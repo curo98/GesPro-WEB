@@ -22,7 +22,7 @@ class User extends Authenticatable implements JWTSubject
         'name',
         'email',
         'password',
-        'role_id',
+        'id_role',
     ];
 
     /**
@@ -33,7 +33,7 @@ class User extends Authenticatable implements JWTSubject
     protected $hidden = [
         'password',
         'remember_token',
-        'role_id'
+        'id_role'
     ];
 
     /**
@@ -59,5 +59,16 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+
+    public function supplier()
+    {
+        return $this->hasOne(Supplier::class);
+    }
+
+    public function supplierRequests()
+    {
+        return $this->hasMany(SupplierRequest::class);
     }
 }
