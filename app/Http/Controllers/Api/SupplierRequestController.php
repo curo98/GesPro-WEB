@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\SupplierRequest;
 
 class SupplierRequestController extends Controller
 {
@@ -12,7 +13,10 @@ class SupplierRequestController extends Controller
      */
     public function index()
     {
-        $supplierRequests = App\Models\SupplierRequest::all();
+        //$supplierRequests = SupplierRequest::all();
+
+        $supplierRequests = SupplierRequest::with('user', 'state', 'typePayment', 'methodPayment', 'documents', 'questions')->get();
+
 
         return response()->json($supplierRequests);
     }

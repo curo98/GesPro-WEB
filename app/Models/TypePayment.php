@@ -14,6 +14,11 @@ class TypePayment extends Model
         'description',
     ];
 
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
+
     public function supplierRequests()
     {
         return $this->belongsTo(SupplierRequest::class, 'id');

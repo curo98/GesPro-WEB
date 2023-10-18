@@ -14,6 +14,11 @@ class Document extends Model
         'file',
     ];
 
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
+
     // public function supplierRequests()
     // {
     //     return $this->belongsToMany(SupplierRequest::class, 'supplier_requests_documents');

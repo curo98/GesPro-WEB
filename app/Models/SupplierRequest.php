@@ -16,6 +16,11 @@ class SupplierRequest extends Model
         'id_method_payment',
     ];
 
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class, 'id_user');
@@ -35,18 +40,6 @@ class SupplierRequest extends Model
     {
         return $this->belongsTo(MethodPayment::class, 'id_method_payment');
     }
-
-
-
-    // public function documents()
-    // {
-    //     return $this->belongsToMany(Document::class, 'supplier_requests_documents');
-    // }
-
-    // public function questions()
-    // {
-    //     return $this->belongsToMany(Question::class, 'supplier_requests_questions', 'question_id');
-    // }
 
     public function documents()
     {

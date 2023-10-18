@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api;
+use App\Http\Controllers\Auth\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,18 +18,21 @@ use Illuminate\Support\Facades\Route;
 
 //Route::post('register', [AuthController::class, 'register']);
 //Route::post('/register', [App\Http\Controllers\Auth\AuthController::class, 'register']);
-Route::post('/login', [App\Http\Controllers\Auth\AuthController::class, 'login']);
-
-Route::get('/states', [App\Http\Controllers\Api\StateRequestController::class, 'index']);
-Route::get('/suppliers', [App\Http\Controllers\Api\SupplierController::class, 'index']);
-Route::get('/types-payments', [App\Http\Controllers\Api\TypePaymentController::class, 'index']);
-Route::get('/methods-payments', [App\Http\Controllers\Api\MethodPaymentController::class, 'index']);
-Route::get('/requests-suppliers', [App\Http\Controllers\Api\SupplierRequestController::class, 'index']);
-Route::get('/documents-request', [App\Http\Controllers\Api\DocumentController::class, 'index']);
-Route::get('/questions-request', [App\Http\Controllers\Api\QuestionController::class, 'index']);
 
 
+// Rutas públicas
+Route::post('/login', [AuthController::class, 'login']);
+
+Route::get('/states', [Api\StateRequestController::class, 'index']);
+Route::get('/suppliers', [Api\SupplierController::class, 'index']);
+Route::get('/types-payments', [Api\TypePaymentRequestController::class, 'index']);
+Route::get('/methods-payments', [Api\MethodPaymentController::class, 'index']);
+Route::get('/requests-suppliers', [Api\SupplierRequestController::class, 'index']);
+Route::get('/documents-request', [Api\DocumentController::class, 'index']);
+Route::get('/questions-request', [Api\QuestionController::class, 'index']);
+
+// Rutas protegidas con autenticación
 Route::middleware('auth:api')->group(function () {
-    Route::get('/user', [App\Http\Controllers\Api\UserController::class, 'show']);
-    Route::post('/logout', [App\Http\Controllers\Auth\AuthController::class, 'logout']);
+    Route::get('/user', [Api\UserController::class, 'show']);
+    Route::post('/logout', [AuthController::class, 'logout']);
 });

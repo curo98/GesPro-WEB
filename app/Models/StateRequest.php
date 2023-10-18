@@ -14,6 +14,12 @@ class StateRequest extends Model
         'description',
     ];
 
+    protected $hidden = [
+        'description',
+        'created_at',
+        'updated_at',
+    ];
+
     public function supplierRequests()
     {
         return $this->belongsTo(SupplierRequest::class, 'id');

@@ -14,6 +14,11 @@ class Question extends Model
         'response',
     ];
 
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
+
     // public function supplierRequests()
     // {
     //     return $this->belongsToMany(SupplierRequest::class, 'supplier_requests_questions');
