@@ -67,7 +67,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function supplier()
     {
-        return $this->hasOne(Supplier::class);
+        return $this->hasOne(Supplier::class, 'id_user');
     }
 
     public function supplierRequests()

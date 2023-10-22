@@ -31,6 +31,10 @@ Route::get('/requests-suppliers', [Api\SupplierRequestController::class, 'index'
 Route::get('/documents-request', [Api\DocumentController::class, 'index']);
 Route::get('/questions-request', [Api\QuestionController::class, 'index']);
 
+Route::get('/departments', [Api\UbigeoPeruController::class, 'loadDepartments']);
+Route::get('/provinces', [Api\UbigeoPeruController::class, 'loadProvinces']);
+Route::get('/districts', [Api\UbigeoPeruController::class, 'loadDistricts']);
+
 // Rutas protegidas con autenticación
 Route::middleware('auth:api')->group(function () {
     Route::get('/user', [Api\UserController::class, 'show']);
