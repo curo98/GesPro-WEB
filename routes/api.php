@@ -26,7 +26,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::get('/states', [Api\StateRequestController::class, 'index']);
 Route::get('/suppliers', [Api\SupplierController::class, 'index']);
 Route::get('/types-payments', [Api\TypePaymentRequestController::class, 'index']);
-Route::get('/methods-payments', [Api\MethodPaymentController::class, 'index']);
+Route::get('/methods-payments', [Api\MethodPaymentRequestController::class, 'index']);
 Route::get('/requests-suppliers', [Api\SupplierRequestController::class, 'index']);
 Route::get('/documents-request', [Api\DocumentController::class, 'index']);
 Route::get('/questions-request', [Api\QuestionController::class, 'index']);
