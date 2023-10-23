@@ -43,15 +43,7 @@ class UbigeoPeruController extends Controller
      */
     public function getDistricts($province)
     {
-        //dd($department);
-        // Realiza una consulta SQL para obtener los distritos
-        $districts = DB::select("
-            SELECT id, name
-            FROM ubigeo_peru_districts
-            WHERE province_id = :province
-        ", ['province' => $province]);
-        DB::enableQueryLog();
-
+        $districts = DB::select("SELECT * FROM ubigeo_peru_districts WHERE province_id = :province", ['province' => $province]);
 
         return response()->json($districts);
     }
