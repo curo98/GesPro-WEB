@@ -41,10 +41,21 @@ class UbigeoPeruController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function getDistricts($province)
     {
-        //
+        //dd($department);
+        // Realiza una consulta SQL para obtener los distritos
+        $districts = DB::select("
+            SELECT id, name
+            FROM ubigeo_peru_districts
+            WHERE province_id = :province
+        ", ['province' => $province]);
+        DB::enableQueryLog();
+
+
+        return response()->json($districts);
     }
+
 
     /**
      * Update the specified resource in storage.
