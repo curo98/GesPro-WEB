@@ -14,7 +14,7 @@ class CountrieController extends Controller
     public function getCountries()
     {
         //obtener paises
-        $countries = DB::select('SELECT * FROM countries');
+        $countries = DB::select('SELECT * FROM countries ORDER BY name ASC');
 
         return response()->json($countries);
     }
