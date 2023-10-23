@@ -35,6 +35,8 @@ Route::get('/departments', [Api\UbigeoPeruController::class, 'loadDepartments'])
 Route::get('/provinces', [Api\UbigeoPeruController::class, 'loadProvinces']);
 Route::get('/districts', [Api\UbigeoPeruController::class, 'loadDistricts']);
 
+Route::get('/countries', [Api\CountrieController::class, 'getCountries']);
+
 Route::get('/departments/{department}/provinces', [Api\UbigeoPeruController::class, 'getProvincesByDepartment']);
 Route::get('/provinces/{province}/districts', [Api\UbigeoPeruController::class, 'getDistricts']);
 
