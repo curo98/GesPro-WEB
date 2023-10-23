@@ -35,6 +35,8 @@ Route::get('/departments', [Api\UbigeoPeruController::class, 'loadDepartments'])
 Route::get('/provinces', [Api\UbigeoPeruController::class, 'loadProvinces']);
 Route::get('/districts', [Api\UbigeoPeruController::class, 'loadDistricts']);
 
+Route::get('/departments/{department}/provinces', [Api\UbigeoPeruController::class, 'getProvincesByDepartment']);
+
 // Rutas protegidas con autenticación
 Route::middleware('auth:api')->group(function () {
     Route::get('/user', [Api\UserController::class, 'show']);

@@ -31,9 +31,11 @@ class UbigeoPeruController extends Controller
         return response()->json($departments);
     }
 
-    public function show(string $id)
-    {
-        //
+
+    public function getProvincesByDepartment($department) {
+        $provinces = DB::select("SELECT * FROM ubigeo_peru_provinces WHERE department_id = :department", ['department' => $department]);
+
+        return response()->json($provinces);
     }
 
     /**
