@@ -19,7 +19,7 @@ use App\Http\Controllers\Auth\AuthController;
 //Route::post('register', [AuthController::class, 'register']);
 //Route::post('/register', [App\Http\Controllers\Auth\AuthController::class, 'register']);
 
-
+//mi commit bryan
 // Rutas públicas
 Route::post('/login', [AuthController::class, 'login']);
 
