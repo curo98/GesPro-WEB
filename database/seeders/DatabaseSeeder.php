@@ -49,60 +49,48 @@ class DatabaseSeeder extends Seeder
        // Crear 10 registros de SupplierRequest
         $supplierRequests = \App\Models\SupplierRequest::factory(80)->create();
 
-        // Asignar preguntas y documentos aleatorios a cada SupplierRequest
-        $supplierRequests->each(function ($supplierRequest) {
-            $questions = \App\Models\Question::inRandomOrder()->limit(5)->get();
-            $documents = \App\Models\Document::inRandomOrder()->limit(3)->get();
+$supplierRequests->each(function ($supplierRequest) {
+    // Asignar preguntas aleatorias
+    $questions = \App\Models\Question::inRandomOrder()->limit(5)->get();
+    $supplierRequest->questions()->attach($questions, ['response' => rand(0, 1) ? 'Sí' : 'No']);
 
-            // Asignar preguntas
-            $supplierRequest->questions()->attach($questions);
+    // Asignar documentos aleatorios
+    $documents = \App\Models\Document::inRandomOrder()->limit(3)->get();
+    $supplierRequest->documents()->attach($documents);
 
-            $supplierRequest->questions()->attach($questions, [
-                'response' => rand(0, 1) ? 'Sí' : 'No'
-            ]);
+    // Asignar políticas aleatorias
+    $policies = \App\Models\Policy::inRandomOrder()->get();
+    $supplierRequest->policies()->attach($policies, ['accepted' => (bool) rand(0, 1)]);
 
-            // Asignar documentos
-            $supplierRequest->documents()->attach($documents);
+    // Asignar observaciones aleatorias
+    $observations = \App\Models\Observation::inRandomOrder()->limit(2)->get();
+    $supplierRequest->observations()->attach($observations);
 
-            $policies = \App\Models\Policy::inRandomOrder()->get();
+    // Asignar transiciones de estados aleatorias
+    $enviadoState = \App\Models\StateRequest::where('name', 'Enviado')->first();
+    $transitions = \App\Models\StateRequest::inRandomOrder()->limit(2)->get();
+    $reviewers = \App\Models\User::inRandomOrder()->limit(2)->get();
 
-            // Asignar políticas con el campo 'accepted' en falso o verdadero aleatoriamente
-            $supplierRequest->policies()->attach($policies, [
-                'accepted' => (bool) rand(0, 1) // Convertir el número aleatorio (0 o 1) a un valor booleano
-            ]);
+    $fromState = null;
 
-            $observations = \App\Models\Observation::inRandomOrder()->limit(2)->get();
+    foreach ($transitions as $key => $transition) {
+        $reviewer = $reviewers[$key];
 
-            // Asignar observaciones
-            $supplierRequest->observations()->attach($observations);
+        $transitionData = [
+            'from_state_id' => 1,
+            'to_state_id' => $transition->id,
+            'id_supplier_request' => $supplierRequest->id,
+            'id_reviewer' => $reviewer->id,
+        ];
 
-            // Asignar transiciones de estados aleatorias
-            // Obtener el ID del estado 'Enviado'
-            $enviadoStateId = \App\Models\StateRequest::where('name', 'Enviado')->value('id');
+        $supplierRequest->stateTransitions()->attach($transition, $transitionData);
 
-            // Asignar transiciones de estados aleatorias
-            $transitions = \App\Models\StateRequest::inRandomOrder()->limit(2)->get();
-            $reviewers = \App\Models\User::inRandomOrder()->limit(2)->get();
+        // Actualizar el estado de origen para la próxima transición
+        $fromState = $transition;
+    }
+});
 
-            $fromStateId = $enviadoStateId; // Establecer el estado de origen como 'Enviado'
-            $toStateId = null;
 
-            $transitions->each(function ($transition, $key) use ($supplierRequest, $reviewers, &$fromStateId, &$toStateId) {
-                // Establecer el revisor para esta transición
-                $reviewer = $reviewers[$key];
-
-                $supplierRequest->fromState()->attach($transition, [
-                    'from_state_id' => $fromStateId,
-                    'to_state_id' => $transition->id,
-                    'id_reviewer' => $reviewer->id,
-                ]);
-
-                // Actualizar los valores para la próxima transición
-                $fromStateId = $transition->id;
-                $toStateId = $transition->id;
-            });
-
-        });
 
 
         DB::statement("INSERT INTO `countries` (`id`, `name`) VALUES

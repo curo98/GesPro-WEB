@@ -11,7 +11,6 @@ class SupplierRequest extends Model
 
     protected $fillable = [
         'id_user',
-        'id_state',
         'id_type_payment',
         'id_method_payment',
     ];
@@ -26,14 +25,9 @@ class SupplierRequest extends Model
         return $this->belongsTo(User::class, 'id_user');
     }
 
-    public function fromState()
+    public function stateTransitions()
     {
-        return $this->belongsToMany(StateRequest::class, 'transitions_state_requests', 'id_supplier_request', 'from_state_id');
-    }
-
-    public function toState()
-    {
-        return $this->belongsToMany(StateRequest::class, 'transitions_state_requests', 'id_supplier_request', 'to_state_id');
+        return $this->belongsToMany(StateRequest::class, 'transitions_state_requests', 'id_supplier_request', 'from_state_id', 'to_state_id');
     }
 
     public function typePayment()

@@ -26,21 +26,8 @@ class SupplierRequestFactory extends Factory
     {
         return [
             'id_user' => User::inRandomOrder()->first()->id,
-            'id_state' => StateRequest::inRandomOrder()->first()->id,
             'id_type_payment' => TypePayment::inRandomOrder()->first()->id,
             'id_method_payment' => MethodPayment::inRandomOrder()->first()->id,
         ];
     }
-
-    // public function configure()
-    // {
-    //     return $this->afterCreating(function (SupplierRequest $supplierRequest) {
-    //         $documents = Document::inRandomOrder()->limit(3)->get();
-    //         $questions = Question::inRandomOrder()->limit(5)->get();
-
-    //         // Asignar documentos y preguntas existentes
-    //         $supplierRequest->documents()->attach($documents->pluck('id'));
-    //         $supplierRequest->questions()->attach($questions->pluck('id'));
-    //     });
-    // }
 }
