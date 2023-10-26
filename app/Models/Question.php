@@ -11,7 +11,6 @@ class Question extends Model
 
     protected $fillable = [
         'question',
-        'response',
     ];
 
     protected $hidden = [

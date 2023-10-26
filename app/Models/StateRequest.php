@@ -24,4 +24,14 @@ class StateRequest extends Model
     {
         return $this->belongsTo(SupplierRequest::class, 'id');
     }
+
+    public function fromSupplierRequests()
+    {
+        return $this->belongsToMany(SupplierRequest::class, 'transitions_state_requests', 'from_state_id', 'id_supplier_request');
+    }
+
+    public function toSupplierRequests()
+    {
+        return $this->belongsToMany(SupplierRequest::class, 'transitions_state_requests', 'to_state_id', 'id_supplier_request');
+    }
 }

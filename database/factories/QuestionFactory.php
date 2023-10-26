@@ -18,7 +18,7 @@ class QuestionFactory extends Factory
     {
         return [
             'question' => $this->faker->sentence,
-            'response' => $this->faker->randomElement(['si', 'no']),
+
         ];
     }
 }

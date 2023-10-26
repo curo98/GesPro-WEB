@@ -11,16 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('supplier_requests_questions', function (Blueprint $table) {
+        Schema::create('supplier_requests_policies', function (Blueprint $table) {
             $table->id();
 
             $table->unsignedBigInteger('id_supplier_request');
+            $table->unsignedBigInteger('id_policie');
+            $table->boolean('accepted')->default(false); // Puede establecerse en falso por defecto
+
             $table->foreign('id_supplier_request')->references('id')->on('supplier_requests');
-
-            $table->unsignedBigInteger('id_question');
-            $table->foreign('id_question')->references('id')->on('questions');
-
-            $table->enum('response', ['Sí', 'No']);
+            $table->foreign('id_policie')->references('id')->on('policies');
 
             $table->timestamps();
         });
@@ -31,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('supplier_requests_questions');
+        Schema::dropIfExists('supplier_requests_policies');
     }
 };

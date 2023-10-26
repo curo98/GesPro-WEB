@@ -11,16 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('supplier_requests_questions', function (Blueprint $table) {
+        Schema::create('supplier_requests_observations', function (Blueprint $table) {
             $table->id();
 
             $table->unsignedBigInteger('id_supplier_request');
             $table->foreign('id_supplier_request')->references('id')->on('supplier_requests');
 
-            $table->unsignedBigInteger('id_question');
-            $table->foreign('id_question')->references('id')->on('questions');
 
-            $table->enum('response', ['Sí', 'No']);
+            $table->unsignedBigInteger('id_observation');
+            $table->foreign('id_observation')->references('id')->on('observations');
 
             $table->timestamps();
         });
@@ -31,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('supplier_requests_questions');
+        Schema::dropIfExists('supplier_requests_observations');
     }
 };

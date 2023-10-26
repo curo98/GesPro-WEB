@@ -26,9 +26,14 @@ class SupplierRequest extends Model
         return $this->belongsTo(User::class, 'id_user');
     }
 
-    public function state()
+    public function fromState()
     {
-        return $this->belongsTo(StateRequest::class, 'id_state');
+        return $this->belongsToMany(StateRequest::class, 'transitions_state_requests', 'id_supplier_request', 'from_state_id');
+    }
+
+    public function toState()
+    {
+        return $this->belongsToMany(StateRequest::class, 'transitions_state_requests', 'id_supplier_request', 'to_state_id');
     }
 
     public function typePayment()
@@ -49,5 +54,18 @@ class SupplierRequest extends Model
     public function questions()
     {
         return $this->belongsToMany(Question::class, 'supplier_requests_questions', 'id_supplier_request', 'id_question');
+    }
+
+    public function policies() {
+        return $this->belongsToMany(Policy::class, 'supplier_requests_policies', 'id_supplier_request', 'id_policie')
+            ->withPivot('accepted');
+    }
+
+    public function observations() {
+        return $this->belongsToMany(observation::class, 'supplier_requests_observations', 'id_supplier_request', 'id_observation');
+    }
+
+    public function reviewers() {
+        return $this->belongsToMany(User::class, 'transitions_state_requests', 'id_supplier_request', 'id_user');
     }
 }

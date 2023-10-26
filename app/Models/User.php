@@ -72,6 +72,21 @@ class User extends Authenticatable implements JWTSubject
 
     public function supplierRequests()
     {
-        return $this->hasMany(SupplierRequest::class);
+        return $this->hasMany(SupplierRequest::class, 'id_user');
+    }
+
+    public function observations()
+    {
+        return $this->hasMany(Observation::class, 'id_user');
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(SupplierRequest::class, 'id_user');
+    }
+
+    public function reviewsSupplierRequests()
+    {
+        return $this->belongsToMany(SupplierRequest::class, 'transitions_state_requests', 'id_reviewer', 'id_supplier_request');
     }
 }
