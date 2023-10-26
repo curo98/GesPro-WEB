@@ -49,46 +49,46 @@ class DatabaseSeeder extends Seeder
        // Crear 10 registros de SupplierRequest
         $supplierRequests = \App\Models\SupplierRequest::factory(80)->create();
 
-$supplierRequests->each(function ($supplierRequest) {
-    // Asignar preguntas aleatorias
-    $questions = \App\Models\Question::inRandomOrder()->limit(5)->get();
-    $supplierRequest->questions()->attach($questions, ['response' => rand(0, 1) ? 'Sí' : 'No']);
+        $supplierRequests->each(function ($supplierRequest) {
+            // Asignar preguntas aleatorias
+            $questions = \App\Models\Question::inRandomOrder()->limit(5)->get();
+            $supplierRequest->questions()->attach($questions, ['response' => rand(0, 1) ? 'Sí' : 'No']);
 
-    // Asignar documentos aleatorios
-    $documents = \App\Models\Document::inRandomOrder()->limit(3)->get();
-    $supplierRequest->documents()->attach($documents);
+            // Asignar documentos aleatorios
+            $documents = \App\Models\Document::inRandomOrder()->limit(3)->get();
+            $supplierRequest->documents()->attach($documents);
 
-    // Asignar políticas aleatorias
-    $policies = \App\Models\Policy::inRandomOrder()->get();
-    $supplierRequest->policies()->attach($policies, ['accepted' => (bool) rand(0, 1)]);
+            // Asignar políticas aleatorias
+            $policies = \App\Models\Policy::inRandomOrder()->get();
+            $supplierRequest->policies()->attach($policies, ['accepted' => (bool) rand(0, 1)]);
 
-    // Asignar observaciones aleatorias
-    $observations = \App\Models\Observation::inRandomOrder()->limit(2)->get();
-    $supplierRequest->observations()->attach($observations);
+            // Asignar observaciones aleatorias
+            $observations = \App\Models\Observation::inRandomOrder()->limit(2)->get();
+            $supplierRequest->observations()->attach($observations);
 
-    // Asignar transiciones de estados aleatorias
-    $enviadoState = \App\Models\StateRequest::where('name', 'Enviado')->first();
-    $transitions = \App\Models\StateRequest::inRandomOrder()->limit(2)->get();
-    $reviewers = \App\Models\User::inRandomOrder()->limit(2)->get();
+            // Asignar transiciones de estados aleatorias
+            $enviadoState = \App\Models\StateRequest::where('name', 'Enviado')->first();
+            $transitions = \App\Models\StateRequest::inRandomOrder()->limit(2)->get();
+            $reviewers = \App\Models\User::inRandomOrder()->limit(2)->get();
 
-    $fromState = null;
+            $fromState = null;
 
-    foreach ($transitions as $key => $transition) {
-        $reviewer = $reviewers[$key];
+            foreach ($transitions as $key => $transition) {
+                $reviewer = $reviewers[$key];
 
-        $transitionData = [
-            'from_state_id' => 1,
-            'to_state_id' => $transition->id,
-            'id_supplier_request' => $supplierRequest->id,
-            'id_reviewer' => $reviewer->id,
-        ];
+                $transitionData = [
+                    'from_state_id' => 1,
+                    'to_state_id' => $transition->id,
+                    'id_supplier_request' => $supplierRequest->id,
+                    'id_reviewer' => $reviewer->id,
+                ];
 
-        $supplierRequest->stateTransitions()->attach($transition, $transitionData);
+                $supplierRequest->stateTransitions()->attach($transition, $transitionData);
 
-        // Actualizar el estado de origen para la próxima transición
-        $fromState = $transition;
-    }
-});
+                // Actualizar el estado de origen para la próxima transición
+                $fromState = $transition;
+            }
+        });
 
 
 

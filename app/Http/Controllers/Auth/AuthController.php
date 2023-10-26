@@ -31,7 +31,7 @@ class AuthController extends Controller
 
     //     if(Auth::guard('api')->attemp($credentials)){
     //         $user = Auth::guard('api')->user();
-            
+
     //         $jwt = JwtAuth::generateToken($user);
 
     //         $error = false;
@@ -53,8 +53,9 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             $token = JWTAuth::fromUser($user);
+            $success = true;
 
-            return response()->json(compact('user', 'token'));
+            return response()->json(compact('user', 'token', 'success'));
         } else {
             return response()->json(['error' => 'Credenciales incorrectas'], 401);
         }
@@ -67,7 +68,7 @@ class AuthController extends Controller
 
         return response()->json(['message' => 'Sesion finalizada exitosamente']);
     }
-    
+
 
 
 }
