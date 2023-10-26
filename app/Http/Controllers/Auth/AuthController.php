@@ -52,12 +52,14 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
-            $token = JWTAuth::fromUser($user);
+            $jwt = JWTAuth::fromUser($user);
             $success = true;
 
-            return response()->json(compact('user', 'token', 'success'));
+            return response()->json(compact('success', 'user', 'jwt'));
         } else {
-            return response()->json(['error' => 'Credenciales incorrectas'], 401);
+            $success = false;
+            $message = "Credenciales incorrectas";
+            return response()->json(compact('success', 'message'));
         }
     }
 
