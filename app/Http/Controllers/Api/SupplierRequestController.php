@@ -9,6 +9,7 @@ use App\Models\StateRequest;
 use App\Models\User;
 use App\Models\TypePayment;
 use App\Models\MethodPayment;
+use App\Models\Role;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
