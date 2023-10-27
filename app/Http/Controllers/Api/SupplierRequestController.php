@@ -132,7 +132,7 @@ class SupplierRequestController extends Controller
 {
     $user = Auth::guard('api')->user();
 
-    if ($user->role->name === "invitado") {
+    // if ($user->role->name === "invitado") {
         // Cambiar el rol del usuario a "proveedor"
         $user->id_role = Role::where('name', 'proveedor')->first()->id;
         $user->save();
@@ -156,9 +156,9 @@ class SupplierRequestController extends Controller
         $supplier->save();
 
         return response()->json(['message' => 'Registro exitoso como proveedor'], 201);
-    } else {
-        return response()->json(['message' => 'No tiene permisos para realizar esta acción'], 403);
-    }
+    // } else {
+    //     return response()->json(['message' => 'No tiene permisos para realizar esta acción'], 403);
+    // }
 }
 
 
