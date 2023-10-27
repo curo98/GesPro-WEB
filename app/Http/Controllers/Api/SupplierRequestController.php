@@ -127,17 +127,19 @@ class SupplierRequestController extends Controller
     public function store(Request $request)
     {
         $user = Auth::guard('api')->user();
-        $data = $request->validate([
-            'id_user' => 'required|integer',
-            'id_type_payment' => 'required|integer',
-            'id_method_payment' => 'required|integer',
-        ]);
+
+        $data = [
+            'id_user' => $user->id,
+            'id_type_payment' => $request->input('id_type_payment'),
+            'id_method_payment' => $request->input('id_method_payment'),
+        ];
 
         $supplierRequest = new SupplierRequest($data);
         $supplierRequest->save();
 
         return response()->json(['message' => 'Registro exitoso'], 201);
     }
+
 
     /**
      * Display the specified resource.
