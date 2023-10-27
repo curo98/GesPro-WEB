@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\TypePayment;
 use App\Models\MethodPayment;
 use App\Models\Role;
+use App\Models\Supplier;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
