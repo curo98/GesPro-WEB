@@ -129,38 +129,38 @@ class SupplierRequestController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        $user = Auth::guard('api')->user();
+{
+    $user = Auth::guard('api')->user();
 
-        if ($user->role->name === "invitado") {
+    if ($user->role->name === "invitado") {
+        // Cambiar el rol del usuario a "proveedor"
+        $user->id_role = Role::where('name', 'proveedor')->first()->id;
+        $user->save();
 
-            // Cambiar el rol del usuario a "proveedor"
-            $user->id_role = Role::where('name', 'proveedor')->first()->id;
-            $user->save();
+        $typePaymentName = $request->input('typePayment');
+        $methodPaymentName = $request->input('methodPayment');
 
-            $typePaymentName = $request->input('typePayment');
-            $methodPaymentName = $request->input('methodPayment');
+        $typePayment = TypePayment::where('name', $typePaymentName)->first();
+        $methodPayment = MethodPayment::where('name', $methodPaymentName)->first();
 
-            $typePayment = TypePayment::where('name', $typePaymentName)->first();
-            $methodPayment = MethodPayment::where('name', $methodPaymentName)->first();
-
-            if (!$typePayment || !$methodPayment) {
-                return response()->json(['message' => 'Tipo de pago o método de pago no válido'], 400);
-            }
-
-            $supplier = new Supplier([
-                // 'nacionality' => $request->input('nacionality'),
-                'nacionality' => "Extranjero",
-                // 'nic_ruc' => $request->input('nic_ruc'),
-                'nic_ruc' => "1234567898",
-                'state' => "inactivo", // Establecer el estado del proveedor como "inactivo"
-                'id_user' => $user->id
-            ]);
-            $supplier->save();
-
-            return response()->json(['message' => 'Registro exitoso como proveedor'], 201);
+        if (!$typePayment || !$methodPayment) {
+            return response()->json(['message' => 'Tipo de pago o método de pago no válido'], 400);
         }
+
+        $supplier = new Supplier([
+            'nacionality' => $request->input('nacionality', 'Extranjero'),
+            'nic_ruc' => $request->input('nic_ruc', '1234567898'),
+            'state' => 'inactivo',
+            'id_user' => $user->id
+        ]);
+        $supplier->save();
+
+        return response()->json(['message' => 'Registro exitoso como proveedor'], 201);
+    } else {
+        return response()->json(['message' => 'No tiene permisos para realizar esta acción'], 403);
     }
+}
+
 
 
 
