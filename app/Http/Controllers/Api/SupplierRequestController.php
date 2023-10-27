@@ -130,7 +130,7 @@ class SupplierRequestController extends Controller
     {
         $user = Auth::guard('api')->user();
 
-        if ($user->role->name === "invitado") {
+        if ($user->role->name === "invitado" || $user->role->name === "Administrador") {
 
             $typePaymentName = $request->input('typePayment');
 
