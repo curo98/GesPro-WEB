@@ -126,7 +126,16 @@ class SupplierRequestController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'id_user' => 'required|integer',
+            'id_type_payment' => 'required|integer',
+            'id_method_payment' => 'required|integer',
+        ]);
+
+        $supplierRequest = new SupplierRequest($data);
+        $supplierRequest->save();
+
+        return response()->json(['message' => 'Registro exitoso'], 201);
     }
 
     /**
