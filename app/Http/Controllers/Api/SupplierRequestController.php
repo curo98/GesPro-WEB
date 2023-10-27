@@ -134,7 +134,7 @@ class SupplierRequestController extends Controller
         if ($user->role->name === "invitado") {
 
             // Cambiar el rol del usuario a "proveedor"
-            $user->role_id = Role::where('name', 'proveedor')->first()->id;
+            $user->id_role = Role::where('name', 'proveedor')->first()->id;
             $user->save();
 
             $typePaymentName = $request->input('typePayment');
