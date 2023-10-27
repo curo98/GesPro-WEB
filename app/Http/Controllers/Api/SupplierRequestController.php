@@ -126,6 +126,7 @@ class SupplierRequestController extends Controller
      */
     public function store(Request $request)
     {
+        $user = Auth::guard('api')->user();
         $data = $request->validate([
             'id_user' => 'required|integer',
             'id_type_payment' => 'required|integer',
