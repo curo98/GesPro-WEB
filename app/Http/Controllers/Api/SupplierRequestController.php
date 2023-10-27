@@ -154,9 +154,8 @@ class SupplierRequestController extends Controller
                 // 'nic_ruc' => $request->input('nic_ruc'),
                 'nic_ruc' => "1234567898",
                 'state' => "inactivo", // Establecer el estado del proveedor como "inactivo"
+                'id_user' => $user->id
             ]);
-
-            $supplier->user()->associate($user);
             $supplier->save();
 
             return response()->json(['message' => 'Registro exitoso como proveedor'], 201);
