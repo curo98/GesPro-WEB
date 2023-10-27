@@ -39,9 +39,6 @@ Route::get('/departments/{department}/provinces', [Api\UbigeoPeruController::cla
 Route::get('/provinces/{province}/districts', [Api\UbigeoPeruController::class, 'getDistricts']);
 
 
-Route::post('/requests-suppliers', [Api\SupplierRequestController::class, 'store']);
-
-
 
 
 // Rutas protegidas con autenticación
@@ -53,7 +50,7 @@ Route::middleware('auth:api')->group(function () {
 
     /*RUTAS PARA EL CRUD DE SOLICITUDES DE PROVEEDORES*/
     Route::get('/requests-suppliers', [Api\SupplierRequestController::class, 'index']);
-
+    Route::post('/requests-suppliers', [Api\SupplierRequestController::class, 'store']);
     /* END RUTAS CRUD SP */
 
     Route::get('/documents-request', [Api\DocumentController::class, 'index']);
