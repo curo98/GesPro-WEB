@@ -47,7 +47,11 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 
     Route::get('/suppliers', [Api\SupplierController::class, 'index']);
+
+    /*RUTAS PARA EL CRUD DE SOLICITUDES DE PROVEEDORES*/
     Route::get('/requests-suppliers', [Api\SupplierRequestController::class, 'index']);
+    Route::post('/requests-suppliers', [Api\SupplierRequestController::class, 'store']);
+    /* END RUTAS CRUD SP */
 
     Route::get('/documents-request', [Api\DocumentController::class, 'index']);
     Route::get('/questions-request', [Api\QuestionController::class, 'index']);
