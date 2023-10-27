@@ -130,27 +130,30 @@ class SupplierRequestController extends Controller
     {
         $user = Auth::guard('api')->user();
 
-        $typePaymentName = $request->input('typePayment');
+        if ($user->role->name === "invitado") {
 
-        $methodPaymentName = $request->input('methodPayment');
+            $typePaymentName = $request->input('typePayment');
 
-        $typePayment = TypePayment::where('name', $typePaymentName)->first();
-        $methodPayment = MethodPayment::where('name', $methodPaymentName)->first();
+            $methodPaymentName = $request->input('methodPayment');
 
-        if (!$typePayment || !$methodPayment) {
-            return response()->json(['message' => 'Tipo de pago o método de pago no válido'], 400);
+            $typePayment = TypePayment::where('name', $typePaymentName)->first();
+            $methodPayment = MethodPayment::where('name', $methodPaymentName)->first();
+
+            if (!$typePayment || !$methodPayment) {
+                return response()->json(['message' => 'Tipo de pago o método de pago no válido'], 400);
+            }
+
+            $data = [
+                'id_user' => $user->id,
+                'id_type_payment' => $typePayment->id,
+                'id_method_payment' => $methodPayment->id,
+            ];
+
+            $supplierRequest = new SupplierRequest($data);
+            $supplierRequest->save();
+
+            return response()->json(['message' => 'Registro exitoso'], 201);
         }
-
-        $data = [
-            'id_user' => $user->id,
-            'id_type_payment' => $typePayment->id,
-            'id_method_payment' => $methodPayment->id,
-        ];
-
-        $supplierRequest = new SupplierRequest($data);
-        $supplierRequest->save();
-
-        return response()->json(['message' => 'Registro exitoso'], 201);
     }
 
 
