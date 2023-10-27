@@ -38,8 +38,7 @@ Route::get('/countries', [Api\CountrieController::class, 'getCountries']);
 Route::get('/departments/{department}/provinces', [Api\UbigeoPeruController::class, 'getProvincesByDepartment']);
 Route::get('/provinces/{province}/districts', [Api\UbigeoPeruController::class, 'getDistricts']);
 
-Route::get('/suppliers', [Api\SupplierController::class, 'index']);
-    Route::get('/requests-suppliers', [Api\SupplierRequestController::class, 'index']);
+
 
 
 // Rutas protegidas con autenticación
@@ -47,7 +46,8 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/user', [Api\UserController::class, 'show']);
     Route::post('/logout', [AuthController::class, 'logout']);
 
-
+    Route::get('/suppliers', [Api\SupplierController::class, 'index']);
+    Route::get('/requests-suppliers', [Api\SupplierRequestController::class, 'index']);
 
     Route::get('/documents-request', [Api\DocumentController::class, 'index']);
     Route::get('/questions-request', [Api\QuestionController::class, 'index']);

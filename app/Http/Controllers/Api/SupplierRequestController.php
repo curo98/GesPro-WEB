@@ -18,31 +18,6 @@ class SupplierRequestController extends Controller
     public function index()
     {
         $user = Auth::guard('api')->user();
-        // $supplierRequests = SupplierRequest::where('id_user', $user->id)
-        //     ->with('user', 'typePayment', 'methodPayment', 'documents', 'questions')
-        //     ->get();
-
-        // // Obtener las transiciones de estado para cada solicitud
-        // $supplierRequestsWithTransitions = $supplierRequests->map(function ($supplierRequest) {
-        //     $transitions = DB::table('transitions_state_requests')
-        //         ->select('from_state_id', 'to_state_id', 'id_reviewer')
-        //         ->where('id_supplier_request', $supplierRequest->id)
-        //         ->get();
-
-        //     $transitions->each(function ($transition) {
-        //         $transition->fromState = StateRequest::find($transition->from_state_id);
-        //         $transition->toState = StateRequest::find($transition->to_state_id);
-        //         $transition->reviewer = User::find($transition->id_reviewer);
-        //     });
-
-        //     $supplierRequest->stateTransitions = $transitions;
-
-        //     return $supplierRequest;
-        // });
-
-        // return response()->json($supplierRequestsWithTransitions);
-
-
         if ($user->role->name === "proveedor") {
             $supplierRequests = SupplierRequest::where('id_user', $user->id)
                 ->with(
@@ -74,7 +49,7 @@ class SupplierRequestController extends Controller
             });
 
             return response()->json($supplierRequestsWithTransitions);
-        } elseif ($user->role->name === "Administrador") {
+        } elseif ($user->role->name === "Administrador" || $user->role->name === "analista" || $user->role->name === "validador") {
             // El usuario tiene el rol de proveedor, obtén todas las solicitudes de proveedor
             $supplierRequests = SupplierRequest::with(
                 'user',
