@@ -8,6 +8,7 @@ use App\Models\SupplierRequest;
 use App\Models\StateRequest;
 use App\Models\User;
 use App\Models\TypePayment;
+use App\Models\MethodPayment;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -131,8 +132,11 @@ class SupplierRequestController extends Controller
 
         $typePaymentName = $request->input('typePayment'); // Obtén el nombre del tipo de pago desde la solicitud
 
+        $methodPaymentName = $request->input('methodPayment');
+
         // Busca el tipo de pago por nombre
         $typePayment = TypePayment::where('name', $typePaymentName)->first();
+        $methodPayment = MethodPayment::where('name', $methodPaymentName)->first();
 
         if (!$typePayment) {
             // Si el tipo de pago no existe, puedes manejar el error
@@ -142,7 +146,7 @@ class SupplierRequestController extends Controller
         $data = [
             'id_user' => $user->id,
             'id_type_payment' => $typePayment->id, // Asigna el ID del tipo de pago encontrado
-            'id_method_payment' => $request->input('methodPayment'),
+            'id_method_payment' => $methodPayment->id,
         ];
 
         $supplierRequest = new SupplierRequest($data);
