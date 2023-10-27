@@ -50,25 +50,25 @@ class AuthController extends Controller
     {
         $credentials = $request->only('email', 'password');
 
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-            $jwt = JWTAuth::fromUser($user);
+        if (Auth::guard('api')->attempt($credentials)) {
+            $user = Auth::guard('api')->user();
+            $jwt = JWTAuth::attempt($credentials);
             $success = true;
 
-            return response()->json(compact('success', 'user', 'jwt'));
+            return compact('success', 'user', 'jwt');
         } else {
             $success = false;
             $message = "Credenciales incorrectas";
-            return response()->json(compact('success', 'message'));
+            return compact('success', 'message');
         }
     }
 
     public function logout()
     {
         Auth::guard('api')->logout();
-        // auth()->logout();
+        $success = true;
 
-        return response()->json(['message' => 'Sesion finalizada exitosamente']);
+        return compact('success');
     }
 
 
