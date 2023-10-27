@@ -130,10 +130,13 @@ class SupplierRequestController extends Controller
     {
         $user = Auth::guard('api')->user();
 
-        if ($user->role->name === "invitado" || $user->role->name === "Administrador") {
+        if ($user->role->name === "invitado") {
+
+            // Cambiar el rol del usuario a "proveedor"
+            $user->role_id = Role::where('name', 'proveedor')->first()->id;
+            $user->save();
 
             $typePaymentName = $request->input('typePayment');
-
             $methodPaymentName = $request->input('methodPayment');
 
             $typePayment = TypePayment::where('name', $typePaymentName)->first();
@@ -143,18 +146,21 @@ class SupplierRequestController extends Controller
                 return response()->json(['message' => 'Tipo de pago o método de pago no válido'], 400);
             }
 
-            $data = [
-                'id_user' => $user->id,
-                'id_type_payment' => $typePayment->id,
-                'id_method_payment' => $methodPayment->id,
-            ];
+            $supplier = new Supplier([
+                // 'nacionality' => $request->input('nacionality'),
+                'nacionality' => "Extranjero",
+                // 'nic_ruc' => $request->input('nic_ruc'),
+                'nic_ruc' => "1234567898",
+                'state' => "inactivo", // Establecer el estado del proveedor como "inactivo"
+            ]);
 
-            $supplierRequest = new SupplierRequest($data);
-            $supplierRequest->save();
+            $supplier->user()->associate($user);
+            $supplier->save();
 
-            return response()->json(['message' => 'Registro exitoso'], 201);
+            return response()->json(['message' => 'Registro exitoso como proveedor'], 201);
         }
     }
+
 
 
 
