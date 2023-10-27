@@ -126,14 +126,34 @@ class SupplierRequestController extends Controller
      */
     public function store(Request $request)
     {
+        // $user = Auth::guard('api')->user();
+        // $data = $request->validate([
+        //     'id_user' => 'required|integer',
+        //     'id_type_payment' => 'required|integer',
+        //     'id_method_payment' => 'required|integer',
+        // ]);
+
+        // $supplierRequest = new SupplierRequest($data);
+        // $supplierRequest->save();
+
+        // return response()->json(['message' => 'Registro exitoso'], 201);
+
+        // Obtén al usuario autenticado
         $user = Auth::guard('api')->user();
+
+        // Validación de los datos que se envían desde Android Studio
         $data = $request->validate([
-            'id_user' => 'required|integer',
             'id_type_payment' => 'required|integer',
             'id_method_payment' => 'required|integer',
         ]);
 
+        // Agrega el id_user del usuario autenticado a los datos
+        $data['id_user'] = $user->id;
+
+        // Crea una nueva instancia de SupplierRequest con los datos
         $supplierRequest = new SupplierRequest($data);
+
+        // Guarda el registro en la base de datos
         $supplierRequest->save();
 
         return response()->json(['message' => 'Registro exitoso'], 201);
