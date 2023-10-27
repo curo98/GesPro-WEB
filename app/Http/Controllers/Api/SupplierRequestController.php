@@ -128,9 +128,19 @@ class SupplierRequestController extends Controller
     {
         $user = Auth::guard('api')->user();
 
+        $typePaymentName = $request->input('typePayment'); // Obtén el nombre del tipo de pago desde la solicitud
+
+        // Busca el tipo de pago por nombre
+        $typePayment = TypePayment::where('name', $typePaymentName)->first();
+
+        if (!$typePayment) {
+            // Si el tipo de pago no existe, puedes manejar el error
+            return response()->json(['message' => 'Tipo de pago no válido'], 400);
+        }
+
         $data = [
             'id_user' => $user->id,
-            'id_type_payment' => $request->input('id_type_payment'),
+            'id_type_payment' => $typePayment->id, // Asigna el ID del tipo de pago encontrado
             'id_method_payment' => $request->input('id_method_payment'),
         ];
 
@@ -139,6 +149,7 @@ class SupplierRequestController extends Controller
 
         return response()->json(['message' => 'Registro exitoso'], 201);
     }
+
 
 
     /**
