@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\SupplierRequest;
 use App\Models\StateRequest;
 use App\Models\User;
+use App\Models\TypePayment;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -128,7 +129,7 @@ class SupplierRequestController extends Controller
     {
         $user = Auth::guard('api')->user();
 
-        $typePaymentName = $request->input('typePayment'); // Obtén el nombre del tipo de pago desde la solicitud
+        $typePaymentName = $request->input('id_type_payment'); // Obtén el nombre del tipo de pago desde la solicitud
 
         // Busca el tipo de pago por nombre
         $typePayment = TypePayment::where('name', $typePaymentName)->first();
