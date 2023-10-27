@@ -129,7 +129,7 @@ class SupplierRequestController extends Controller
     {
         $user = Auth::guard('api')->user();
 
-        $typePaymentName = $request->input('id_type_payment'); // Obtén el nombre del tipo de pago desde la solicitud
+        $typePaymentName = $request->input('typePayment'); // Obtén el nombre del tipo de pago desde la solicitud
 
         // Busca el tipo de pago por nombre
         $typePayment = TypePayment::where('name', $typePaymentName)->first();
