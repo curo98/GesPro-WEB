@@ -142,7 +142,7 @@ class SupplierRequestController extends Controller
         $data = [
             'id_user' => $user->id,
             'id_type_payment' => $typePayment->id, // Asigna el ID del tipo de pago encontrado
-            'id_method_payment' => $request->input('id_method_payment'),
+            'id_method_payment' => $request->input('methodPayment'),
         ];
 
         $supplierRequest = new SupplierRequest($data);
