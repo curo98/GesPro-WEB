@@ -175,6 +175,14 @@ class SupplierRequestController extends Controller
         ]);
         $supplier->save();
 
+        $supplierRequest = new SupplierRequest([
+            'id_user' => $user->id,
+            'id_type_payment' => $typePayment->id,
+            'id_method_payment' => $methodPayment->id,
+        ]);
+
+        $supplierRequest->save();
+
         return response()->json(['message' => 'Registro exitoso como proveedor'], 201);
     }
 
