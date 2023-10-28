@@ -183,14 +183,11 @@ class SupplierRequestController extends Controller
         ]);
 
         $supplierRequest->save();
-        $id_supplier_request = $supplierRequest->id;
+        $supplierRequest = SupplierRequest::find($id_supplier_request); // Suponiendo que ya tienes la instancia de SupplierRequest
 
         foreach ($selectedPolicies as $policy) {
-            DB::table('supplier_requests_policies')->insert([
-                'id_supplier_request' => $id_supplier_request, // Asigna el ID de la solicitud de proveedor
-                'id_policie' => 1, // Asigna el ID de la póliza desde la lista
-                'accepted' => true, // Puede establecerse en falso por defecto
-            ]);
+            // Asocia cada objeto Policy a la solicitud de proveedor con el ID y el estado
+            $supplierRequest->policies()->attach($policy->id, ['accepted' => true]);
         }
 
         return response()->json(['message' => 'Registro exitoso como proveedor'], 201);
