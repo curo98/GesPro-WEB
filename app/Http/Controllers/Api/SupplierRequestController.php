@@ -129,12 +129,17 @@ class SupplierRequestController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-{
-    $user = Auth::guard('api')->user();
+    {
+        $user = Auth::guard('api')->user();
 
-    // if ($user->role->name === "invitado") {
-        // Cambiar el rol del usuario a "proveedor"
-        $user->id_role = Role::where('name', 'proveedor')->first()->id;
+        // Obtén el país desde la solicitud, asumiendo que se encuentra en un campo llamado 'country'
+        $country = $request->input('country');
+
+        // Si el país no es Perú, establece 'Extranjero' como nacionalidad, de lo contrario, establece 'Nacional'
+        $nacionality = ($country !== 'Perú') ? 'Extranjero' : 'Nacional';
+
+        // Cambia el rol del usuario a "proveedor"
+        $user->role_id = Role::where('name', 'proveedor')->first()->id;
         $user->save();
 
         $typePaymentName = $request->input('typePayment');
@@ -148,7 +153,7 @@ class SupplierRequestController extends Controller
         }
 
         $supplier = new Supplier([
-            'nacionality' => $request->input('nacionality'),
+            'nacionality' => $nacionality,
             'nic_ruc' => $request->input('nic_ruc'),
             'state' => 'inactivo',
             'id_user' => $user->id
@@ -156,10 +161,8 @@ class SupplierRequestController extends Controller
         $supplier->save();
 
         return response()->json(['message' => 'Registro exitoso como proveedor'], 201);
-    // } else {
-    //     return response()->json(['message' => 'No tiene permisos para realizar esta acción'], 403);
-    // }
-}
+    }
+
 
 
 
