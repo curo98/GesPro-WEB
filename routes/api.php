@@ -21,6 +21,7 @@ use App\Http\Controllers\Auth\AuthController;
 
 
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
 
 Route::get('/states', [Api\StateRequestController::class, 'index']);
 

@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
+use Illuminate\Foundation\Auth\RegistersUsers;
+
+use Illuminate\Support\Facades\Validator;
+
 class AuthController extends Controller
 {
     public function login(Request $request)
@@ -34,6 +38,36 @@ class AuthController extends Controller
         return compact('success');
     }
 
+    // public function register(Request $request){
+    //     $this->validator($request->all())->validate();
+    //     event(new Registered($user = $this->create($request->all())));
+    //     Auth::guard('api')->login($user);
 
+    //     $jwt = JWTAuth::attempt($credentials);
+    //     $success = true;
+
+    //     return compact('success', 'user', 'jwt');
+
+    // }
+
+    public function register(Request $request){
+    $this->validator($request->all())->validate();
+    $user = $this->create($request->all());
+    event(new Registered($user));
+
+    $credentials = $request->only('email', 'password');
+    if ($token = JWTAuth::attempt($credentials)) {
+        $success = true;
+    } else {
+        $success = false;
+    }
+
+    return compact('success', 'user', 'token');
+}
+
+    protected function validator(array $data)
+    {
+        return Validator::make($data, User::rules);
+    }
 
 }

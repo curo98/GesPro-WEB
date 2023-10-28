@@ -8,6 +8,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Role;
+use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -39,6 +41,13 @@ class User extends Authenticatable implements JWTSubject
         'email_verified_at'
     ];
 
+    public static $rules = [
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+    ];
+
+
     /**
      * The attributes that should be cast.
      *
@@ -48,6 +57,19 @@ class User extends Authenticatable implements JWTSubject
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public static function createUser(array $data)
+    {
+        // Obtener el ID del rol "invitado" de la base de datos
+        $invitadoRoleId = Role::where('name', 'invitado')->first()->id;
+
+        return self::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'id_role' => $invitadoRoleId, // Asegúrate de que $invitadoRoleId esté definido
+        ]);
+    }
 
     public function role()
     {
