@@ -134,6 +134,8 @@ class SupplierRequestController extends Controller
 
         $newName = $request->input('nameSupplier');
         $newEmail = $request->input('emailSupplier');
+
+        // Verifica si el nombre o el correo electrónico son diferentes de los actuales
         if ($newName !== $user->name) {
             $user->name = $newName;
         }
@@ -141,11 +143,18 @@ class SupplierRequestController extends Controller
         if ($newEmail && $newEmail !== $user->email) {
             $user->email = $newEmail;
         }
+
+        // Guarda el usuario actualizado
         $user->save();
+
+        // Cambia el rol del usuario a "proveedor"
         $user->id_role = Role::where('name', 'proveedor')->first()->id;
         $user->save();
 
+        // Obtén el país desde la solicitud, asumiendo que se encuentra en un campo llamado 'country'
         $country = $request->input('nacionality');
+
+        // Si el país no es Perú, establece 'Extranjero' como nacionalidad, de lo contrario, establece 'Nacional'
         $nacionality = ($country !== 'Perú') ? 'Extranjero' : 'Nacional';
 
         $typePaymentName = $request->input('typePayment');
@@ -157,24 +166,6 @@ class SupplierRequestController extends Controller
         if (!$typePayment || !$methodPayment) {
             return response()->json(['message' => 'Tipo de pago o método de pago no válido'], 400);
         }
-
-        $supplierRequest = new SupplierRequest([
-            'id_user' => $user->id,
-            'id_type_payment' => $typePayment->id,
-            'id_method_payment' => $methodPayment->id,
-        ]);
-
-        $supplierRequest->save();
-
-        // $selectedPolicies = $request->input('selectedPolicies');
-
-        // foreach ($selectedPolicies as $policy) {
-        //     $policyId = $policy['id']; // ID de la política
-        //     $policyAccepted = $policy['isChecked']; // Valor booleano para 'accepted'
-
-        //     // Crea un registro en la tabla intermedia
-        //     $supplierRequest->policies()->attach($policyId, ['accepted' => $policyAccepted]);
-        // }
 
         $supplier = new Supplier([
             'nacionality' => $nacionality,
