@@ -14,6 +14,11 @@ class Policy extends Model
         'content',
     ];
 
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
+
     public function requests() {
         return $this->belongsToMany(SupplierRequest::class,  'supplier_requests_policies',  'id_supplier_request', 'id_policie')
             ->withPivot('aceepted');

@@ -27,7 +27,7 @@ Route::get('/states', [Api\StateRequestController::class, 'index']);
 
 Route::get('/types-payments', [Api\TypePaymentRequestController::class, 'index']);
 Route::get('/methods-payments', [Api\MethodPaymentRequestController::class, 'index']);
-
+Route::get('/policies', [Api\PolicyController::class, 'index']);
 
 
 Route::get('/departments', [Api\UbigeoPeruController::class, 'loadDepartments']);
