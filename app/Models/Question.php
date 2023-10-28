@@ -18,11 +18,6 @@ class Question extends Model
         'updated_at',
     ];
 
-    // public function supplierRequests()
-    // {
-    //     return $this->belongsToMany(SupplierRequest::class, 'supplier_requests_questions');
-    // }
-
     public function supplierRequests()
     {
         return $this->belongsToMany(SupplierRequest::class, 'supplier_requests_questions', 'id_question', 'id_supplier_request');

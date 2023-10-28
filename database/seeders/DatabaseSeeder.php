@@ -52,7 +52,7 @@ class DatabaseSeeder extends Seeder
         $supplierRequests->each(function ($supplierRequest) {
             // Asignar preguntas aleatorias
             $questions = \App\Models\Question::inRandomOrder()->limit(5)->get();
-            $supplierRequest->questions()->attach($questions, ['response' => rand(0, 1) ? 'Sí' : 'No']);
+            $supplierRequest->questions()->attach($questions, ['response' => rand(0, 1)]);
 
             // Asignar documentos aleatorios
             $documents = \App\Models\Document::inRandomOrder()->limit(3)->get();

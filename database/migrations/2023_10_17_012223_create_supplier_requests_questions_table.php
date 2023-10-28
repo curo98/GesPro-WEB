@@ -19,8 +19,7 @@ return new class extends Migration
 
             $table->unsignedBigInteger('id_question');
             $table->foreign('id_question')->references('id')->on('questions');
-
-            $table->enum('response', ['Sí', 'No']);
+            $table->boolean('response')->default(true);
 
             $table->timestamps();
         });
