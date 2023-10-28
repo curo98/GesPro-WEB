@@ -132,15 +132,27 @@ class SupplierRequestController extends Controller
     {
         $user = Auth::guard('api')->user();
 
+        $newName = $request->input('nameSupplier');
+        $newEmail = $request->input('emailSupplier');
+
+        // Verifica si el nombre o el correo electrónico son diferentes de los actuales
+        if ($newName !== $user->name) {
+            $user->name = $newName;
+        }
+
+        if ($newEmail && $newEmail !== $user->email) {
+            $user->email = $newEmail;
+        }
+
+        // Cambia el rol del usuario a "proveedor"
+        $user->id_role = Role::where('name', 'proveedor')->first()->id;
+        $user->save();
+
         // Obtén el país desde la solicitud, asumiendo que se encuentra en un campo llamado 'country'
         $country = $request->input('country');
 
         // Si el país no es Perú, establece 'Extranjero' como nacionalidad, de lo contrario, establece 'Nacional'
         $nacionality = ($country !== 'Perú') ? 'Extranjero' : 'Nacional';
-
-        // Cambia el rol del usuario a "proveedor"
-        $user->id_role = Role::where('name', 'proveedor')->first()->id;
-        $user->save();
 
         $typePaymentName = $request->input('typePayment');
         $methodPaymentName = $request->input('methodPayment');
