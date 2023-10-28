@@ -134,6 +134,7 @@ class SupplierRequestController extends Controller
 
         $newName = $request->input('nameSupplier');
         $newEmail = $request->input('emailSupplier');
+        $selectedPolicies = $request->input('selectedPolicies');
 
         // Verifica si el nombre o el correo electrónico son diferentes de los actuales
         if ($newName !== $user->name) {
