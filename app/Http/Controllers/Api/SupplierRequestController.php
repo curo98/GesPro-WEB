@@ -183,6 +183,7 @@ class SupplierRequestController extends Controller
         ]);
 
         $supplierRequest->save();
+        $id_supplier_request = $supplierRequest->id;
         $supplierRequest = SupplierRequest::find($id_supplier_request); // Suponiendo que ya tienes la instancia de SupplierRequest
 
         foreach ($selectedPolicies as $policy) {
