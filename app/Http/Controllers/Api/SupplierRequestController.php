@@ -148,8 +148,8 @@ class SupplierRequestController extends Controller
         }
 
         $supplier = new Supplier([
-            'nacionality' => $request->input('nacionality', 'Extranjero'),
-            'nic_ruc' => $request->input('nic_ruc', '1234567898'),
+            'nacionality' => $request->input('nacionality'),
+            'nic_ruc' => $request->input('nic_ruc'),
             'state' => 'inactivo',
             'id_user' => $user->id
         ]);
