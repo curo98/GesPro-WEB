@@ -189,8 +189,12 @@ class SupplierRequestController extends Controller
         $selectedPolicies = $request->input('selectedPolicies');
 
         foreach ($selectedPolicies as $policyData) {
-            // Asocia cada política a la solicitud de proveedor con el ID de la solicitud y el estado utilizando Eloquent
-            $supplierRequest->policies()->attach($policyData['id'], ['accepted' => $policyData['isChecked']]);
+        // Asocia cada política a la solicitud de proveedor con el ID y el estado desde el array
+            DB::table('supplier_requests_policies')->insert([
+                'id_supplier_request' => $id_supplier_request,
+                'id_policie' => $policyData['id'],
+                'accepted' => $policyData['isChecked'], // Establece el estado según el array
+            ]);
         }
         return response()->json(['message' => 'Registro exitoso como proveedor'], 201);
     }
