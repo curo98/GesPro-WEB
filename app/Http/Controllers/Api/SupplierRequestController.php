@@ -166,15 +166,15 @@ class SupplierRequestController extends Controller
 
         $supplierRequest->save();
 
-        $selectedPolicies = $request->input('selectedPolicies');
+        // $selectedPolicies = $request->input('selectedPolicies');
 
-        foreach ($selectedPolicies as $policy) {
-            $policyId = $policy['id']; // ID de la política
-            $policyAccepted = $policy['isChecked']; // Valor booleano para 'accepted'
+        // foreach ($selectedPolicies as $policy) {
+        //     $policyId = $policy['id']; // ID de la política
+        //     $policyAccepted = $policy['isChecked']; // Valor booleano para 'accepted'
 
-            // Crea un registro en la tabla intermedia
-            $supplierRequest->policies()->attach($policyId, ['accepted' => $policyAccepted]);
-        }
+        //     // Crea un registro en la tabla intermedia
+        //     $supplierRequest->policies()->attach($policyId, ['accepted' => $policyAccepted]);
+        // }
 
         $supplier = new Supplier([
             'nacionality' => $nacionality,
