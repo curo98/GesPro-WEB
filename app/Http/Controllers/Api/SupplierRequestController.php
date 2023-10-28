@@ -134,7 +134,6 @@ class SupplierRequestController extends Controller
 
         $newName = $request->input('nameSupplier');
         $newEmail = $request->input('emailSupplier');
-        $selectedPolicies = $request->input('selectedPolicies');
 
         // Verifica si el nombre o el correo electrónico son diferentes de los actuales
         if ($newName !== $user->name) {
@@ -184,13 +183,15 @@ class SupplierRequestController extends Controller
 
         $supplierRequest->save();
         $id_supplier_request = $supplierRequest->id;
-        $supplierRequest = SupplierRequest::find($id_supplier_request); // Suponiendo que ya tienes la instancia de SupplierRequest
 
-        foreach ($selectedPolicies as $policy) {
-            // Asocia cada objeto Policy a la solicitud de proveedor con el ID y el estado
-            $supplierRequest->policies()->attach($policy->id, ['accepted' => true]);
+        // Ahora, asumimos que ya tienes la instancia de SupplierRequest con el ID de la solicitud de proveedor
+
+        $selectedPolicies = $request->input('selectedPolicies');
+
+        foreach ($selectedPolicies as $policyData) {
+            // Asocia cada política a la solicitud de proveedor con el ID y el estado
+            $supplierRequest->policies()->attach($policyData['id'], ['accepted' => true]);
         }
-
         return response()->json(['message' => 'Registro exitoso como proveedor'], 201);
     }
 
