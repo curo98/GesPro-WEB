@@ -188,7 +188,7 @@ class SupplierRequestController extends Controller
         foreach ($selectedPolicies as $policy) {
             DB::table('supplier_requests_policies')->insert([
                 'id_supplier_request' => $id_supplier_request, // Asigna el ID de la solicitud de proveedor
-                'id_policie' => $policy->id, // Asigna el ID de la póliza desde la lista
+                'id_policie' => 1, // Asigna el ID de la póliza desde la lista
                 'accepted' => true, // Puede establecerse en falso por defecto
             ]);
         }
