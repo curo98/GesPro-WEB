@@ -187,10 +187,19 @@ class SupplierRequestController extends Controller
         // Ahora, asumimos que ya tienes la instancia de SupplierRequest con el ID de la solicitud de proveedor
 
         $selectedPolicies = $request->input('selectedPolicies');
+        $questionResponses = $request->input('questionResponses');
 
         foreach ($selectedPolicies as $policyData) {
             // Asocia cada política a la solicitud de proveedor con el ID y el estado
             $supplierRequest->policies()->attach($policyData['id'], ['accepted' => $policyData['accepted']]);
+        }
+
+        foreach ($questionResponses as $questionResponse) {
+            // Accede a los datos de pregunta y respuesta
+            $supplierRequest->questions()->attach($questionId['id'], ['response' => $answer['response']]);
+
+            // Puedes procesar los datos de la pregunta y respuesta aquí
+            // Por ejemplo, guardarlos en la base de datos si es necesario
         }
         return response()->json(['message' => 'Registro exitoso como proveedor'], 201);
     }
