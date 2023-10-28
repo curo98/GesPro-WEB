@@ -193,7 +193,7 @@ class SupplierRequestController extends Controller
             DB::table('supplier_requests_policies')->insert([
                 'id_supplier_request' => $id_supplier_request,
                 'id_policie' => $policyData['id'],
-                'accepted' => $policyData['accepted'], // Establece el estado según el array
+                'accepted' => $policyData['isChecked'], // Establece el estado según el array
             ]);
         }
         return response()->json(['message' => 'Registro exitoso como proveedor'], 201);
