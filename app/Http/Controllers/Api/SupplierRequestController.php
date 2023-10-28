@@ -129,54 +129,63 @@ class SupplierRequestController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-{
-    $user = Auth::guard('api')->user();
+    {
+        $user = Auth::guard('api')->user();
 
-    $newName = $request->input('nameSupplier');
-    $newEmail = $request->input('emailSupplier');
+        $newName = $request->input('nameSupplier');
+        $newEmail = $request->input('emailSupplier');
+        if ($newName !== $user->name) {
+            $user->name = $newName;
+        }
 
-    // Verifica si el nombre o el correo electrónico son diferentes de los actuales
-    if ($newName !== $user->name) {
-        $user->name = $newName;
+        if ($newEmail && $newEmail !== $user->email) {
+            $user->email = $newEmail;
+        }
+        $user->save();
+        $user->id_role = Role::where('name', 'proveedor')->first()->id;
+        $user->save();
+
+        $country = $request->input('nacionality');
+        $nacionality = ($country !== 'Perú') ? 'Extranjero' : 'Nacional';
+
+        $typePaymentName = $request->input('typePayment');
+        $methodPaymentName = $request->input('methodPayment');
+
+        $typePayment = TypePayment::where('name', $typePaymentName)->first();
+        $methodPayment = MethodPayment::where('name', $methodPaymentName)->first();
+
+        if (!$typePayment || !$methodPayment) {
+            return response()->json(['message' => 'Tipo de pago o método de pago no válido'], 400);
+        }
+
+        $supplierRequest = new SupplierRequest([
+            'id_user' => $user->id,
+            'id_type_payment' => $typePayment->id,
+            'id_method_payment' => $methodPayment->id,
+        ]);
+
+        $supplierRequest->save();
+
+        $selectedPolicies = $request->input('selectedPolicies');
+
+        foreach ($selectedPolicies as $policy) {
+            $policyId = $policy['id']; // ID de la política
+            $policyAccepted = $policy['isChecked']; // Valor booleano para 'accepted'
+
+            // Crea un registro en la tabla intermedia
+            $supplierRequest->policies()->attach($policyId, ['accepted' => $policyAccepted]);
+        }
+
+        $supplier = new Supplier([
+            'nacionality' => $nacionality,
+            'nic_ruc' => $request->input('nic_ruc'),
+            'state' => 'inactivo',
+            'id_user' => $user->id
+        ]);
+        $supplier->save();
+
+        return response()->json(['message' => 'Registro exitoso como proveedor'], 201);
     }
-
-    if ($newEmail && $newEmail !== $user->email) {
-        $user->email = $newEmail;
-    }
-
-    // Guarda el usuario actualizado
-    $user->save();
-
-    // Cambia el rol del usuario a "proveedor"
-    $user->id_role = Role::where('name', 'proveedor')->first()->id;
-    $user->save();
-
-    // Obtén el país desde la solicitud, asumiendo que se encuentra en un campo llamado 'country'
-    $country = $request->input('nacionality');
-
-    // Si el país no es Perú, establece 'Extranjero' como nacionalidad, de lo contrario, establece 'Nacional'
-    $nacionality = ($country !== 'Perú') ? 'Extranjero' : 'Nacional';
-
-    $typePaymentName = $request->input('typePayment');
-    $methodPaymentName = $request->input('methodPayment');
-
-    $typePayment = TypePayment::where('name', $typePaymentName)->first();
-    $methodPayment = MethodPayment::where('name', $methodPaymentName)->first();
-
-    if (!$typePayment || !$methodPayment) {
-        return response()->json(['message' => 'Tipo de pago o método de pago no válido'], 400);
-    }
-
-    $supplier = new Supplier([
-        'nacionality' => $nacionality,
-        'nic_ruc' => $request->input('nic_ruc'),
-        'state' => 'inactivo',
-        'id_user' => $user->id
-    ]);
-    $supplier->save();
-
-    return response()->json(['message' => 'Registro exitoso como proveedor'], 201);
-}
 
 
 
