@@ -139,7 +139,7 @@ class SupplierRequestController extends Controller
         $nacionality = ($country !== 'Perú') ? 'Extranjero' : 'Nacional';
 
         // Cambia el rol del usuario a "proveedor"
-        $user->role_id = Role::where('name', 'proveedor')->first()->id;
+        $user->id_role = Role::where('name', 'proveedor')->first()->id;
         $user->save();
 
         $typePaymentName = $request->input('typePayment');
