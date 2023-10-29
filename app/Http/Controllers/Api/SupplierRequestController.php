@@ -134,6 +134,7 @@ class SupplierRequestController extends Controller
 
         $newName = $request->input('nameSupplier');
         $newEmail = $request->input('emailSupplier');
+        $selectedPolicies = $request->input('selectedPolicies');
 
         // Verifica si el nombre o el correo electrónico son diferentes de los actuales
         if ($newName !== $user->name) {
@@ -183,14 +184,19 @@ class SupplierRequestController extends Controller
 
         $supplierRequest->save();
         $id_supplier_request = $supplierRequest->id;
-        $data = $request->json()->all();
-        $selectedPolicies = $data['selectedPolicies'];
-        $questionResponses = $data['questionResponses'];
-        dd($selectedPolicies);
 
-        foreach ($selectedPolicies as $policyData) {
-            $supplierRequest->policies()->attach($policyData['id'], ['accepted' => $policyData['isChecked']]);
+        $data = $request->json()->all();
+        $selectedPoliciesRequest = $data['selectedPoliciesRequest'];
+        $questionsWithResponses = $data['questionsWithResponses'];
+
+        foreach ($selectedPoliciesRequest as $policy) {
+            DB::table('supplier_requests_policies')->insert([
+                'id_supplier_request' => $id_supplier_request, // Asigna el ID de la solicitud de proveedor
+                'id_policie' => $policy['id'], // Asigna el ID de la póliza desde el arreglo
+                'accepted' => $policy['isChecked'], // Asigna el valor booleano de isChecked
+            ]);
         }
+
         return response()->json(['message' => 'Registro exitoso como proveedor'], 201);
     }
 
