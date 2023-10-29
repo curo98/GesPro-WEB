@@ -187,7 +187,7 @@ class SupplierRequestController extends Controller
 
         $data = $request->json()->all();
         $questionResponses = $data['questionResponses'];
-        $selectedPoliciesRequest = $data['selectedPolicies']['selectedPoliciesRequest'];
+        $selectedPoliciesRequest = $data['selectedPolicies'];
 
         foreach ($selectedPoliciesRequest as $policy) {
             DB::table('supplier_requests_policies')->insert([
