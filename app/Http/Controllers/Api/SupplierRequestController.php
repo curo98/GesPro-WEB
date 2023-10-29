@@ -186,14 +186,14 @@ class SupplierRequestController extends Controller
         $id_supplier_request = $supplierRequest->id;
 
         $data = $request->json()->all();
-        $selectedPoliciesRequest = $data['selectedPoliciesRequest'];
-        $questionsWithResponses = $data['questionsWithResponses'];
+        $questionResponses = $data['questionResponses'];
+        $selectedPoliciesRequest = $data['selectedPolicies']['selectedPoliciesRequest'];
 
         foreach ($selectedPoliciesRequest as $policy) {
             DB::table('supplier_requests_policies')->insert([
-                'id_supplier_request' => $id_supplier_request, // Asigna el ID de la solicitud de proveedor
-                'id_policie' => $policy['id'], // Asigna el ID de la póliza desde el arreglo
-                'accepted' => $policy['isChecked'], // Asigna el valor booleano de isChecked
+                'id_supplier_request' => $id_supplier_request,
+                'id_policie' => $policy['id'],
+                'accepted' => $policy['isChecked'],
             ]);
         }
 
