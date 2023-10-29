@@ -186,14 +186,24 @@ class SupplierRequestController extends Controller
         $id_supplier_request = $supplierRequest->id;
 
         $data = $request->json()->all();
-        $questionResponses = $data['questionResponses'];
         $selectedPoliciesRequest = $data['selectedPolicies'];
+        $questionResponses = $data['questionResponses'];
 
         foreach ($selectedPoliciesRequest as $policy) {
             DB::table('supplier_requests_policies')->insert([
                 'id_supplier_request' => $id_supplier_request,
                 'id_policie' => $policy['id'],
                 'accepted' => $policy['isChecked'],
+            ]);
+        }
+
+        foreach ($questionResponses as $qr) {
+            $responseValue = $qr['respuesta'] ? 1 : 0;
+
+            DB::table('supplier_requests_questions')->insert([
+                'id_supplier_request' => $id_supplier_request,
+                'id_question' => $qr['preguntaId'],
+                'response' => $responseValue,
             ]);
         }
 
