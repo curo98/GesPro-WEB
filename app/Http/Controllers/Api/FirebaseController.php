@@ -14,8 +14,8 @@ class FirebaseController extends Controller
     {
         // $request->validate($rules);
         $user = Auth::guard('api')->user();
-        if ($request->has('token')) {
-            $user->device_token = $request->input('token');
+        if ($request->has('device_token')) {
+            $user->device_token = $request->input('device_token');
             $user->save();
         }
 
