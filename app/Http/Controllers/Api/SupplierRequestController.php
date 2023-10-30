@@ -182,7 +182,7 @@ class SupplierRequestController extends Controller
             'id_method_payment' => $methodPayment->id,
         ]);
 
-        $supplierRequest->save();
+        $saved = $supplierRequest->save();
         $id_supplier_request = $supplierRequest->id;
 
         $data = $request->json()->all();
@@ -197,6 +197,7 @@ class SupplierRequestController extends Controller
             ]);
         }
 
+        //implementar envio de mensajes tambien para otros casos
         foreach ($questionResponses as $qr) {
             $responseValue = $qr['respuesta'] ? 1 : 0;
 
@@ -205,6 +206,9 @@ class SupplierRequestController extends Controller
                 'id_question' => $qr['preguntaId'],
                 'response' => $responseValue,
             ]);
+        }
+        if ($saved) {
+            $supplierRequest->user->sendFCM('Su solicitud se ha enviado correctamente!');
         }
 
         return response()->json(['message' => 'Registro exitoso como proveedor'], 201);

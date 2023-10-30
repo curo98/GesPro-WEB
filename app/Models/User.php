@@ -111,4 +111,10 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->belongsToMany(SupplierRequest::class, 'transitions_state_requests', 'id_reviewer', 'id_supplier_request');
     }
+
+    public function sendFCM($message){
+        return fcm()->to([$this->device_token])->notification([
+                    'title' => config('app.name'),
+                    'body' => $message])->send();
+    }
 }

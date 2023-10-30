@@ -22,5 +22,13 @@ class FirebaseController extends Controller
             ->send();
         $notification = 'Notificacion enviada a todos los usuarios (android).';
         return back()->with(compact('notification'));
+
+        fcm()
+            ->to($recipients)
+            ->notification([
+                'title' => $request->input('title'),
+                'body' => $request->input('body')
+            ])
+            ->send();
     }
 }
