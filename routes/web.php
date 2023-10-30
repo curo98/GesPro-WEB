@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Admin\FirebaseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,3 +30,10 @@ Route::get('/register-paso3', [App\Http\Controllers\ProveedorController::class, 
 Route::get('/register-step4', [App\Http\Controllers\ProveedorController::class, 'formStep4'])->name('step4');
 
 Route::get('/register-step5', [App\Http\Controllers\ProveedorController::class, 'formStep5'])->name('step5');
+
+
+// Route::middleware(['auth', 'admin'])->namespace('Administrador')->group(
+//     function () {
+Route::middleware(['auth'])->namespace('Admin')->group(function () {
+    Route::post('/fcm/send', [FirebaseController::class, 'sendAll']);
+});
