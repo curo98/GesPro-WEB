@@ -58,6 +58,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/documents-request', [Api\DocumentController::class, 'index']);
 
     /* FCM */
-    Route::post('/fcm/token', [Api\FirebaseController::class, 'postToken']);
+    // Route::post('/fcm/token', [Api\FirebaseController::class, 'postToken']);
+    Route::post('/fcm/token', 'FirebaseController@postToken');
 
 });
