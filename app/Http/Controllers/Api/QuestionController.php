@@ -14,4 +14,11 @@ class QuestionController extends Controller
 
         return response()->json($questions);
     }
+    // public function inicio()
+    // {
+    //     $questions = Question::all();
+
+    //     return response()->json($questions);
+    // }
+
 }
