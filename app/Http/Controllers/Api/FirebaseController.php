@@ -10,9 +10,15 @@ class FirebaseController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function postToken(Request $request)
     {
-        //
+        // $request->validate($rules);
+        $user = Auth::guard('api')->user();
+        if ($request->has('token')) {
+            $user->device_token = $request->input('token');
+            $user->save();
+        }
+
     }
 
     /**
