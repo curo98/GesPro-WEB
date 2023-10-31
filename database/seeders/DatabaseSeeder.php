@@ -17,16 +17,33 @@ class DatabaseSeeder extends Seeder
 
         \App\Models\Role::factory(4)->create();
         \App\Models\Role::create([
-                'name' => 'Administrador',
+                'name' => 'admin',
                 'description' => 'Usuario con todos los permisos',
             ]);
         \App\Models\User::factory(10)->create();
         \App\Models\User::create([
-                'name' => 'Test User',
-                'email' => 'curo@dev.com',
-                'password' => bcrypt('76124769'),
+                'name' => 'Alexis',
+                'email' => 'admin@admin.com',
+                'password' => bcrypt('123'),
                 'id_role' => 5,
             ]);
+        $comprasRole = \App\Models\Role::where('name', 'compras')->first();
+        $contabilidadRole = \App\Models\Role::where('name', 'contabilidad')->first();
+        \App\Models\User::create([
+            'name' => 'Compras',
+            'email' => 'compras@example.com',
+            'password' => bcrypt('1234'),
+            'id_role' => $comprasRole->id,
+        ]);
+
+        \App\Models\User::create([
+            'name' => 'Contador',
+            'email' => 'contabilidad@example.com',
+            'password' => bcrypt('1234'),
+            'id_role' => $contabilidadRole->id,
+        ]);
+
+
         //\App\Models\Supplier::factory(5)->create();
         \App\Models\StateRequest::factory(6)->create();
         \App\Models\TypePayment::factory(2)->create();

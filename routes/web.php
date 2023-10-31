@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Admin\FirebaseController;
+use App\Http\Controllers;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,8 +33,15 @@ Route::get('/register-step4', [App\Http\Controllers\ProveedorController::class, 
 Route::get('/register-step5', [App\Http\Controllers\ProveedorController::class, 'formStep5'])->name('step5');
 
 
-// Route::middleware(['auth', 'admin'])->namespace('Administrador')->group(
-//     function () {
-Route::middleware(['auth'])->namespace('Admin')->group(function () {
+Route::middleware(['auth', 'admin'])->namespace('Admin')->group(function () {
     Route::post('/fcm/send', [FirebaseController::class, 'sendAll']);
 });
+
+Route::middleware(['auth', 'role:compras,contabilidad'])->group(function () {
+    // Rutas para usuarios con los roles 'admin' o 'compras'
+    Route::get('/suppliers', 'SupplierController@index');
+
+    Route::get('/requests', [Controllers\SupplierRequestController::class, 'index']);
+    Route::post('/requests/check', [Controllers\SupplierRequestController::class, 'check']);
+});
+

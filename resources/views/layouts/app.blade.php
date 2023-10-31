@@ -27,6 +27,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 
+
     <style>
         .custom-column {
             background-color: #17a2b8;
@@ -106,6 +107,40 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
                         <!-- Authentication Links -->
+                        @auth
+                            @if (auth()->user()->role->name == 'compras' || auth()->user()->role->name == 'contabilidad')
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ url('/requests') }}">{{ __('Solicitudes') }}</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Proveedores') }}</a>
+                                </li>
+                            @elseif(auth()->user()->role->name == 'admin')
+                                <li class="nav-item dropdown">
+                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                        Formulario
+                                    </a>
+
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                        <a class="dropdown-item" href="#">Estados</a>
+                                        <a class="dropdown-item" href="#">Politicas</a>
+                                        <a class="dropdown-item" href="#">preguntas</a>
+                                    </div>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                        Administrar
+                                    </a>
+
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                        <a class="dropdown-item" href="#">Roles de usuarios</a>
+                                        <a class="dropdown-item" href="#">Usuarios</a>
+                                    </div>
+                                </li>
+                            @endif
+                        @endauth
                         @guest
                             @if (Route::has('login'))
                                 <li class="nav-item">
@@ -138,6 +173,7 @@
                                 </div>
                             </li>
                         @endguest
+
                     </ul>
                 </div>
             </div>
