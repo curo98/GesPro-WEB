@@ -157,6 +157,8 @@ class StateRequestController extends Controller
                 'updated_at' => now(), // Fecha actual de actualización
             ]);
 
+            $sr->user->supplier->update(['state' => 'activo']);
+
             $sr->user->sendFCM('Su solicitud ha sido aporbada');
 
             $notification = 'Su solicitud ha sido aprobada, felicidades!';
