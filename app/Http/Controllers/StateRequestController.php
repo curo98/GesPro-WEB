@@ -22,16 +22,17 @@ class StateRequestController extends Controller
         $nuevoEstadoId = $estadoValidado->id;
 
         $ultimoEstado = DB::table('transitions_state_requests')
-            ->select('to_state_id')
+            ->select('from_state_id', 'to_state_id')
             ->where('id_supplier_request', $id)
             ->orderBy('id', 'desc')
             ->first();
 
         if ($ultimoEstado) {
+            $estadoActual = $ultimoEstado->to_state_id ?? $ultimoEstado->from_state_id;
             // Inserta un nuevo registro en la tabla intermedia con el último estado en from_state_id y el nuevo estado en to_state_id
             DB::table('transitions_state_requests')->insert([
                 'id_supplier_request' => $id,
-                'from_state_id' => $ultimoEstado->to_state_id,
+                'from_state_id' => $estadoActual,
                 'to_state_id' => $nuevoEstadoId,
                 'id_reviewer' => auth()->user()->id, // El ID del revisor, ajústalo según tus necesidades
                 'created_at' => now(), // Fecha actual de creación
