@@ -44,6 +44,11 @@ class StateRequestController extends Controller
                 'updated_at' => now(), // Fecha actual de actualización
             ]);
 
+            $transitionId = DB::table('transitions_state_requests')
+            ->where('id_supplier_request', $id)
+            ->orderBy('id', 'desc')
+            ->value('to_state_id');
+
             //siguiente estado
             $estadoPorValidar = DB::table('state_requests')
                 ->where('name', 'Por validar')
@@ -52,7 +57,7 @@ class StateRequestController extends Controller
 
             DB::table('transitions_state_requests')->insert([
                 'id_supplier_request' => $id,
-                'from_state_id' => $estadoActual,
+                'from_state_id' => $transitionId,
                 'to_state_id' => $stateToValidate,
                 'id_reviewer' => auth()->user()->id, // El ID del revisor, ajústalo según tus necesidades
                 'created_at' => now(), // Fecha actual de creación
