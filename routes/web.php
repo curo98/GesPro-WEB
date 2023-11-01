@@ -45,7 +45,7 @@ Route::middleware(['auth', 'role:compras,contabilidad'])->group(function () {
 
     Route::post('/requests/check/{id}', [Controllers\StateRequestController::class, 'check'])->name('requests.check');
     Route::post('/requests/receive/{id}', [Controllers\StateRequestController::class, 'receive'])->name('requests.receive');
-    Route::post('/requests/approve/{id}', [Controllers\StateRequestController::class, 'approve'])->name('requests.approve');
+    Route::post('/requests/approve/{id}', [Controllers\StateRequestController::class, 'approve'])->name('requests.approve'); //
 
 });
 
