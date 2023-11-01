@@ -185,6 +185,18 @@ class SupplierRequestController extends Controller
         $saved = $supplierRequest->save();
         $id_supplier_request = $supplierRequest->id;
 
+        $estadoValidado = DB::table('state_requests')
+            ->where('name', 'Enviado')
+            ->first();
+        $nuevoEstadoId = $estadoValidado->id;
+
+        DB::table('transitions_state_requests')->insert([
+                'id_supplier_request' => $id_supplier_request,
+                'from_state_id' => $nuevoEstadoId,
+                'created_at' => now(), // Fecha actual de creación
+                'updated_at' => now(), // Fecha actual de actualización
+            ]);
+
         $data = $request->json()->all();
         $selectedPoliciesRequest = $data['selectedPolicies'];
         $questionResponses = $data['questionResponses'];

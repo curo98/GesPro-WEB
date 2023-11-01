@@ -25,7 +25,7 @@ return new class extends Migration
             $table->unsignedBigInteger('to_state_id')->nullable();
             $table->foreign('to_state_id')->references('id')->on('state_requests');
 
-            $table->unsignedBigInteger('id_reviewer'); // ID del revisor
+            $table->unsignedBigInteger('id_reviewer')->nullable(); // ID del revisor
             $table->foreign('id_reviewer')->references('id')->on('users'); // Clave foránea hacia la tabla de usuarios
 
 
