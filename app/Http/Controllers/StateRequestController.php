@@ -23,7 +23,7 @@ class StateRequestController extends Controller
         $ultimoEstado = DB::table('transitions_state_requests')
             ->select('from_state_id', 'to_state_id')
             ->where('id_supplier_request', $id)
-            ->orderBy('id', 'desc')
+            ->orderBy('created_at', 'desc')
             ->first();
 
         if ($ultimoEstado) {
