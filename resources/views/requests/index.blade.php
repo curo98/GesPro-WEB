@@ -76,9 +76,8 @@
                                                                     action="{{ route('requests.approve', ['id' => $sr->id]) }}"
                                                                     method="post">
                                                                     @csrf
-                                                                    <li><button class="dropdown-item" type="button">
-                                                                            Aprobar <i class="fas fa-check"></i></button>
-                                                                    </li>
+                                                                    <button type="submit" class="dropdown-item">Aprobar
+                                                                        <i class="fas fa-check"></i></button>
                                                                 </form>
                                                             @endif
                                                             @if (auth()->user()->role->name === 'proveedor')
