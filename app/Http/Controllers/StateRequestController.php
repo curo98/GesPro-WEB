@@ -11,7 +11,7 @@ use App\Models\User;
 
 class StateRequestController extends Controller
 {
-    public function receive()
+    public function receive(String $id)
     {
         $sr = SupplierRequest::findOrFail($id);
 
