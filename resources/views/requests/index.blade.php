@@ -43,56 +43,64 @@
                                                         </button>
                                                     @endif
 
-                                                    <div class="dropdown" style="display: inline-block;">
-                                                        <button class="btn btn-sm btn-secondary dropdown-toggle"
-                                                            type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                            Acciones
-                                                        </button>
-                                                        <ul class="dropdown-menu">
-                                                            @if (auth()->user()->role->name === 'compras')
-                                                                @if ($sr->getFinalState()->name === 'Por recibir')
+                                                    @if (!in_array($sr->getFinalState()->name, ['Rechazada', 'En corrección', 'Aprobada']))
+                                                        <div class="dropdown" style="display: inline-block;">
+                                                            <button class="btn btn-sm btn-secondary dropdown-toggle"
+                                                                type="button" data-bs-toggle="dropdown"
+                                                                aria-expanded="false">
+                                                                Acciones
+                                                            </button>
+                                                            <ul class="dropdown-menu">
+                                                                @if (auth()->user()->role->name === 'compras')
+                                                                    @if ($sr->getFinalState()->name === 'Por recibir')
+                                                                        <form
+                                                                            action="{{ route('requests.receive', ['id' => $sr->id]) }}"
+                                                                            method="post">
+                                                                            @csrf
+                                                                            <button type="submit"
+                                                                                class="dropdown-item">Recibir <i
+                                                                                    class="fas fa-check"></i></button>
+                                                                        </form>
+                                                                    @endif
+
+                                                                    @if ($sr->getFinalState()->name === 'Por validar')
+                                                                        <form
+                                                                            action="{{ route('requests.check', ['id' => $sr->id]) }}"
+                                                                            method="post">
+                                                                            @csrf
+                                                                            <button type="submit"
+                                                                                class="dropdown-item">Validar <i
+                                                                                    class="fas fa-check"></i></button>
+                                                                        </form>
+                                                                    @endif
+                                                                @endif
+
+                                                                @if ($sr->getFinalState()->name === 'Por aprobar')
                                                                     <form
-                                                                        action="{{ route('requests.receive', ['id' => $sr->id]) }}"
+                                                                        action="{{ route('requests.approve', ['id' => $sr->id]) }}"
                                                                         method="post">
                                                                         @csrf
-                                                                        <button type="submit" class="dropdown-item">Recibir
+                                                                        <button type="submit" class="dropdown-item">Aprobar
                                                                             <i class="fas fa-check"></i></button>
                                                                     </form>
                                                                 @endif
 
-                                                                @if ($sr->getFinalState()->name === 'Por validar')
-                                                                    <form
-                                                                        action="{{ route('requests.check', ['id' => $sr->id]) }}"
-                                                                        method="post">
-                                                                        @csrf
-                                                                        <button type="submit" class="dropdown-item">Validar
-                                                                            <i class="fas fa-check"></i></button>
-                                                                    </form>
+                                                                @if (auth()->user()->role->name === 'proveedor')
+                                                                    <li><button class="dropdown-item"
+                                                                            type="button">Rechazar <i
+                                                                                class="fas fa-times"></i></button></li>
                                                                 @endif
-                                                            @endif
 
-                                                            @if ($sr->getFinalState()->name === 'Por aprobar')
-                                                                <form
-                                                                    action="{{ route('requests.approve', ['id' => $sr->id]) }}"
-                                                                    method="post">
-                                                                    @csrf
-                                                                    <button type="submit" class="dropdown-item">Aprobar
-                                                                        <i class="fas fa-check"></i></button>
-                                                                </form>
-                                                            @endif
-                                                            @if (auth()->user()->role->name === 'proveedor')
-                                                                <li><button class="dropdown-item" type="button">
-                                                                        Rechazar <i class="fas fa-times"></i></button>
-                                                                </li>
-                                                            @endif
+                                                                @if (auth()->user()->role->name === 'proveedor')
+                                                                    <li><button class="dropdown-item"
+                                                                            type="button">Cancelar <i
+                                                                                class="fas fa-times"></i></button></li>
+                                                                @endif
 
-                                                            @if (auth()->user()->role->name === 'proveedor')
-                                                                <li><button class="dropdown-item" type="button">
-                                                                        Cancelar <i class="fas fa-times"></i></button></li>
-                                                            @endif
+                                                            </ul>
+                                                        </div>
+                                                    @endif
 
-                                                        </ul>
-                                                    </div>
                                                 </td>
                                             </tr>
                                         @endforeach
