@@ -75,12 +75,16 @@
                                                                 <li><button class="dropdown-item" type="button">
                                                                         Aprobar <i class="fas fa-check"></i></button></li>
                                                             @endif
+                                                            @if (auth()->user()->role->name === 'proveedor')
+                                                                <li><button class="dropdown-item" type="button">
+                                                                        Rechazar <i class="fas fa-times"></i></button></li>
+                                                            @endif
 
-                                                            <li><button class="dropdown-item" type="button">
-                                                                    Rechazar <i class="fas fa-times"></i></button></li>
+                                                            @if (auth()->user()->role->name === 'proveedor')
+                                                                <li><button class="dropdown-item" type="button">
+                                                                        Cancelar <i class="fas fa-times"></i></button></li>
+                                                            @endif
 
-                                                            <li><button class="dropdown-item" type="button">
-                                                                    Cancelar <i class="fas fa-times"></i></button></li>
                                                         </ul>
                                                     </div>
                                                 </td>

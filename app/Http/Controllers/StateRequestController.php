@@ -21,7 +21,6 @@ class StateRequestController extends Controller
         $to_state_id = $estadoRecibido->id;
 
         $ultimoEstado = DB::table('transitions_state_requests')
-            ->select('from_state_id', 'to_state_id')
             ->where('id_supplier_request', $id)
             ->orderBy('created_at', 'desc')
             ->first();
@@ -101,6 +100,26 @@ class StateRequestController extends Controller
                 'updated_at' => now(), // Fecha actual de actualización
             ]);
 
+            $transitionId = DB::table('transitions_state_requests')
+            ->where('id_supplier_request', $id)
+            ->orderBy('id', 'desc')
+            ->value('to_state_id');
+
+            //siguiente estado
+            $estadoPorValidar = DB::table('state_requests')
+                ->where('name', 'Por aprobar')
+                ->first();
+            $stateToValidate = $estadoPorValidar->id;
+
+            DB::table('transitions_state_requests')->insert([
+                'id_supplier_request' => $id,
+                'from_state_id' => $transitionId,
+                'to_state_id' => $stateToValidate,
+                'id_reviewer' => auth()->user()->id, // El ID del revisor, ajústalo según tus necesidades
+                'created_at' => now(), // Fecha actual de creación
+                'updated_at' => now(), // Fecha actual de actualización
+            ]);
+
             $sr->user->sendFCM('Su solicitud ha sido validada');
 
             $notification = 'Su solicitud ha sido validada por el analista de compras';
@@ -116,7 +135,7 @@ class StateRequestController extends Controller
         $sr = SupplierRequest::findOrFail($id);
 
         $estadoRecibido = DB::table('state_requests')
-            ->where('name', 'Recibido')
+            ->where('name', 'Aprobado')
             ->first();
         $to_state_id = $estadoRecibido->id;
 
@@ -138,9 +157,9 @@ class StateRequestController extends Controller
                 'updated_at' => now(), // Fecha actual de actualización
             ]);
 
-            $sr->user->sendFCM('Su solicitud ha sido recibida');
+            $sr->user->sendFCM('Su solicitud ha sido aporbada');
 
-            $notification = 'Su solicitud ha sido recibida por el analista de compras';
+            $notification = 'Su solicitud ha sido aprobada, felicidades!';
 
             return back()->with(compact('notification'));
         }
