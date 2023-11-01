@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container-fluid">
+    <div class="container-fluid pt-5">
         <div class="row justify-content-center">
             <div class="col-md-10">
                 <div class="card w-80 mx-auto">
@@ -31,33 +31,56 @@
                                                 @endif
                                                 <td>{{ $sr->getFinalState()->name }}</td>
                                                 <td>
-                                                    <button type="button" class="btn btn-primary" title="Visualizar">
+                                                    <button type="button" class="btn btn-sm btn-primary"
+                                                        title="Visualizar">
                                                         <i class="fas fa-eye"></i>
                                                     </button>
 
-                                                    <button type="button" class="btn btn-success" title="Validar">
-                                                        <i class="fas fa-check"></i>
-                                                    </button>
+                                                    @if (auth()->user()->role->name === 'proveedor')
+                                                        <button type="button" class="btn btn-sm btn-success"
+                                                            title="Editar">
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>
+                                                    @endif
 
                                                     <div class="dropdown" style="display: inline-block;">
-                                                        <button class="btn btn-primary dropdown-toggle" type="button"
-                                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <button class="btn btn-sm btn-secondary dropdown-toggle"
+                                                            type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                             Acciones
                                                         </button>
                                                         <ul class="dropdown-menu">
-                                                            @if (auth()->user()->role->name == 'compras')
-                                                                <form
-                                                                    action="{{ route('requests.check', ['id' => $sr->id]) }}"
-                                                                    method="post">
-                                                                    @csrf
-                                                                    <button type="submit"
-                                                                        class="dropdown-item">Validar</button>
-                                                                </form>
+                                                            @if (auth()->user()->role->name === 'compras')
+                                                                @if ($sr->getFinalState()->name === 'Por recibir')
+                                                                    <form
+                                                                        action="{{ route('requests.receive', ['id' => $sr->id]) }}"
+                                                                        method="post">
+                                                                        @csrf
+                                                                        <button type="submit" class="dropdown-item">Recibir
+                                                                            <i class="fas fa-check"></i></button>
+                                                                    </form>
+                                                                @endif
+
+                                                                @if ($sr->getFinalState()->name === 'Por validar')
+                                                                    <form
+                                                                        action="{{ route('requests.check', ['id' => $sr->id]) }}"
+                                                                        method="post">
+                                                                        @csrf
+                                                                        <button type="submit" class="dropdown-item">Validar
+                                                                            <i class="fas fa-check"></i></button>
+                                                                    </form>
+                                                                @endif
                                                             @endif
+
+                                                            @if ($sr->getFinalState()->name === 'Por aprobar')
+                                                                <li><button class="dropdown-item" type="button">
+                                                                        Aprobar <i class="fas fa-check"></i></button></li>
+                                                            @endif
+
                                                             <li><button class="dropdown-item" type="button">
-                                                                    Aprobar</button></li>
+                                                                    Rechazar <i class="fas fa-times"></i></button></li>
+
                                                             <li><button class="dropdown-item" type="button">
-                                                                    Rechazar</button></li>
+                                                                    Cancelar <i class="fas fa-times"></i></button></li>
                                                         </ul>
                                                     </div>
                                                 </td>

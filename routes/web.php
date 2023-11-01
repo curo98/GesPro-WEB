@@ -38,11 +38,11 @@ Route::middleware(['auth', 'role:admin'])->namespace('Admin')->group(function ()
 });
 
 Route::middleware(['auth', 'role:compras,contabilidad'])->group(function () {
-    // Rutas para usuarios con los roles 'admin' o 'compras'
-    Route::get('/suppliers', 'SupplierController@index');
+
+    Route::get('/suppliers', [Controllers\SupplierController::class, 'index'])->name('suppliers.index');
 
     Route::get('/requests', [Controllers\SupplierRequestController::class, 'index']);
-    // Route::get('/requests/check', [Controllers\SupplierRequestController::class, 'check']);
+    Route::post('/requests/receive/{id}', [Controllers\SupplierRequestController::class, 'receive'])->name('requests.receive');
     Route::post('/requests/check/{id}', [Controllers\StateRequestController::class, 'check'])->name('requests.check');
 
 });

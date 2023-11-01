@@ -185,14 +185,19 @@ class SupplierRequestController extends Controller
         $saved = $supplierRequest->save();
         $id_supplier_request = $supplierRequest->id;
 
-        $estadoValidado = DB::table('state_requests')
+        $estadoInicial = DB::table('state_requests')
             ->where('name', 'Enviado')
             ->first();
-        $nuevoEstadoId = $estadoValidado->id;
+        $from_state_id = $estadoInicial->id;
+        $estadoPost = DB::table('state_requests')
+            ->where('name', 'Por recibir')
+            ->first();
+        $to_state_id = $estadoPost->id;
 
         DB::table('transitions_state_requests')->insert([
                 'id_supplier_request' => $id_supplier_request,
-                'from_state_id' => $nuevoEstadoId,
+                'from_state_id' => $from_state_id,
+                'to_state_id' => $to_state_id,
                 'created_at' => now(), // Fecha actual de creación
                 'updated_at' => now(), // Fecha actual de actualización
             ]);

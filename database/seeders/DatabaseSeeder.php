@@ -48,8 +48,8 @@ class DatabaseSeeder extends Seeder
         \App\Models\StateRequest::factory(8)->create();
         \App\Models\TypePayment::factory(2)->create();
         \App\Models\MethodPayment::factory(2)->create();
-        \App\Models\Document::factory(50)->create();
-        \App\Models\Question::factory(15)->create();
+        \App\Models\Document::factory(10)->create();
+        \App\Models\Question::factory(6)->create();
         \App\Models\Observation::factory(5)->create();
 
         \App\Models\Policy::create([
@@ -64,7 +64,7 @@ class DatabaseSeeder extends Seeder
 
 
        // Crear 10 registros de SupplierRequest
-        $supplierRequests = \App\Models\SupplierRequest::factory(80)->create();
+        $supplierRequests = \App\Models\SupplierRequest::factory(5)->create();
 
         $supplierRequests->each(function ($supplierRequest) {
             // Asignar preguntas aleatorias

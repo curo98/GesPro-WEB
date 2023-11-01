@@ -113,7 +113,7 @@
                                     <a class="nav-link" href="{{ url('/requests') }}">{{ __('Solicitudes') }}</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Proveedores') }}</a>
+                                    <a class="nav-link" href="{{ route('suppliers.index') }}">{{ __('Proveedores') }}</a>
                                 </li>
                             @elseif(auth()->user()->role->name == 'admin')
                                 <li class="nav-item dropdown">
@@ -157,7 +157,7 @@
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
+                                    {{ Auth::user()->name }} | {{ Auth::user()->role->name }}
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
@@ -181,25 +181,28 @@
 
         <main class="py-0 pb-4">
 
-            <div class="container-fluid pb-4">
-                <div class="row">
-                    <div class="col-sm text-center bg-primary text-white custom-column">
-                        <h6>Bienvenida</h6>
-                    </div>
-                    <div class="col-sm text-center bg-info custom-column">
-                        <h6>Datos del Proveedor</h6>
-                    </div>
-                    <div class="col-sm text-center bg-info custom-column">
-                        <h6>Revisión Código de Política</h6>
-                    </div>
-                    <div class="col-sm text-center bg-info custom-column">
-                        <h6>Revisión Código de Ética</h6>
-                    </div>
-                    <div class="col-sm text-center bg-info custom-column">
-                        <h6>Check List</h6>
+            @if (request()->routeIs('step1', 'step2', 'step3', 'step4', 'step5'))
+                <div class="container-fluid pb-4">
+                    <div class="row">
+                        <div class="col-sm text-center bg-primary text-white custom-column">
+                            <h6>Bienvenida</h6>
+                        </div>
+                        <div class="col-sm text-center bg-info custom-column">
+                            <h6>Datos del Proveedor</h6>
+                        </div>
+                        <div class="col-sm text-center bg-info custom-column">
+                            <h6>Revisión Código de Política</h6>
+                        </div>
+                        <div class="col-sm text-center bg-info custom-column">
+                            <h6>Revisión Código de Ética</h6>
+                        </div>
+                        <div class="col-sm text-center bg-info custom-column">
+                            <h6>Check List</h6>
+                        </div>
                     </div>
                 </div>
-            </div>
+            @endif
+
             @yield('content')
         </main>
 
