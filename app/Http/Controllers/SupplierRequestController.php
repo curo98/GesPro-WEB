@@ -74,7 +74,7 @@ class SupplierRequestController extends Controller
 
             $notification = 'Su solicitud ha sido validada por el analista de compras';
 
-            return back()->with(compact('nitification'));
+            return back()->with(compact('notification'));
         }
 
         return back();
