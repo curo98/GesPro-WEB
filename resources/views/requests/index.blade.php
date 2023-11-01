@@ -43,7 +43,7 @@
                                                         </button>
                                                     @endif
 
-                                                    @if (!in_array($sr->getFinalState()->name, ['Rechazada', 'En corrección', 'Aprobada']))
+                                                    @if (!in_array($sr->getFinalState()->name, ['Rechazada', 'En correcion', 'Aprobado', 'Cancelada']))
                                                         <div class="dropdown" style="display: inline-block;">
                                                             <button class="btn btn-sm btn-secondary dropdown-toggle"
                                                                 type="button" data-bs-toggle="dropdown"
