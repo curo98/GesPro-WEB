@@ -30,7 +30,7 @@ class StateRequestController extends Controller
 
             //Agregar revisor al estado inicial
             DB::table('transitions_state_requests')
-            ->where('id', $ultimoEstado->id)
+            ->where('id_supplier_request', $id)
             ->update(['id_reviewer' => auth()->user()->id]);
 
             $estadoActual = $ultimoEstado->to_state_id ?? $ultimoEstado->from_state_id;
