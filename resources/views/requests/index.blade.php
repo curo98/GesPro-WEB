@@ -72,12 +72,19 @@
                                                             @endif
 
                                                             @if ($sr->getFinalState()->name === 'Por aprobar')
-                                                                <li><button class="dropdown-item" type="button">
-                                                                        Aprobar <i class="fas fa-check"></i></button></li>
+                                                                <form
+                                                                    action="{{ route('requests.approve', ['id' => $sr->id]) }}"
+                                                                    method="post">
+                                                                    @csrf
+                                                                    <li><button class="dropdown-item" type="button">
+                                                                            Aprobar <i class="fas fa-check"></i></button>
+                                                                    </li>
+                                                                </form>
                                                             @endif
                                                             @if (auth()->user()->role->name === 'proveedor')
                                                                 <li><button class="dropdown-item" type="button">
-                                                                        Rechazar <i class="fas fa-times"></i></button></li>
+                                                                        Rechazar <i class="fas fa-times"></i></button>
+                                                                </li>
                                                             @endif
 
                                                             @if (auth()->user()->role->name === 'proveedor')
