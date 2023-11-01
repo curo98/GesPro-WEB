@@ -43,7 +43,7 @@ Route::middleware(['auth', 'role:compras,contabilidad'])->group(function () {
 
     Route::get('/requests', [Controllers\SupplierRequestController::class, 'index']);
     // Route::get('/requests/check', [Controllers\SupplierRequestController::class, 'check']);
-    Route::post('/requests/check/{id}', [Controllers\SupplierRequestController::class, 'check'])->name('requests.check');
+    Route::post('/requests/check/{id}', [Controllers\StateRequestController::class, 'check'])->name('requests.check');
 
 });
 
