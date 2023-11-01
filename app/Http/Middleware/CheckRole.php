@@ -13,19 +13,44 @@ class CheckRole
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, String $role): Response
+    // public function handle(Request $request, Closure $next, ...$roles): Response
+    // {
+    //     if (! auth()->user() || ! $this->userHasAnyRole($roles)) {
+    //     return redirect('/home');
+    // }
+
+    // // Si el usuario tiene el rol, continúa con la solicitud.
+    // return $next($request);
+
+    // }
+    // private function userHasAnyRole( $roles)
+    // {
+    //     foreach ($roles as $role) {
+    //         if (auth()->user()->hasRole($role)) {
+    //             return true;
+    //         }
+    //     }
+    //     return false;
+    // }
+
+    //lo inverso
+    public function handle(Request $request, Closure $next, ...$roles): Response
     {
-
-        // $user = $request->user();
-
-        // if ($user && ($user->role->name === 'compras' || $user->role->name === 'contabilidad')) {
-        //     return $next($request);
-        // }
-        if ($request->user()->role->name($role)) {
-            # code...
-        }
-
+        if (! auth()->user() || ! $this->userHasAnyRole($roles)) {
         return redirect('/home');
+    }
 
+    // Si el usuario tiene el rol, continúa con la solicitud.
+    return $next($request);
+
+    }
+    private function userHasAnyRole( $roles)
+    {
+        foreach ($roles as $role) {
+            if (auth()->user()->hasRole($role)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

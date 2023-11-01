@@ -76,6 +76,11 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsTo(Role::class, 'id_role', 'id'); // Verifica las claves aquí
     }
 
+    public function hasRole($role)
+    {
+        return $this->role->name === $role;
+    }
+
     public function getJWTIdentifier()
     {
         return $this->getKey();

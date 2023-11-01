@@ -17,7 +17,7 @@ class StateRequestFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->unique()->randomElement(['Enviado', 'Recibido', 'En correccion', 'Por validar', 'Rechazado', 'Aprobado']),
+            'name' => $this->faker->unique()->randomElement(['Enviado', 'Recibido', 'En correccion', 'Por validar', 'Rechazado', 'Por aprobar', 'Aprobado', 'Validado']),
             'description' => $this->faker->sentence(),
         ];
     }

@@ -45,12 +45,13 @@
                                                             Acciones
                                                         </button>
                                                         <ul class="dropdown-menu">
-                                                            @if (auth()->user()->role->name == 'compras' || auth()->user()->role->name == 'contabilidad')
-                                                                <form action="{{ url('/requests/check', $sr->id) }}"
+                                                            @if (auth()->user()->role->name == 'compras')
+                                                                <form
+                                                                    action="{{ route('requests.check', ['id' => $sr->id]) }}"
                                                                     method="post">
                                                                     @csrf
-                                                                    <li><button class="dropdown-item" type="submit">
-                                                                            Validar</button></li>
+                                                                    <button type="submit"
+                                                                        class="dropdown-item">Validar</button>
                                                                 </form>
                                                             @endif
                                                             <li><button class="dropdown-item" type="button">
