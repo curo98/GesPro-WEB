@@ -39,7 +39,7 @@ class StateRequestController extends Controller
                 'updated_at' => now(), // Fecha actual de actualización
             ]);
 
-            $sr->user->sendFCM('Solicitud validad');
+            $sr->user->sendFCM('Su solicitud ha sido validada');
 
             $notification = 'Su solicitud ha sido validada por el analista de compras';
 
