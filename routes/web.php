@@ -42,8 +42,10 @@ Route::middleware(['auth', 'role:compras,contabilidad'])->group(function () {
     Route::get('/suppliers', [Controllers\SupplierController::class, 'index'])->name('suppliers.index');
 
     Route::get('/requests', [Controllers\SupplierRequestController::class, 'index']);
-    Route::post('/requests/receive/{id}', [Controllers\StateRequestController::class, 'receive'])->name('requests.receive');
+
     Route::post('/requests/check/{id}', [Controllers\StateRequestController::class, 'check'])->name('requests.check');
+    Route::post('/requests/receive/{id}', [Controllers\StateRequestController::class, 'receive'])->name('requests.receive');
+    Route::post('/requests/approve/{id}', [Controllers\StateRequestController::class, 'approve'])->name('requests.approve');
 
 });
 

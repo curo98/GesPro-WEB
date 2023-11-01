@@ -130,7 +130,7 @@ class StateRequestController extends Controller
         return back();
     }
 
-    public function approve()
+    public function approve(String $id)
     {
         $sr = SupplierRequest::findOrFail($id);
 
@@ -165,12 +165,12 @@ class StateRequestController extends Controller
         }
     }
 
-    public function reject()
+    public function reject(String $id)
     {
 
     }
 
-    public function cancel()
+    public function cancel(String $id)
     {
 
     }
