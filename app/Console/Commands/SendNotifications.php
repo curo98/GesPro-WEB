@@ -32,13 +32,6 @@ class SendNotifications extends Command
         $this->info('Buscando solicitudes de proveedores con estado "Por validar"');
 
         $requestsToNotify = $this->getRequestsForRAndToVa();
-        // $users = User::whereHas('role', function ($query) {
-        //     $query->where('name', 'compras');
-        // })->get();
-
-        // foreach ($users as $user) {
-        //     $user->sendFCM('');
-        // }
         $pendingRequestsCount = count($requestsToNotify);
 
         $users = User::whereHas('role', function ($query) {
