@@ -44,7 +44,7 @@
                                                     @endif
 
                                                     @if (!in_array($sr->getFinalState()->name, ['Rechazada', 'En correcion', 'Aprobada', 'Cancelada']))
-                                                        <div class="dropdown" style="display: inline-block;">
+                                                        {{-- <div class="dropdown" style="display: inline-block;">
                                                             <button class="btn btn-sm btn-secondary dropdown-toggle"
                                                                 type="button" data-bs-toggle="dropdown"
                                                                 aria-expanded="false">
@@ -100,9 +100,16 @@
                                                                 @endif
 
                                                             </ul>
-                                                        </div>
-                                                    @endif
+                                                        </div> --}}
 
+                                                        @if (auth()->user()->role->name === 'compras')
+                                                            @include('requests.actions_list.userPurcharses')
+                                                        @elseif (auth()->user()->role->name === 'contabilidad')
+                                                            @include('requests.actions_list.userContability')
+                                                        @else
+                                                            @include('requests.actions_list.userSupplier')
+                                                        @endif
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach

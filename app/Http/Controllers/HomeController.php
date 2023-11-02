@@ -25,36 +25,43 @@ class HomeController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index()
-{
-    $dayOrder = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+    {
+        // Definir el orden de los días de la semana
+        $dayOrder = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 
-    $startDate = Carbon::now()->startOfWeek(); // Obtener el primer día de la semana actual
-    $endDate = Carbon::now()->endOfWeek(); // Obtener el último día de la semana actual
+        // Obtener el primer día y el último día de la semana actual
+        $startDate = Carbon::now()->startOfWeek();
+        $endDate = Carbon::now()->endOfWeek();
 
-    $requestsData = SupplierRequest::select(
-            DB::raw('DAYNAME(created_at) as day'),
-            DB::raw('COUNT(*) as count')
-        )
-        ->whereBetween('created_at', [$startDate, $endDate])
-        ->groupBy('day')
-        ->orderByRaw("FIELD(day, '" . implode("', '", $dayOrder) . "')")
-        ->get();
+        // Consulta para obtener los datos de los proveedores
+        $requestsData = SupplierRequest::select(
+                DB::raw('DAYNAME(created_at) as day'),
+                DB::raw('COUNT(*) as count')
+            )
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->groupBy('day')
+            ->orderByRaw("FIELD(day, '" . implode("', '", $dayOrder) . "')")
+            ->get();
 
-    $labels = [];
-    foreach ($requestsData as $requestDatum) {
-        $labels[] = Carbon::createFromDate($requestDatum->day)->dayName;
+        // Crear etiquetas para los días de la semana
+        $labels = [];
+        foreach ($requestsData as $requestDatum) {
+            $labels[] = Carbon::createFromDate($requestDatum->day)->dayName;
+        }
+
+        // Obtener los datos de recuento y convertirlos en un array
+        $data = $requestsData->pluck('count')->toArray();
+
+        // Generar colores aleatorios en formato RGB para la gráfica
+        $colors = [];
+        foreach ($labels as $label) {
+            $color = 'rgba(' . rand(0, 255) . ',' . rand(0, 255) . ',' . rand(0, 255) . ', 0.2)';
+            $colors[] = $color;
+        }
+
+        // Pasar los datos a la vista
+        return view('home', compact('labels', 'data', 'colors'));
     }
-    $data = $requestsData->pluck('count')->toArray();
-
-    $colors = [];
-    foreach ($labels as $label) {
-        // Generar un color aleatorio en formato RGB
-        $color = 'rgba(' . rand(0, 255) . ',' . rand(0, 255) . ',' . rand(0, 255) . ', 0.2)';
-        $colors[] = $color;
-    }
-
-    return view('home', compact('labels', 'data', 'colors'));
-}
 
 
 }
