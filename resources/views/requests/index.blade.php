@@ -74,23 +74,25 @@
                                                                         </form>
                                                                     @endif
                                                                 @endif
+                                                                @if (auth()->user()->role->name === 'contabilidad')
+                                                                    @if ($sr->getFinalState()->name === 'Por aprobar')
+                                                                        <form
+                                                                            action="{{ route('requests.approve', ['id' => $sr->id]) }}"
+                                                                            method="post">
+                                                                            @csrf
+                                                                            <button type="submit"
+                                                                                class="dropdown-item">Aprobar
+                                                                                <i class="fas fa-check"></i></button>
+                                                                        </form>
+                                                                    @endif
 
-                                                                @if ($sr->getFinalState()->name === 'Por aprobar')
-                                                                    <form
-                                                                        action="{{ route('requests.approve', ['id' => $sr->id]) }}"
-                                                                        method="post">
-                                                                        @csrf
-                                                                        <button type="submit" class="dropdown-item">Aprobar
-                                                                            <i class="fas fa-check"></i></button>
-                                                                    </form>
+
+                                                                    @if (auth()->user()->role->name === 'contabilidad')
+                                                                        <li><button class="dropdown-item"
+                                                                                type="button">Rechazar <i
+                                                                                    class="fas fa-times"></i></button></li>
+                                                                    @endif
                                                                 @endif
-
-                                                                @if (auth()->user()->role->name === 'proveedor')
-                                                                    <li><button class="dropdown-item"
-                                                                            type="button">Rechazar <i
-                                                                                class="fas fa-times"></i></button></li>
-                                                                @endif
-
                                                                 @if (auth()->user()->role->name === 'proveedor')
                                                                     <li><button class="dropdown-item"
                                                                             type="button">Cancelar <i
