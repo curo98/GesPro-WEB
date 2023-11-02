@@ -108,6 +108,11 @@
                     <ul class="navbar-nav ms-auto">
                         <!-- Authentication Links -->
                         @auth
+                            @if (auth()->user()->role->name == 'invitado' || auth()->user()->role->name == 'proveedor')
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('r.step1') }}">{{ __('Iniciar solicitud') }}</a>
+                                </li>
+                            @endif
                             @if (auth()->user()->role->name == 'compras' || auth()->user()->role->name == 'contabilidad')
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ url('/requests') }}">{{ __('Solicitudes') }}</a>
@@ -181,22 +186,26 @@
 
         <main class="py-0 pb-4">
 
-            @if (request()->routeIs('step1', 'step2', 'step3', 'step4', 'step5'))
+            @if (request()->routeIs('r.step1', 'r.step2', 'r.step3', 'r.step4', 'r.step5'))
                 <div class="container-fluid pb-4">
                     <div class="row">
                         <div class="col-sm text-center bg-primary text-white custom-column">
                             <h6>Bienvenida</h6>
                         </div>
-                        <div class="col-sm text-center bg-info custom-column">
+                        <div
+                            class="col-sm text-center @if (request()->routeIs('r.step2', 'r.step3', 'r.step4', 'r.step5')) bg-primary @else bg-info @endif custom-column">
                             <h6>Datos del Proveedor</h6>
                         </div>
-                        <div class="col-sm text-center bg-info custom-column">
+                        <div
+                            class="col-sm text-center @if (request()->routeIs('r.step3', 'r.step4', 'r.step5')) bg-primary @else bg-info @endif custom-column">
                             <h6>Revisión Código de Política</h6>
                         </div>
-                        <div class="col-sm text-center bg-info custom-column">
+                        <div
+                            class="col-sm text-center @if (request()->routeIs('r.step4', 'r.step5')) bg-primary @else bg-info @endif custom-column">
                             <h6>Revisión Código de Ética</h6>
                         </div>
-                        <div class="col-sm text-center bg-info custom-column">
+                        <div
+                            class="col-sm text-center @if (request()->routeIs('r.step5')) bg-primary @else bg-info @endif custom-column">
                             <h6>Check List</h6>
                         </div>
                     </div>

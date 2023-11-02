@@ -1,49 +1,52 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container-fluid">
-        <div class="row justify-content-center">
-            <div class="col-md-4">
-                <div class="card w-80 mx-auto">
+    @if (auth()->user()->role->name === 'admin')
+        <div class="container-fluid pt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-4">
+                    <div class="card w-80 mx-auto">
 
-                    <div class="card-body">
-                        @if (session('notification'))
-                            <div class="alert alert-success" role="alert">
-                                {{ session('notification') }}
-                            </div>
-                        @endif
-                        <h6>Notificacion general</h6>
-                        <h4 class="card-title">Notificar a todos los usuarios</h4>
-                        <br>
-                        <form action="{{ url('/fcm/send') }}" method="post">
-                            @csrf
-                            <div class="row ">
-                                <div class="form-group">
-                                    <label for="title">Titulo</label>
-                                    <input value="{{ config('app.name') }}" type="text" class="form-control"
-                                        name="title" id="title" required>
+                        <div class="card-body">
+                            @if (session('notification'))
+                                <div class="alert alert-success" role="alert">
+                                    {{ session('notification') }}
                                 </div>
-                            </div>
-
-                            <div class="row pt-4">
-                                <div class="form-group">
-                                    <label for="body">Mensaje</label>
-                                    <textarea name="body" class="form-control" id="body" rows="3" required></textarea>
-                                </div>
-                            </div>
-                            <div class="row pt-4">
-                                <div class="form-group">
-                                    <div class="d-flex flex-row">
-                                        <button class="btn btn-info custom-button1">Enviar notificacion</button>
+                            @endif
+                            <h6>Notificacion general</h6>
+                            <h4 class="card-title">Notificar a todos los usuarios</h4>
+                            <br>
+                            <form action="{{ url('/fcm/send') }}" method="post">
+                                @csrf
+                                <div class="row ">
+                                    <div class="form-group">
+                                        <label for="title">Titulo</label>
+                                        <input value="{{ config('app.name') }}" type="text" class="form-control"
+                                            name="title" id="title" required>
                                     </div>
                                 </div>
-                            </div>
-                        </form>
+
+                                <div class="row pt-4">
+                                    <div class="form-group">
+                                        <label for="body">Mensaje</label>
+                                        <textarea name="body" class="form-control" id="body" rows="3" required></textarea>
+                                    </div>
+                                </div>
+                                <div class="row pt-4">
+                                    <div class="form-group">
+                                        <div class="d-flex flex-row">
+                                            <button class="btn btn-info custom-button1">Enviar notificacion</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    @endif
+
     <div class="container min-vh-100 d-flex flex-column justify-content-center">
         <div class="row my-3">
             <div class="col">

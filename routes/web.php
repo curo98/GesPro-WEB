@@ -22,15 +22,15 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('/registrar-paso1', [App\Http\Controllers\ProveedorController::class, 'formStep1'])->name('step1');
+Route::get('/registrar-paso1', [App\Http\Controllers\ProveedorController::class, 'formStep1'])->name('r.step1');
 
-Route::get('/register-paso2', [App\Http\Controllers\ProveedorController::class, 'formStep2'])->name('step2');
+Route::get('/register-paso2', [App\Http\Controllers\ProveedorController::class, 'formStep2'])->name('r.step2');
 
-Route::get('/register-paso3', [App\Http\Controllers\ProveedorController::class, 'formStep3'])->name('step3');
+Route::get('/register-paso3', [App\Http\Controllers\ProveedorController::class, 'formStep3'])->name('r.step3');
 
-Route::get('/register-step4', [App\Http\Controllers\ProveedorController::class, 'formStep4'])->name('step4');
+Route::get('/register-step4', [App\Http\Controllers\ProveedorController::class, 'formStep4'])->name('r.step4');
 
-Route::get('/register-step5', [App\Http\Controllers\ProveedorController::class, 'formStep5'])->name('step5');
+Route::get('/register-step5', [App\Http\Controllers\ProveedorController::class, 'formStep5'])->name('r.step5');
 
 
 Route::middleware(['auth', 'role:admin'])->namespace('Admin')->group(function () {
