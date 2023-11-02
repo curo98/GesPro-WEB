@@ -216,7 +216,8 @@
         </main>
 
     </div>
-    <script src="{{ asset('js/chart.js') }}"></script>
+    <!-- Sección para scripts adicionales de las vistas hijas -->
+    @yield('scripts')
 </body>
 
 </html>
