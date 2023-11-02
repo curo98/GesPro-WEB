@@ -30,6 +30,22 @@ class SupplierRequest extends Model
         return $this->belongsToMany(StateRequest::class, 'transitions_state_requests', 'id_supplier_request', 'from_state_id', 'to_state_id');
     }
 
+    public function getFinalState()
+    {
+        // Verificar si hay al menos una transición de estado
+        if ($this->stateTransitions->isNotEmpty()) {
+            // Obtener la última transición de estado
+            $lastTransition = $this->stateTransitions->last();
+            // Verificar si existe un "to_state"
+            if ($lastTransition->toState) {
+                return $lastTransition->toState;
+            }
+            // Si no hay "to_state", mostrar "from_state"
+            return $lastTransition->fromState;
+        }
+        return null; // No hay transiciones de estado
+    }
+
     public function typePayment()
     {
         return $this->belongsTo(TypePayment::class, 'id_type_payment');
@@ -64,19 +80,5 @@ class SupplierRequest extends Model
     }
 
 
-    public function getFinalState()
-    {
-        // Verificar si hay al menos una transición de estado
-        if ($this->stateTransitions->isNotEmpty()) {
-            // Obtener la última transición de estado
-            $lastTransition = $this->stateTransitions->last();
-            // Verificar si existe un "to_state"
-            if ($lastTransition->toState) {
-                return $lastTransition->toState;
-            }
-            // Si no hay "to_state", mostrar "from_state"
-            return $lastTransition->fromState;
-        }
-        return null; // No hay transiciones de estado
-    }
+
 }

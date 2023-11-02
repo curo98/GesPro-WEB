@@ -118,6 +118,9 @@ class User extends Authenticatable implements JWTSubject
     }
 
     public function sendFCM($message){
+        if (!$this->device_token)
+            return;
+
         return fcm()->to([$this->device_token])->notification([
                     'title' => config('app.name'),
                     'body' => $message])->send();
