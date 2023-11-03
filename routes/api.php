@@ -42,7 +42,7 @@ Route::post('/requests-suppliers', [App\Http\Controllers\Api\SupplierRequestCont
 
 
 Route::get('/questions-requests', [App\Http\Controllers\Api\QuestionController::class, 'index']);
-
+Route::post('/fcm/token', [App\Http\Controllers\Api\FirebaseController::class, 'postToken']);
 // Rutas protegidas con autenticación
 Route::middleware('auth:api')->group(function () {
 
@@ -63,6 +63,6 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/documents-request', [App\Http\Controllers\Api\DocumentController::class, 'index']);
 
     /* FCM */
-    Route::post('/fcm/token', [App\Http\Controllers\Api\FirebaseController::class, 'postToken']);
+
 
 });
