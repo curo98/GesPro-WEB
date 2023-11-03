@@ -23,25 +23,25 @@ use App\Http\Controllers\Auth\AuthController;
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 
-Route::get('/states', [Api\StateRequestController::class, 'index']);
+Route::get('/states', [App\Http\Controllers\Api\StateRequestController::class, 'index']);
 
-Route::get('/types-payments', [Api\TypePaymentRequestController::class, 'index']);
-Route::get('/methods-payments', [Api\MethodPaymentRequestController::class, 'index']);
-Route::get('/policies', [Api\PolicyController::class, 'index']);
-
-
-Route::get('/departments', [Api\UbigeoPeruController::class, 'loadDepartments']);
-Route::get('/provinces', [Api\UbigeoPeruController::class, 'loadProvinces']);
-Route::get('/districts', [Api\UbigeoPeruController::class, 'loadDistricts']);
-
-Route::get('/countries', [Api\CountrieController::class, 'getCountries']);
-
-Route::get('/departments/{department}/provinces', [Api\UbigeoPeruController::class, 'getProvincesByDepartment']);
-Route::get('/provinces/{province}/districts', [Api\UbigeoPeruController::class, 'getDistricts']);
-Route::post('/requests-suppliers', [Api\SupplierRequestController::class, 'store']);
+Route::get('/types-payments', [App\Http\Controllers\Api\TypePaymentRequestController::class, 'index']);
+Route::get('/methods-payments', [App\Http\Controllers\Api\MethodPaymentRequestController::class, 'index']);
+Route::get('/policies', [App\Http\Controllers\Api\PolicyController::class, 'index']);
 
 
-Route::get('/questions-requests', [Api\QuestionController::class, 'index']);
+Route::get('/departments', [App\Http\Controllers\Api\UbigeoPeruController::class, 'loadDepartments']);
+Route::get('/provinces', [App\Http\Controllers\Api\UbigeoPeruController::class, 'loadProvinces']);
+Route::get('/districts', [App\Http\Controllers\Api\UbigeoPeruController::class, 'loadDistricts']);
+
+Route::get('/countries', [App\Http\Controllers\Api\CountrieController::class, 'getCountries']);
+
+Route::get('/departments/{department}/provinces', [App\Http\Controllers\Api\UbigeoPeruController::class, 'getProvincesByDepartment']);
+Route::get('/provinces/{province}/districts', [App\Http\Controllers\Api\UbigeoPeruController::class, 'getDistricts']);
+Route::post('/requests-suppliers', [App\Http\Controllers\Api\SupplierRequestController::class, 'store']);
+
+
+Route::get('/questions-requests', [App\Http\Controllers\Api\QuestionController::class, 'index']);
 
 // Rutas protegidas con autenticación
 Route::middleware('auth:api')->group(function () {
@@ -53,14 +53,14 @@ Route::middleware('auth:api')->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    Route::get('/suppliers', [Api\SupplierController::class, 'index']);
+    Route::get('/suppliers', [App\Http\Controllers\Api\SupplierController::class, 'index']);
 
     /*RUTAS PARA EL CRUD DE SOLICITUDES DE PROVEEDORES*/
-    Route::get('/requests-suppliers', [Api\SupplierRequestController::class, 'index']);
+    Route::get('/requests-suppliers', [App\Http\Controllers\Api\SupplierRequestController::class, 'index']);
 
     /* END RUTAS CRUD SP */
 
-    Route::get('/documents-request', [Api\DocumentController::class, 'index']);
+    Route::get('/documents-request', [App\Http\Controllers\Api\DocumentController::class, 'index']);
 
     /* FCM */
     Route::post('/fcm/token', [App\Http\Controllers\Api\FirebaseController::class, 'postToken']);
