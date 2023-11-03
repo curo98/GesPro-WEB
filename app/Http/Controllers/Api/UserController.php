@@ -23,7 +23,7 @@ class UserController extends Controller
         $user->email = $request->input('email');
         $user->save();
 
-        JwtAuth::ClearCache($user);
+        JwtAuth::clearCache($user);
     }
 
 }
