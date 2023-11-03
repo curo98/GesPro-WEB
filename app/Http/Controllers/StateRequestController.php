@@ -63,9 +63,9 @@ class StateRequestController extends Controller
                 'updated_at' => now(), // Fecha actual de actualización
             ]);
 
-            $sr->user->sendFCM('Su solicitud ha sido recibida y ha pasado a un estado para para revision');
+            $sr->user->sendFCM('Su solicitud ha sido recibida y ha pasado a un estado para revision');
 
-            $notification = 'Su solicitud ha sido recibida por el analista de compras';
+            $notification = 'Solicitud recibida satisfactoriamente';
 
             return back()->with(compact('notification'));
         }
@@ -120,9 +120,9 @@ class StateRequestController extends Controller
                 'updated_at' => now(), // Fecha actual de actualización
             ]);
 
-            $sr->user->sendFCM('Su solicitud ha sido validada');
+            $sr->user->sendFCM('Su solicitud ha sido validada por el analista de compras');
 
-            $notification = 'Su solicitud ha sido validada por el analista de compras';
+            $notification = 'Solicitud validad satisfactoriamente';
 
             return back()->with(compact('notification'));
         }
@@ -159,9 +159,9 @@ class StateRequestController extends Controller
 
             $sr->user->supplier->update(['state' => 'activo']);
 
-            $sr->user->sendFCM('Su solicitud ha sido aporbada');
+            $sr->user->sendFCM('Su solicitud ha sido aprobada, felicidades!');
 
-            $notification = 'Su solicitud ha sido aprobada, felicidades!';
+            $notification = 'La solicitud ha sido aprobada satisfactoriamente';
 
             return back()->with(compact('notification'));
         }
