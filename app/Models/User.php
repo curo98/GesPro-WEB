@@ -121,8 +121,10 @@ class User extends Authenticatable implements JWTSubject
         if (!$this->device_token)
             return;
 
-        return fcm()->to([$this->device_token])->notification([
+        return fcm()->to([$this->device_token])->notification(
+                    [
                     'title' => config('app.name'),
-                    'body' => $message])->send();
+                    'body' => $message
+                    ])->send();
     }
 }

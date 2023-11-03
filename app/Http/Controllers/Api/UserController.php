@@ -20,8 +20,10 @@ class UserController extends Controller
         $user = Auth::guard('api')->user();
         $user->name = $request->input('name');
         $user->email = $request->input('email');
-        $user->save();
 
+        if ($user->save()) {
+            $user->sendFCM("Hola {$user->name}, tus datos se han actualizado correctamente!");
+        }
     }
 
 }
