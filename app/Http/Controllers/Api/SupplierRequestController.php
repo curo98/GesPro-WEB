@@ -54,61 +54,40 @@ class SupplierRequestController extends Controller
 
             return response()->json($supplierRequestsWithTransitions);
         } elseif ($user->role->name === "compras") {
+            // El usuario tiene el rol de proveedor, obtén todas las solicitudes de proveedor
+            // $supplierRequests = SupplierRequest::with(
+            //     'user',
+            //     'typePayment',
+            //     'methodPayment',
+            //     'documents',
+            //     'questions'
+            // )->get();
 
-            $estadoPorValidar = DB::table('state_requests')
-                ->where('name', 'Por validar')
-                ->first();
-            $stateToValidate1 = $estadoPorValidar->id;
-            $estadoPorRecibir = DB::table('state_requests')
-                ->where('name', 'Por recibir')
-                ->first();
-            $stateToValidate2 = $estadoPorRecibir->id;
-        $supplierRequests = SupplierRequest::with([
-            'user',
-            'typePayment',
-            'methodPayment',
-            'documents',
-            'questions',
-            'stateTransitions' => function ($query) {
-                $query->orderBy('created_at', 'desc')->take(1);
-            }
-        ])->whereHas('stateTransitions', function ($query) {
-            $query->whereIn('to_state_id', [9, 2]); // 1: Por recibir, 2: Por validar
-        })->get();
+            // // Obtener las transiciones de estado para cada solicitud
+            // $supplierRequestsWithTransitions = $supplierRequests->map(function ($supplierRequest) {
+            //     $transitions = DB::table('transitions_state_requests')
+            //         ->select('from_state_id', 'to_state_id', 'id_reviewer')
+            //         ->where('id_supplier_request', $supplierRequest->id)
+            //         ->get();
 
-        return response()->json($supplierRequests);
-        // elseif ($user->role->name === "compras") {
-        //     // El usuario tiene el rol de proveedor, obtén todas las solicitudes de proveedor
-        //     $supplierRequests = SupplierRequest::with(
-        //         'user',
-        //         'typePayment',
-        //         'methodPayment',
-        //         'documents',
-        //         'questions'
-        //     )->get();
+            //     $transitions->each(function ($transition) {
+            //         $transition->fromState = StateRequest::find($transition->from_state_id);
+            //         $transition->toState = StateRequest::find($transition->to_state_id);
+            //         $transition->reviewer = User::find($transition->id_reviewer);
+            //     });
 
-        //     // Obtener las transiciones de estado para cada solicitud
-        //     $supplierRequestsWithTransitions = $supplierRequests->map(function ($supplierRequest) {
-        //         $transitions = DB::table('transitions_state_requests')
-        //             ->select('from_state_id', 'to_state_id', 'id_reviewer')
-        //             ->where('id_supplier_request', $supplierRequest->id)
-        //             ->get();
+            //     $supplierRequest->stateTransitions = $transitions;
 
-        //         $transitions->each(function ($transition) {
-        //             $transition->fromState = StateRequest::find($transition->from_state_id);
-        //             $transition->toState = StateRequest::find($transition->to_state_id);
-        //             $transition->reviewer = User::find($transition->id_reviewer);
-        //         });
+            //     return $supplierRequest;
+            // });
+            $supplierRequestsWithTransitions = DB::table('supplier_requests')
+                ->join('transitions_state_requests', 'supplier_requests.id', '=', 'transitions_state_requests.id_supplier_request')
+                ->select('supplier_requests.*')
+                ->whereIn('to_state_id', [9, 2])
+                ->whereRaw('transitions_state_requests.created_at = (SELECT MAX(created_at) FROM transitions_state_requests WHERE id_supplier_request = supplier_requests.id)')
+                ->get();
 
-        //         $supplierRequest->stateTransitions = $transitions;
-
-        //         return $supplierRequest;
-        //     });
-
-        //     return response()->json($supplierRequestsWithTransitions);
-
-
-
+            return response()->json($supplierRequestsWithTransitions);
         } else {
             // El usuario no tiene el rol de proveedor, puedes manejar esto como desees
             return response()->json(['message' => 'No tienes permiso para ver las solicitudes de proveedor'], 403);
