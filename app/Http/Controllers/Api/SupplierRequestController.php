@@ -53,7 +53,7 @@ class SupplierRequestController extends Controller
             });
 
             return response()->json($supplierRequestsWithTransitions);
-        } elseif ($user->role->name === "Administrador" || $user->role->name === "analista" || $user->role->name === "validador") {
+        } elseif ($user->role->name === "admin" || $user->role->name === "compras" || $user->role->name === "contabilidad") {
             // El usuario tiene el rol de proveedor, obtén todas las solicitudes de proveedor
             $supplierRequests = SupplierRequest::with(
                 'user',
