@@ -93,38 +93,45 @@ class SupplierRequestController extends Controller
             });
 
             return response()->json($supplierRequestsWithTransitions);
+
+        } elseif ($user->role->name === "contabilidad") {
+            $supplierRequests = SupplierRequest::with(
+                'user',
+                'typePayment',
+                'methodPayment',
+                'documents',
+                'questions'
+            )->get();
+
+            $estadoPorValidar = DB::table('state_requests')
+                ->where('name', 'Por validar')
+                ->first();
+            $stateToValidate = $estadoPorValidar->id;
+
+            $supplierRequestsWithTransitions = $supplierRequests->map(function ($supplierRequest) use ($stateToReceive, $stateToValidate) {
+                $transitions = DB::table('transitions_state_requests')
+                    ->select('from_state_id', 'to_state_id', 'id_reviewer')
+                    ->where('id_supplier_request', $supplierRequest->id)
+                    ->where('to_state_id', $stateToValidate)
+                    ->get();
+
+                $transitions->each(function ($transition) {
+                    $transition->fromState = StateRequest::find($transition->from_state_id);
+                    $transition->toState = StateRequest::find($transition->to_state_id);
+                    $transition->reviewer = User::find($transition->id_reviewer);
+                });
+
+                $supplierRequest->stateTransitions = $transitions;
+
+                return $supplierRequest;
+            });
+
+            return response()->json($supplierRequestsWithTransitions);
+
         } else {
             // El usuario no tiene el rol de proveedor, puedes manejar esto como desees
             return response()->json(['message' => 'No tienes permiso para ver las solicitudes de proveedor'], 403);
         }
-
-        // $user = Auth::guard('api')->user();
-        // return $user->supplierRequests()->with(
-        //     'user',
-        //     'typePayment',
-        //     'methodPayment',
-        //     'documents',
-        //     'questions')->get();
-
-        // //Obtener las transiciones de estado para cada solicitud
-        // $supplierRequestsWithTransitions = $supplierRequests->map(function ($supplierRequest) {
-        //     $transitions = DB::table('transitions_state_requests')
-        //         ->select('from_state_id', 'to_state_id', 'id_reviewer')
-        //         ->where('id_supplier_request', $supplierRequest->id)
-        //         ->get();
-
-        //     $transitions->each(function ($transition) {
-        //         $transition->fromState = StateRequest::find($transition->from_state_id);
-        //         $transition->toState = StateRequest::find($transition->to_state_id);
-        //         $transition->reviewer = User::find($transition->id_reviewer);
-        //     });
-
-        //     $supplierRequest->stateTransitions = $transitions;
-
-        //     return $supplierRequest;
-        // });
-
-        // return response()->json($supplierRequestsWithTransitions);
     }
 
 
