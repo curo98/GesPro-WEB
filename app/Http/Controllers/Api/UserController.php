@@ -11,9 +11,9 @@ class UserController extends Controller
 {
     public function show(){
 
-        return Auth::guard('api')->user();
+        return 'Hola llegue hasta aqui';
 
         // return response()->json(auth()->user());
     }
-    
+
 }

@@ -45,7 +45,7 @@ Route::get('/questions-requests', [Api\QuestionController::class, 'index']);
 
 // Rutas protegidas con autenticación
 Route::middleware('auth:api')->group(function () {
-    Route::get('/user', [Api\UserController::class, 'show']);
+    Route::get('/user', [App\Http\Controllers\Api\UserController::class, 'show']);
     Route::post('/logout', [AuthController::class, 'logout']);
 
     Route::get('/suppliers', [Api\SupplierController::class, 'index']);
