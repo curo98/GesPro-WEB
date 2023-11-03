@@ -78,7 +78,7 @@ class StateRequestController extends Controller
         $sr = SupplierRequest::findOrFail($id);
 
         $estadoValidado = DB::table('state_requests')
-            ->where('name', 'Validado')
+            ->where('name', 'Validada')
             ->first();
         $nuevoEstadoId = $estadoValidado->id;
 
