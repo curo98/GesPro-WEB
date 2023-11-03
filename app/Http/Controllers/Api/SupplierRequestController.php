@@ -104,15 +104,15 @@ class SupplierRequestController extends Controller
             )->get();
 
             $estadoPorValidar = DB::table('state_requests')
-                ->where('name', 'Por validar')
+                ->where('name', 'Por aprobar')
                 ->first();
-            $stateToValidate = $estadoPorValidar->id;
+            $stateToApprove = $estadoPorValidar->id;
 
-            $supplierRequestsWithTransitions = $supplierRequests->map(function ($supplierRequest) use ($stateToValidate) {
+            $supplierRequestsWithTransitions = $supplierRequests->map(function ($supplierRequest) use ($stateToApprove) {
                 $transitions = DB::table('transitions_state_requests')
                     ->select('from_state_id', 'to_state_id', 'id_reviewer')
                     ->where('id_supplier_request', $supplierRequest->id)
-                    ->where('to_state_id', $stateToValidate)
+                    ->where('to_state_id', $stateToApprove)
                     ->get();
 
                 $transitions->each(function ($transition) {
