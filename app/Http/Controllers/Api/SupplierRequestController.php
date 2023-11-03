@@ -70,10 +70,10 @@ class SupplierRequestController extends Controller
             'documents',
             'questions',
             'stateTransitions' => function ($query) {
-                $query->orderBy('id', 'desc')->take(1);
+                $query->orderBy('created_at', 'desc')->take(1);
             }
         ])->whereHas('stateTransitions', function ($query) {
-            $query->whereIn('to_state_id', [$stateToValidate1, $stateToValidate2]); // 1: Por recibir, 2: Por validar
+            $query->whereIn('to_state_id', [9, 2]); // 1: Por recibir, 2: Por validar
         })->get();
 
         return response()->json($supplierRequests);
