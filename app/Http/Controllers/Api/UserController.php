@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\JwtAuth;
 
 
 class UserController extends Controller
@@ -23,7 +22,6 @@ class UserController extends Controller
         $user->email = $request->input('email');
         $user->save();
 
-        JwtAuth::clearCache($user);
     }
 
 }
