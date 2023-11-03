@@ -108,7 +108,7 @@ class SupplierRequestController extends Controller
                 ->first();
             $stateToValidate = $estadoPorValidar->id;
 
-            $supplierRequestsWithTransitions = $supplierRequests->map(function ($supplierRequest) use ($stateToReceive, $stateToValidate) {
+            $supplierRequestsWithTransitions = $supplierRequests->map(function ($supplierRequest) use ($stateToValidate) {
                 $transitions = DB::table('transitions_state_requests')
                     ->select('from_state_id', 'to_state_id', 'id_reviewer')
                     ->where('id_supplier_request', $supplierRequest->id)
