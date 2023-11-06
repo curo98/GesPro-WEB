@@ -45,7 +45,7 @@ Route::get('/questions-requests', [App\Http\Controllers\Api\QuestionController::
 Route::post('/fcm/token', [App\Http\Controllers\Api\FirebaseController::class, 'postToken']);
 
 
-Route::get('/supplier/{supplierId}', [App\Http\Controllers\Api\SupplierController::class, 'show']);
+Route::get('/supplier/{id}', [App\Http\Controllers\Api\SupplierController::class, 'show']);
 
 // Rutas protegidas con autenticación
 Route::middleware('auth:api')->group(function () {
