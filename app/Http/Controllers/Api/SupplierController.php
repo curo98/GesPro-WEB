@@ -37,12 +37,12 @@ class SupplierController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
-    {
-        $supplier = Supplier::findOrFail($id);
+    // public function show($id)
+    // {
+    //     $supplier = Supplier::findOrFail($id);
 
-        return $supplier;
-    }
+    //     return $supplier;
+    // }
 
     public function show($id)
     {
