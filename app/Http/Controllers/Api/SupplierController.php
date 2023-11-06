@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use \App\Models\Supplier;
 use \App\Models\User;
+use Illuminate\Support\Facades\Hash;
+
 
 class SupplierController extends Controller
 {
@@ -37,6 +39,7 @@ class SupplierController extends Controller
         $user = User::create([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
+            'password' => Hash::make('1234556'),
             'id_role' => 2
             // Agrega otros campos de usuario si es necesario
         ]);
