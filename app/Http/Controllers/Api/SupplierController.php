@@ -39,7 +39,7 @@ class SupplierController extends Controller
      */
     public function show(string $id)
     {
-        //
+        return "Llegue";
     }
 
     /**
