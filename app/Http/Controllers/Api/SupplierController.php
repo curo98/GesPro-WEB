@@ -72,9 +72,21 @@ class SupplierController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        // Busca el proveedor por su ID
+        $supplier = Supplier::find($id);
+
+        if (!$supplier) {
+            return response()->json(['message' => 'Proveedor no encontrado'], 404);
+        }
+
+        // Actualiza los campos del proveedor con los datos enviados
+        $supplier->name = $request->input('name');
+        $supplier->nic_ruc = $request->input('nic_ruc');
+        $supplier->save();
+
+        return response()->json(['message' => 'Proveedor actualizado correctamente']);
     }
 
     /**
