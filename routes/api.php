@@ -61,7 +61,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/suppliers', [App\Http\Controllers\Api\SupplierController::class, 'index']);
     Route::get('/supplier/{id}', [App\Http\Controllers\Api\SupplierController::class, 'show']);
     Route::get('/supplier/{id}/edit', [App\Http\Controllers\Api\SupplierController::class, 'edit']);
-    Route::put('/supplier/{id}/update', [App\Http\Controllers\Api\SupplierController::class, 'update']);
+    Route::post('/supplier/{id}/update', [App\Http\Controllers\Api\SupplierController::class, 'update']);
 
     /*RUTAS PARA EL CRUD DE SOLICITUDES DE PROVEEDORES*/
     Route::get('/requests-suppliers', [App\Http\Controllers\Api\SupplierRequestController::class, 'index']);
