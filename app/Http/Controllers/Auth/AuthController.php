@@ -24,9 +24,10 @@ class AuthController extends Controller
         if (Auth::guard('api')->attempt($credentials)) {
             $user = Auth::guard('api')->user();
             $jwt = JWTAuth::attempt($credentials);
+            $role = $user->role; // Obtiene el rol del usuario
             $success = true;
 
-            return compact('success', 'user', 'jwt');
+            return compact('success', 'user', 'role', 'jwt');
         } else {
             $success = false;
             $message = "Credenciales incorrectas";
