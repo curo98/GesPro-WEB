@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use \App\Models\Supplier;
+use \App\Models\User;
 
 class SupplierController extends Controller
 {
@@ -32,7 +33,26 @@ class SupplierController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Crea un nuevo usuario
+        $user = User::create([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'id_role' => 2
+            // Agrega otros campos de usuario si es necesario
+        ]);
+
+        // Crea un nuevo proveedor y asócialo con el usuario
+        $proveedor = Proveedor::create([
+            'nic_ruc' => $request->input('nic_ruc'),
+            'nacionality' => $request->input('nacionality'),
+            'id_user' => $user->id,// Asocia el proveedor con el usuario recién creado
+            'state' => 'inactivo'
+        ]);
+        return $proveedor;
+
+        // Puedes realizar otras acciones aquí, como enviar una respuesta JSON con el proveedor creado
+        return response()->json($proveedor, 201); // 201 significa "Created" (creado)
+
     }
 
     /**
