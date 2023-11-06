@@ -74,20 +74,23 @@ class SupplierController extends Controller
      */
     public function update(Request $request, $id)
     {
-
         // Busca el proveedor por su ID
         $supplier = Supplier::find($id);
-        return $request;
-        // if (!$supplier) {
-        //     return response()->json(['message' => 'Proveedor no encontrado'], 404);
-        // }
 
-        // // Actualiza los campos del proveedor con los datos enviados
-        // $supplier->user->name = $request->input('name');
-        // $supplier->nic_ruc = $request->input('nic_ruc');
-        // $supplier->save();
+        if (!$supplier) {
+            return response()->json(['message' => 'Proveedor no encontrado'], 404);
+        }
 
-        // return response()->json(['message' => 'Proveedor actualizado correctamente']);
+        // Actualiza los campos del proveedor con los datos enviados
+        $supplier->user->name = $request->input('name');
+        $supplier->nic_ruc = $request->input('nic_ruc');
+
+        // Guarda los cambios
+        $supplier->save();
+        return $supplier;
+
+        // Devuelve el proveedor actualizado
+        // return response()->json(['message' => 'Proveedor actualizado', 'supplier' => $supplier]);
     }
 
     /**
