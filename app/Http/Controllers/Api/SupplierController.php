@@ -77,7 +77,7 @@ class SupplierController extends Controller
 
         // Busca el proveedor por su ID
         $supplier = Supplier::find($id);
-        return $supplier;
+        return $request;
         // if (!$supplier) {
         //     return response()->json(['message' => 'Proveedor no encontrado'], 404);
         // }
