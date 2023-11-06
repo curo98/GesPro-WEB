@@ -58,9 +58,15 @@ class SupplierController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $supplier = Supplier::with('user')->find($id);
+
+        if ($supplier) {
+            return response()->json($supplier);
+        } else {
+            return response()->json(['message' => 'Proveedor no encontrado'], 404);
+        }
     }
 
     /**
