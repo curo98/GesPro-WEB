@@ -44,6 +44,17 @@ class SupplierController extends Controller
         return $supplier;
     }
 
+    public function show($id)
+    {
+        $supplier = Supplier::with('user')->find($id);
+
+        if ($supplier) {
+            return response()->json($supplier);
+        } else {
+            return response()->json(['message' => 'Proveedor no encontrado'], 404);
+        }
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
