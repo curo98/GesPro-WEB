@@ -46,7 +46,7 @@ class SupplierController extends Controller
 
     public function show($id)
     {
-        $supplier = Supplier::findOrFail($id);
+        $supplier = Supplier::with('user')->find($id);
 
         if ($supplier) {
             return response()->json($supplier);
