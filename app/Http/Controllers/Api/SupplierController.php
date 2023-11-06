@@ -45,7 +45,7 @@ class SupplierController extends Controller
         ]);
 
         // Crea un nuevo proveedor y asócialo con el usuario
-        $proveedor = Proveedor::create([
+        $proveedor = Supplier::create([
             'nic_ruc' => $request->input('nic_ruc'),
             'nacionality' => $request->input('nacionality'),
             'id_user' => $user->id,// Asocia el proveedor con el usuario recién creado
