@@ -39,7 +39,7 @@ class SupplierController extends Controller
      */
     public function show(string $id)
     {
-        $supplier = Supplier::with('user')->findOrFail($id);
+        $supplier = Supplier::findOrFail($id);
 
         return response()->json($supplier);
     }
