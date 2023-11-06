@@ -74,10 +74,10 @@ class SupplierController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return "Llegue hasta aqui";
-        // Busca el proveedor por su ID
-        // $supplier = Supplier::find($id);
 
+        // Busca el proveedor por su ID
+        $supplier = Supplier::find($id);
+        return $supplier;
         // if (!$supplier) {
         //     return response()->json(['message' => 'Proveedor no encontrado'], 404);
         // }
