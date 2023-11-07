@@ -35,7 +35,7 @@ class FirebaseController extends Controller
 
         if ($user) {
             // Almacena el token del dispositivo en el campo "device_token" de la tabla "users"
-            $user->update(['device_token' => $request->input('deviceToken')]);
+            $user->update(['device_token' => $request->input('device_token')]);
 
             return response()->json(['message' => 'Token del dispositivo registrado correctamente'], 200);
         } else {
