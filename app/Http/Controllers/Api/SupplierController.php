@@ -70,14 +70,16 @@ class SupplierController extends Controller
 
     public function show($id)
     {
-        return "Llegue has aqui";
-        // $supplier = Supplier::with('user')->find($id);
+        $supplier = Supplier::with(['user', 'user.role'])->find($id);
 
-        // if ($supplier) {
-        //     return response()->json($supplier);
-        // } else {
-        //     return response()->json(['message' => 'Proveedor no encontrado'], 404);
-        // }
+        if ($supplier) {
+            return response()->json($supplier);
+        } else {
+            return response()->json(['message' => 'Proveedor no encontrado'], 404);
+        }
+
+        return $supplier;
+
     }
 
     /**
