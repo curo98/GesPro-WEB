@@ -70,16 +70,13 @@ class SupplierController extends Controller
 
     public function show($id)
     {
-        $supplier = Supplier::with(['user', 'user.role'])->find($id);
+        $supplier = Supplier::with('user')->find($id);
 
         if ($supplier) {
             return response()->json($supplier);
         } else {
             return response()->json(['message' => 'Proveedor no encontrado'], 404);
         }
-
-        return $supplier;
-
     }
 
     /**
@@ -87,6 +84,7 @@ class SupplierController extends Controller
      */
     public function edit($id)
     {
+        return "llegue";
         $supplier = Supplier::with('user')->find($id);
 
         if ($supplier) {
