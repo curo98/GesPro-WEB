@@ -23,6 +23,26 @@ class FirebaseController extends Controller
 
     }
 
+    public function deviceToken(Request $request)
+    {
+        // Valida la solicitud (puedes agregar más validaciones según tus necesidades)
+        $request->validate([
+            'device_token' => 'required|string',
+        ]);
+
+        // Recupera el usuario autenticado
+        $user = auth()->user();
+
+        if ($user) {
+            // Almacena el token del dispositivo en el campo "device_token" de la tabla "users"
+            $user->update(['device_token' => $request->input('deviceToken')]);
+
+            return response()->json(['message' => 'Token del dispositivo registrado correctamente'], 200);
+        } else {
+            return response()->json(['message' => 'Usuario no autenticado'], 401);
+        }
+    }
+
     /**
      * Show the form for creating a new resource.
      */
