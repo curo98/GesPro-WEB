@@ -84,9 +84,8 @@ class SupplierController extends Controller
      */
     public function edit($id)
     {
-        return "llegue";
         $supplier = Supplier::with('user')->find($id);
-
+        return $supplier;
         if ($supplier) {
             return response()->json($supplier);
         } else {
