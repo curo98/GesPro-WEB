@@ -70,7 +70,7 @@ class SupplierController extends Controller
 
     public function show($id)
     {
-        $supplier = Supplier::with('user')->find($id);
+        $supplier = Supplier::with('user.role')->find($id);
 
         if ($supplier) {
             return response()->json($supplier);
