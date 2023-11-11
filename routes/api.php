@@ -45,7 +45,8 @@ Route::get('/questions-requests', [App\Http\Controllers\Api\QuestionController::
 Route::post('/fcm/token', [App\Http\Controllers\Api\FirebaseController::class, 'postToken']);
 Route::post('/fcm/deviceToken', [App\Http\Controllers\Api\FirebaseController::class, 'deviceToken']);
 
-
+Route::get('/users', [App\Http\Controllers\Api\UserController::class, 'index']);
+Route::get('/user/store', [App\Http\Controllers\Api\UserController::class, 'store']);
 
 
 // Rutas protegidas con autenticación
