@@ -49,7 +49,7 @@ class UserController extends Controller
      */
     public function editUser($id)
     {
-        $user = User::with('user')->find($id);
+        $user = User::find($id);
         return $user;
         if ($user) {
             return response()->json($user);
