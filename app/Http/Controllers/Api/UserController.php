@@ -13,8 +13,9 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    public function index(){
-        return $users = User::all();
+    public function index() {
+        $users = User::orderBy('created_at', 'desc')->get();
+        return $users;
     }
 
     public function store(Request $request) {

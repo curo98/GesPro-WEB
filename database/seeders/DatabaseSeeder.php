@@ -107,7 +107,12 @@ class DatabaseSeeder extends Seeder
             }
         });
 
-
+        \App\Models\User::factory()
+            ->count(50)
+            ->create([
+                'id_role' => 2,
+                'password' => bcrypt('1234'),
+        ]);
 
 
         DB::statement("INSERT INTO `countries` (`id`, `name`) VALUES
