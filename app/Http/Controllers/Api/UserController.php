@@ -15,7 +15,7 @@ class UserController extends Controller
         return $users = User::all();
     }
 
-    public function store(Request $request){
+    public function store(Request $request) {
         $user = User::create([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
@@ -24,11 +24,7 @@ class UserController extends Controller
             // Agrega otros campos de usuario si es necesario
         ]);
 
-        if ($user->save()) {
-            return response()->json(['message' => 'Usuario creado con éxito'], 200);
-        } else {
-            return response()->json(['message' => 'Error al crear el usuario'], 500);
-        }
+        return response()->json(['message' => 'Usuario creado con éxito'], 200);
     }
 
     public function edit(){
