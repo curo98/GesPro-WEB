@@ -33,6 +33,51 @@ class UserController extends Controller
         return Auth::guard('api')->user();
     }
 
+    public function show($id)
+    {
+        $user = User::find($id);
+
+        if ($user) {
+            return response()->json($user);
+        } else {
+            return response()->json(['message' => 'Usuario no encontrado'], 404);
+        }
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function editUser($id)
+    {
+        $user = User::with('user')->find($id);
+        return $user;
+        if ($user) {
+            return response()->json($user);
+        } else {
+            return response()->json(['message' => 'Proveedor no encontrado'], 404);
+        }
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function updateUser(Request $request, $id)
+    {
+        // Obtén los datos del request
+        $name = $request->input('name');
+        $email = $request->input('email');
+
+        // Ejecuta una consulta SQL para actualizar los campos en la base de datos
+        DB::table('users')
+            ->where('id', $id)
+            ->update([
+                'name' => $name,
+                'email' => $email
+            ]);
+
+        return response()->json(['message' => 'Usuario actualizado']);
+    }
+
     public function update(Request $request){
 
         $user = Auth::guard('api')->user();
