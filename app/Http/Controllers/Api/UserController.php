@@ -79,6 +79,17 @@ class UserController extends Controller
         return response()->json(['message' => 'Usuario actualizado']);
     }
 
+    public function destroyUser($id) {
+        $user = User::find($id);
+
+        if ($user) {
+            $user->delete();
+            return response()->json(['message' => 'Usuario eliminado correctamente'], 200);
+        } else {
+            return response()->json(['message' => 'Usuario no encontrado'], 404);
+        }
+    }
+
     public function update(Request $request){
 
         $user = Auth::guard('api')->user();

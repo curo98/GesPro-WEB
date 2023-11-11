@@ -50,6 +50,7 @@ Route::post('/user/store', [App\Http\Controllers\Api\UserController::class, 'sto
 Route::get('/user/{id}', [App\Http\Controllers\Api\UserController::class, 'show']);
 Route::get('/user/{id}/edit', [App\Http\Controllers\Api\UserController::class, 'editUser']);
 Route::post('/user/{id}/update', [App\Http\Controllers\Api\UserController::class, 'updateUser']);
+Route::post('/user/{id}/destroy', [App\Http\Controllers\Api\UserController::class, 'destroyUser']);
 
 
 // Rutas protegidas con autenticación
