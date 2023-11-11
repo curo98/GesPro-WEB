@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 class UserController extends Controller
 {
     public function index() {
-        $users = User::orderBy('created_at', 'desc')->get();
+        $users = User::orderBy('id', 'desc')->get();
         return $users;
     }
 
