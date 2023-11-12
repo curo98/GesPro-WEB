@@ -286,6 +286,7 @@ class SupplierRequestController extends Controller
      */
     public function show($id)
     {
+        return "llegue";
         $request = SupplierRequest::find($id);
 
         if ($request) {
