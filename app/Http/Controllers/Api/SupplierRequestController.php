@@ -286,12 +286,21 @@ class SupplierRequestController extends Controller
      */
     public function show($id)
     {
-        $sp = SupplierRequest::find($id);
+        $supplierRequest = SupplierRequest::with(
+            'user',
+            'typePayment',
+            'methodPayment',
+            'documents',
+            'questions'
+        )->find($id);
 
-        if ($sp) {
-            return response()->json($sp);
+        if ($supplierRequest) {
+            // Cargar las transiciones de estado relacionadas
+            $supplierRequest->load(['stateTransitions.fromState', 'stateTransitions.toState', 'stateTransitions.reviewer']);
+
+            return response()->json($supplierRequest);
         } else {
-            return response()->json(['message' => 'Solicitud no encontrado'], 404);
+            return response()->json(['message' => 'Solicitud no encontrada'], 404);
         }
     }
 
