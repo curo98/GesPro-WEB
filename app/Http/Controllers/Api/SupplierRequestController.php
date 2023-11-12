@@ -284,9 +284,15 @@ class SupplierRequestController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $request = SupplierRequest::find($id);
+
+        if ($request) {
+            return response()->json($request);
+        } else {
+            return response()->json(['message' => 'Solicitud no encontrado'], 404);
+        }
     }
 
     /**
