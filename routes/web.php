@@ -31,7 +31,7 @@ Route::get('/register-paso3', [App\Http\Controllers\ProveedorController::class, 
 Route::get('/register-step4', [App\Http\Controllers\ProveedorController::class, 'formStep4'])->name('r.step4');
 
 Route::get('/register-step5', [App\Http\Controllers\ProveedorController::class, 'formStep5'])->name('r.step5');
-
+Route::get('/requests', [Controllers\SupplierRequestController::class, 'index']);
 
 Route::middleware(['auth', 'role:admin'])->namespace('Admin')->group(function () {
     Route::post('/fcm/send', [FirebaseController::class, 'sendAll']);
@@ -41,7 +41,7 @@ Route::middleware(['auth', 'role:compras,contabilidad'])->group(function () {
 
     Route::get('/suppliers', [Controllers\SupplierController::class, 'index'])->name('suppliers.index');
 
-    Route::get('/requests', [Controllers\SupplierRequestController::class, 'index']);
+
 
     Route::post('/requests/check/{id}', [Controllers\StateRequestController::class, 'check'])->name('requests.check');
     Route::post('/requests/receive/{id}', [Controllers\StateRequestController::class, 'receive'])->name('requests.receive');

@@ -128,6 +128,33 @@ class SupplierRequestController extends Controller
 
             return response()->json($supplierRequestsWithTransitions);
 
+        } elseif ($user->role->name === "admin") {
+            $supplierRequests = SupplierRequest::with(
+                'user',
+                'typePayment',
+                'methodPayment',
+                'documents',
+                'questions'
+            )->get();
+
+            $supplierRequestsWithTransitions = $supplierRequests->map(function ($supplierRequest) use ($stateToApprove) {
+                $transitions = DB::table('transitions_state_requests')
+                    ->select('from_state_id', 'to_state_id', 'id_reviewer')
+                    ->where('id_supplier_request', $supplierRequest->id)
+                    ->get();
+
+                $transitions->each(function ($transition) {
+                    $transition->fromState = StateRequest::find($transition->from_state_id);
+                    $transition->toState = StateRequest::find($transition->to_state_id);
+                    $transition->reviewer = User::find($transition->id_reviewer);
+                });
+
+                $supplierRequest->stateTransitions = $transitions;
+
+                return $supplierRequest;
+            });
+
+            return response()->json($supplierRequestsWithTransitions);
         } else {
             // El usuario no tiene el rol de proveedor, puedes manejar esto como desees
             return response()->json(['message' => 'No tienes permiso para ver las solicitudes de proveedor'], 403);
