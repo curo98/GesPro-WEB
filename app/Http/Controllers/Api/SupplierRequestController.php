@@ -286,11 +286,10 @@ class SupplierRequestController extends Controller
      */
     public function show($id)
     {
-        return "llegue";
-        $request = SupplierRequest::find($id);
+        $sp = SupplierRequest::find($id);
 
-        if ($request) {
-            return response()->json($request);
+        if ($sp) {
+            return response()->json($sp);
         } else {
             return response()->json(['message' => 'Solicitud no encontrado'], 404);
         }
