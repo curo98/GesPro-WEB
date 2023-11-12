@@ -137,7 +137,7 @@ class SupplierRequestController extends Controller
                 'questions'
             )->get();
 
-            $supplierRequestsWithTransitions = $supplierRequests->map(function ($supplierRequest) use ($stateToApprove) {
+            $supplierRequestsWithTransitions = $supplierRequests->map(function ($supplierRequest){
                 $transitions = DB::table('transitions_state_requests')
                     ->select('from_state_id', 'to_state_id', 'id_reviewer')
                     ->where('id_supplier_request', $supplierRequest->id)
