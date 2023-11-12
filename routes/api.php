@@ -72,6 +72,7 @@ Route::middleware('auth:api')->group(function () {
 
     /*RUTAS PARA EL CRUD DE SOLICITUDES DE PROVEEDORES*/
     Route::get('/requests-suppliers', [App\Http\Controllers\Api\SupplierRequestController::class, 'index']);
+    Route::get('/request/{id}', [App\Http\Controllers\Api\SupplierRequestController::class, 'show']);
 
     /* END RUTAS CRUD SP */
 
