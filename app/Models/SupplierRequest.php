@@ -63,7 +63,8 @@ class SupplierRequest extends Model
 
     public function questions()
     {
-        return $this->belongsToMany(Question::class, 'supplier_requests_questions', 'id_supplier_request', 'id_question');
+        return $this->belongsToMany(Question::class, 'supplier_requests_questions', 'id_supplier_request', 'id_question')
+            ->withPivot('response');
     }
 
     public function policies() {
