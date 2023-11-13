@@ -294,7 +294,7 @@ class SupplierRequestController extends Controller
             'questions'
         )->find($id);
 
-        $supplierRequestsWithTransitions = $supplierRequest->map(function ($supplierRequest) {
+        if ($supplierRequest) {
             $transitions = DB::table('transitions_state_requests')
                 ->select('from_state_id', 'to_state_id', 'id_reviewer')
                 ->where('id_supplier_request', $supplierRequest->id)
@@ -307,9 +307,10 @@ class SupplierRequestController extends Controller
             });
 
             $supplierRequest->stateTransitions = $transitions;
-
-            return $supplierRequest;
-        });
+        } else {
+            // Manejar el caso en el que no se encontró un SupplierRequest con el ID dado.
+            // Puedes lanzar una excepción, devolver una respuesta de error, etc.
+        }
     }
 
     /**
