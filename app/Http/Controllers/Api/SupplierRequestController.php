@@ -291,7 +291,9 @@ class SupplierRequestController extends Controller
             'typePayment',
             'methodPayment',
             'documents',
-            'questions'
+            'questions',
+            'observations',
+            'policies'
         )->find($id);
 
         if ($supplierRequest) {
