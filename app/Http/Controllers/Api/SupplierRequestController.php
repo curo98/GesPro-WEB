@@ -307,11 +307,15 @@ class SupplierRequestController extends Controller
             });
 
             $supplierRequest->stateTransitions = $transitions;
+
+            // Devuelve el objeto en formato JSON
+            return response()->json($supplierRequest);
         } else {
             // Manejar el caso en el que no se encontró un SupplierRequest con el ID dado.
             // Puedes lanzar una excepción, devolver una respuesta de error, etc.
         }
     }
+
 
     /**
      * Show the form for editing the specified resource.
