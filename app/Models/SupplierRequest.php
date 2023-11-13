@@ -72,7 +72,7 @@ class SupplierRequest extends Model
     }
 
     public function observations() {
-        return $this->belongsToMany(\App\Models\observation::class, 'supplier_requests_observations', 'id_supplier_request', 'id_observation');
+        return $this->belongsToMany(Observation::class, 'supplier_requests_observations', 'id_supplier_request', 'id_observation');
     }
 
     public function reviewers() {
