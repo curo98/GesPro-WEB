@@ -292,7 +292,7 @@ class SupplierRequestController extends Controller
             'methodPayment',
             'documents',
             'questions',
-            'observations',
+            'observations.user',
             'policies'
         )->find($id);
 
