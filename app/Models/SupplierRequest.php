@@ -15,11 +15,6 @@ class SupplierRequest extends Model
         'id_method_payment',
     ];
 
-    protected $hidden = [
-        'created_at',
-        'updated_at',
-    ];
-
     public function user()
     {
         return $this->belongsTo(User::class, 'id_user');
