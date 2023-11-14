@@ -298,7 +298,7 @@ class SupplierRequestController extends Controller
 
         if ($supplierRequest) {
             $transitions = DB::table('transitions_state_requests')
-                ->select('from_state_id', 'to_state_id', 'id_reviewer')
+                ->select('from_state_id', 'to_state_id', 'id_reviewer', 'created_at')
                 ->where('id_supplier_request', $supplierRequest->id)
                 ->get();
 
