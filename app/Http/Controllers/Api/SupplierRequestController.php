@@ -62,9 +62,6 @@ class SupplierRequestController extends Controller
                 'documents',
                 'questions'
             )->get();
-            if ($supplierRequests->isEmpty()) {
-                return response()->json(['success' => 'No hay solicitudes por mostrar']);
-            }
 
             $estadoPorRecibir = DB::table('state_requests')
                 ->where('name', 'Por recibir')
@@ -181,21 +178,21 @@ class SupplierRequestController extends Controller
     {
         $user = Auth::guard('api')->user();
 
-        $newName = $request->input('nameSupplier');
-        $newEmail = $request->input('emailSupplier');
+        // $newName = $request->input('nameSupplier');
+        // $newEmail = $request->input('emailSupplier');
         $selectedPolicies = $request->input('selectedPolicies');
 
         // Verifica si el nombre o el correo electrónico son diferentes de los actuales
-        if ($newName !== $user->name) {
-            $user->name = $newName;
-        }
+        // if ($newName !== $user->name) {
+        //     $user->name = $newName;
+        // }
 
-        if ($newEmail && $newEmail !== $user->email) {
-            $user->email = $newEmail;
-        }
+        // if ($newEmail && $newEmail !== $user->email) {
+        //     $user->email = $newEmail;
+        // }
 
-        // Guarda el usuario actualizado
-        $user->save();
+        // // Guarda el usuario actualizado
+        // $user->save();
 
         // Cambia el rol del usuario a "proveedor"
         $user->id_role = Role::where('name', 'proveedor')->first()->id;
