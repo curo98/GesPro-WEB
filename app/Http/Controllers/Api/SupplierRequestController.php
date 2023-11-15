@@ -21,7 +21,7 @@ class SupplierRequestController extends Controller
      */
     public function index()
     {
-        return "LLegue";
+        // return "LLegue";
         $user = Auth::guard('api')->user();
         if ($user->role->name === "proveedor") {
             $supplierRequests = SupplierRequest::where('id_user', $user->id)
