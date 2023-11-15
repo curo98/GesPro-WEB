@@ -62,6 +62,9 @@ class SupplierRequestController extends Controller
                 'documents',
                 'questions'
             )->get();
+            if ($supplierRequests->isEmpty()) {
+                return response()->json(['success' => 'No hay solicitudes por mostrar']);
+            }
 
             $estadoPorRecibir = DB::table('state_requests')
                 ->where('name', 'Por recibir')
