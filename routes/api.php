@@ -74,6 +74,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/requests-suppliers', [App\Http\Controllers\Api\SupplierRequestController::class, 'index']);
     Route::get('/request/{id}', [App\Http\Controllers\Api\SupplierRequestController::class, 'show']);
     Route::get('/request/{id}/edit', [App\Http\Controllers\Api\SupplierRequestController::class, 'edit']);
+    Route::post('/request/{id}/update', [App\Http\Controllers\Api\SupplierRequestController::class, 'update']);
     /* END RUTAS CRUD SP */
 
     Route::get('/documents-request', [App\Http\Controllers\Api\DocumentController::class, 'index']);
