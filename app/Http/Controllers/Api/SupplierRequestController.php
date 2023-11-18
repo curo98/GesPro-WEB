@@ -334,10 +334,6 @@ class SupplierRequestController extends Controller
                 'user',
                 'typePayment',
                 'methodPayment',
-                'documents',
-                'questions',
-                'observations.user',
-                'policies'
             );
 
             // You may need to load additional data depending on your requirements
