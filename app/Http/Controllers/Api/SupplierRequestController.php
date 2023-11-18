@@ -323,9 +323,32 @@ class SupplierRequestController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        // Assuming $id is the ID of the SupplierRequest you want to edit
+        $supplierRequest = SupplierRequest::find($id);
+
+        if ($supplierRequest) {
+            // Assuming you want to load related data as well
+            $supplierRequest->load(
+                'user',
+                'typePayment',
+                'methodPayment',
+                'documents',
+                'questions',
+                'observations.user',
+                'policies'
+            );
+
+            // You may need to load additional data depending on your requirements
+
+            // Return the SupplierRequest data as JSON
+            return response()->json($supplierRequest);
+        } else {
+            // Handle the case where the SupplierRequest with the given ID was not found.
+            // You can return a JSON response with an error message.
+            return response()->json(['error' => 'Solicitud no encontrada'], 404);
+        }
     }
 
     /**
