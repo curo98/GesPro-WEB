@@ -331,7 +331,7 @@ class SupplierRequestController extends Controller
         if ($supplierRequest) {
             // Assuming you want to load related data as well
             $supplierRequest->load(
-                'user',
+                'user.supplier',
                 'typePayment',
                 'methodPayment',
             );
