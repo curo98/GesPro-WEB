@@ -178,87 +178,84 @@ class SupplierRequestController extends Controller
     {
         $user = Auth::guard('api')->user();
 
-        $selectedPolicies = $request->input('selectedPolicies');
+        // Verificar si el usuario ya tiene un proveedor asociado
+        $existingSupplier = Supplier::where('id_user', $user->id)->first();
 
-        // Cambia el rol del usuario a "proveedor"
-        $user->id_role = Role::where('name', 'proveedor')->first()->id;
-        $user->save();
-
-        $typePaymentName = $request->input('typePayment');
-        $methodPaymentName = $request->input('methodPayment');
-
-        $typePayment = TypePayment::where('name', $typePaymentName)->first();
-        $methodPayment = MethodPayment::where('name', $methodPaymentName)->first();
-
-        if (!$typePayment || !$methodPayment) {
-            return response()->json(['message' => 'Tipo de pago o método de pago no válido'], 400);
-        }
-
-        $supplier = new Supplier([
-            'nacionality' => $request->input('nacionality'),
-            'nic_ruc' => $request->input('nic_ruc'),
-            'locality' => $request->input('locality'),
-            'street_and_number' => $request->input('street_and_number'),
-            'id_user' => $user->id,
-        ]);
-        $supplier->save();
-
-        $supplierRequest = new SupplierRequest([
-            'id_user' => $user->id,
-            'id_type_payment' => $typePayment->id,
-            'id_method_payment' => $methodPayment->id,
-        ]);
-
-        $saved = $supplierRequest->save();
-        $id_supplier_request = $supplierRequest->id;
-
-        $estadoInicial = DB::table('state_requests')
-            ->where('name', 'Enviado')
-            ->first();
-        $from_state_id = $estadoInicial->id;
-        $estadoPost = DB::table('state_requests')
-            ->where('name', 'Por recibir')
-            ->first();
-        $to_state_id = $estadoPost->id;
-
-        DB::table('transitions_state_requests')->insert([
-            'id_supplier_request' => $id_supplier_request,
-            'from_state_id' => $from_state_id,
-            'to_state_id' => $to_state_id,
-            'created_at' => now(), // Fecha actual de creación
-            'updated_at' => now(), // Fecha actual de actualización
-        ]);
-
-        $data = $request->json()->all();
-        $selectedPoliciesRequest = $data['selectedPolicies'];
-        $questionResponses = $data['questionResponses'];
-
-        foreach ($selectedPoliciesRequest as $policy) {
-            DB::table('supplier_requests_policies')->insert([
-                'id_supplier_request' => $id_supplier_request,
-                'id_policie' => $policy['id'],
-                'accepted' => $policy['isChecked'],
+        if ($existingSupplier) {
+            // Si el proveedor existe, actualizar los campos
+            $existingSupplier->update([
+                'nacionality' => $request->input('nacionality'),
+                'nic_ruc' => $request->input('nic_ruc'),
+                'locality' => $request->input('locality'),
+                'street_and_number' => $request->input('street_and_number'),
             ]);
-        }
-
-        // Implementar envío de mensajes también para otros casos
-        foreach ($questionResponses as $qr) {
-            $responseValue = $qr['respuesta'] ? 1 : 0;
-
-            DB::table('supplier_requests_questions')->insert([
-                'id_supplier_request' => $id_supplier_request,
-                'id_question' => $qr['preguntaId'],
-                'response' => $responseValue,
+        } else {
+            // Si el proveedor no existe, crear uno nuevo
+            $supplier = new Supplier([
+                'nacionality' => $request->input('nacionality'),
+                'nic_ruc' => $request->input('nic_ruc'),
+                'locality' => $request->input('locality'),
+                'street_and_number' => $request->input('street_and_number'),
+                'id_user' => $user->id,
             ]);
-        }
+            $supplier->save();
 
-        if ($saved) {
-            $supplierRequest->user->sendFCM('Su solicitud se ha enviado correctamente!');
+            $supplierRequest = new SupplierRequest([
+                'id_user' => $user->id,
+                // Agrega aquí el resto de los campos necesarios
+            ]);
+
+            $saved = $supplierRequest->save();
+            $id_supplier_request = $supplierRequest->id;
+
+            $estadoInicial = DB::table('state_requests')
+                ->where('name', 'Enviado')
+                ->first();
+            $from_state_id = $estadoInicial->id;
+
+            $estadoPost = DB::table('state_requests')
+                ->where('name', 'Por recibir')
+                ->first();
+            $to_state_id = $estadoPost->id;
+
+            DB::table('transitions_state_requests')->insert([
+                'id_supplier_request' => $id_supplier_request,
+                'from_state_id' => $from_state_id,
+                'to_state_id' => $to_state_id,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            $data = $request->json()->all();
+            $selectedPoliciesRequest = $data['selectedPolicies'];
+            $questionResponses = $data['questionResponses'];
+
+            foreach ($selectedPoliciesRequest as $policy) {
+                DB::table('supplier_requests_policies')->insert([
+                    'id_supplier_request' => $id_supplier_request,
+                    'id_policie' => $policy['id'],
+                    'accepted' => $policy['isChecked'],
+                ]);
+            }
+
+            foreach ($questionResponses as $qr) {
+                $responseValue = $qr['respuesta'] ? 1 : 0;
+
+                DB::table('supplier_requests_questions')->insert([
+                    'id_supplier_request' => $id_supplier_request,
+                    'id_question' => $qr['preguntaId'],
+                    'response' => $responseValue,
+                ]);
+            }
+
+            if ($saved) {
+                // Asegúrate de tener implementado el método sendFCM en tu modelo User
+                $supplierRequest->user->sendFCM('Su solicitud se ha enviado correctamente!');
+            }
         }
 
         return response()->json(['message' => 'Registro exitoso como proveedor'], 201);
     }
-
     /**
      * Display the specified resource.
      */
