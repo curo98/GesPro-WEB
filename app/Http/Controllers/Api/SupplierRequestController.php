@@ -178,8 +178,6 @@ class SupplierRequestController extends Controller
     {
         $user = Auth::guard('api')->user();
         $selectedPolicies = $request->input('selectedPolicies');
-
-        // Cambia el rol del usuario a "proveedor"
         $user->id_role = Role::where('name', 'proveedor')->first()->id;
         $user->save();
 
@@ -204,8 +202,6 @@ class SupplierRequestController extends Controller
                 'locality' => $request->input('locality'),
                 'street_and_number' => $request->input('street_and_number'),
             ]);
-
-            $id_supplier_request = $existingSupplier->supplierRequest->id;
         } else {
             // Si el proveedor no existe, crear uno nuevo
             $supplier = new Supplier([
@@ -216,61 +212,58 @@ class SupplierRequestController extends Controller
                 'id_user' => $user->id,
             ]);
             $supplier->save();
+        }
 
-            $supplierRequest = new SupplierRequest([
-                'id_user' => $user->id,
-                'id_type_payment' => $typePayment->id,
-                'id_method_payment' => $methodPayment->id,
-            ]);
+        $supplierRequest = new SupplierRequest([
+            'id_user' => $user->id,
+            'id_type_payment' => $typePayment->id,
+            'id_method_payment' => $methodPayment->id,
+        ]);
 
-            $saved = $supplierRequest->save();
-            $id_supplier_request = $supplierRequest->id;
+        $saved = $supplierRequest->save();
+        $id_supplier_request = $supplierRequest->id;
 
-            $estadoInicial = DB::table('state_requests')
-                ->where('name', 'Enviado')
-                ->first();
-            $from_state_id = $estadoInicial->id;
+        $estadoInicial = DB::table('state_requests')
+            ->where('name', 'Enviado')
+            ->first();
+        $from_state_id = $estadoInicial->id;
+        $estadoPost = DB::table('state_requests')
+            ->where('name', 'Por recibir')
+            ->first();
+        $to_state_id = $estadoPost->id;
 
-            $estadoPost = DB::table('state_requests')
-                ->where('name', 'Por recibir')
-                ->first();
-            $to_state_id = $estadoPost->id;
-
-            DB::table('transitions_state_requests')->insert([
+        DB::table('transitions_state_requests')->insert([
                 'id_supplier_request' => $id_supplier_request,
                 'from_state_id' => $from_state_id,
                 'to_state_id' => $to_state_id,
-                'created_at' => now(),
-                'updated_at' => now(),
+                'created_at' => now(), // Fecha actual de creación
+                'updated_at' => now(), // Fecha actual de actualización
             ]);
 
-            $data = $request->json()->all();
-            $selectedPoliciesRequest = $data['selectedPolicies'];
-            $questionResponses = $data['questionResponses'];
+        $data = $request->json()->all();
+        $selectedPoliciesRequest = $data['selectedPolicies'];
+        $questionResponses = $data['questionResponses'];
 
-            foreach ($selectedPoliciesRequest as $policy) {
-                DB::table('supplier_requests_policies')->insert([
-                    'id_supplier_request' => $id_supplier_request,
-                    'id_policie' => $policy['id'],
-                    'accepted' => $policy['isChecked'],
-                ]);
-            }
+        foreach ($selectedPoliciesRequest as $policy) {
+            DB::table('supplier_requests_policies')->insert([
+                'id_supplier_request' => $id_supplier_request,
+                'id_policie' => $policy['id'],
+                'accepted' => $policy['isChecked'],
+            ]);
+        }
 
-            // Implementar envío de mensajes también para otros casos
-            foreach ($questionResponses as $qr) {
-                $responseValue = $qr['respuesta'] ? 1 : 0;
+        //implementar envio de mensajes tambien para otros casos
+        foreach ($questionResponses as $qr) {
+            $responseValue = $qr['respuesta'] ? 1 : 0;
 
-                DB::table('supplier_requests_questions')->insert([
-                    'id_supplier_request' => $id_supplier_request,
-                    'id_question' => $qr['preguntaId'],
-                    'response' => $responseValue,
-                ]);
-            }
-
-            if ($saved) {
-                // Asegúrate de tener implementado el método sendFCM en tu modelo User
-                $supplierRequest->user->sendFCM('Su solicitud se ha enviado correctamente!');
-            }
+            DB::table('supplier_requests_questions')->insert([
+                'id_supplier_request' => $id_supplier_request,
+                'id_question' => $qr['preguntaId'],
+                'response' => $responseValue,
+            ]);
+        }
+        if ($saved) {
+            $supplierRequest->user->sendFCM('Su solicitud se ha enviado correctamente!');
         }
 
         return response()->json(['message' => 'Registro exitoso como proveedor'], 201);
