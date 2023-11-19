@@ -178,31 +178,11 @@ class SupplierRequestController extends Controller
     {
         $user = Auth::guard('api')->user();
 
-        // $newName = $request->input('nameSupplier');
-        // $newEmail = $request->input('emailSupplier');
         $selectedPolicies = $request->input('selectedPolicies');
-
-        // Verifica si el nombre o el correo electrónico son diferentes de los actuales
-        // if ($newName !== $user->name) {
-        //     $user->name = $newName;
-        // }
-
-        // if ($newEmail && $newEmail !== $user->email) {
-        //     $user->email = $newEmail;
-        // }
-
-        // // Guarda el usuario actualizado
-        // $user->save();
 
         // Cambia el rol del usuario a "proveedor"
         $user->id_role = Role::where('name', 'proveedor')->first()->id;
         $user->save();
-
-        // Obtén el país desde la solicitud, asumiendo que se encuentra en un campo llamado 'country'
-        $country = $request->input('nacionality');
-
-        // Si el país no es Perú, establece 'Extranjero' como nacionalidad, de lo contrario, establece 'Nacional'
-        $nacionality = ($country !== 'Perú') ? 'Extranjero' : 'Nacional';
 
         $typePaymentName = $request->input('typePayment');
         $methodPaymentName = $request->input('methodPayment');
@@ -215,11 +195,11 @@ class SupplierRequestController extends Controller
         }
 
         $supplier = new Supplier([
-            'nacionality' => $nacionality,
+            'nacionality' => $request->input('nacionality'),
             'nic_ruc' => $request->input('nic_ruc'),
             'locality' => $request->input('locality'),
             'street_and_number' => $request->input('street_and_number'),
-            'id_user' => $user->id
+            'id_user' => $user->id,
         ]);
         $supplier->save();
 
@@ -242,12 +222,12 @@ class SupplierRequestController extends Controller
         $to_state_id = $estadoPost->id;
 
         DB::table('transitions_state_requests')->insert([
-                'id_supplier_request' => $id_supplier_request,
-                'from_state_id' => $from_state_id,
-                'to_state_id' => $to_state_id,
-                'created_at' => now(), // Fecha actual de creación
-                'updated_at' => now(), // Fecha actual de actualización
-            ]);
+            'id_supplier_request' => $id_supplier_request,
+            'from_state_id' => $from_state_id,
+            'to_state_id' => $to_state_id,
+            'created_at' => now(), // Fecha actual de creación
+            'updated_at' => now(), // Fecha actual de actualización
+        ]);
 
         $data = $request->json()->all();
         $selectedPoliciesRequest = $data['selectedPolicies'];
@@ -261,7 +241,7 @@ class SupplierRequestController extends Controller
             ]);
         }
 
-        //implementar envio de mensajes tambien para otros casos
+        // Implementar envío de mensajes también para otros casos
         foreach ($questionResponses as $qr) {
             $responseValue = $qr['respuesta'] ? 1 : 0;
 
@@ -271,17 +251,13 @@ class SupplierRequestController extends Controller
                 'response' => $responseValue,
             ]);
         }
+
         if ($saved) {
             $supplierRequest->user->sendFCM('Su solicitud se ha enviado correctamente!');
         }
 
         return response()->json(['message' => 'Registro exitoso como proveedor'], 201);
     }
-
-
-
-
-
 
     /**
      * Display the specified resource.
