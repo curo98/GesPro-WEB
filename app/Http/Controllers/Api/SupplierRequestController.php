@@ -177,6 +177,21 @@ class SupplierRequestController extends Controller
     public function store(Request $request)
     {
         $user = Auth::guard('api')->user();
+        $selectedPolicies = $request->input('selectedPolicies');
+
+        // Cambia el rol del usuario a "proveedor"
+        $user->id_role = Role::where('name', 'proveedor')->first()->id;
+        $user->save();
+
+        $typePaymentName = $request->input('typePayment');
+        $methodPaymentName = $request->input('methodPayment');
+
+        $typePayment = TypePayment::where('name', $typePaymentName)->first();
+        $methodPayment = MethodPayment::where('name', $methodPaymentName)->first();
+
+        if (!$typePayment || !$methodPayment) {
+            return response()->json(['message' => 'Tipo de pago o método de pago no válido'], 400);
+        }
 
         // Verificar si el usuario ya tiene un proveedor asociado
         $existingSupplier = Supplier::where('id_user', $user->id)->first();
@@ -189,6 +204,8 @@ class SupplierRequestController extends Controller
                 'locality' => $request->input('locality'),
                 'street_and_number' => $request->input('street_and_number'),
             ]);
+
+            $id_supplier_request = $existingSupplier->supplierRequest->id;
         } else {
             // Si el proveedor no existe, crear uno nuevo
             $supplier = new Supplier([
@@ -202,7 +219,8 @@ class SupplierRequestController extends Controller
 
             $supplierRequest = new SupplierRequest([
                 'id_user' => $user->id,
-                // Agrega aquí el resto de los campos necesarios
+                'id_type_payment' => $typePayment->id,
+                'id_method_payment' => $methodPayment->id,
             ]);
 
             $saved = $supplierRequest->save();
@@ -238,6 +256,7 @@ class SupplierRequestController extends Controller
                 ]);
             }
 
+            // Implementar envío de mensajes también para otros casos
             foreach ($questionResponses as $qr) {
                 $responseValue = $qr['respuesta'] ? 1 : 0;
 
@@ -256,6 +275,12 @@ class SupplierRequestController extends Controller
 
         return response()->json(['message' => 'Registro exitoso como proveedor'], 201);
     }
+
+
+
+
+
+
     /**
      * Display the specified resource.
      */
