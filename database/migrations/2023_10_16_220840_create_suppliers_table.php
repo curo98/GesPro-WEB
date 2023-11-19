@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('nic_ruc');
             $table->string('locality')->nullable();
             $table->string('street_and_number')->nullable();
-            $table->unsignedBigInteger('id_district')->nullable();
             $table->unsignedBigInteger('id_user');
             $table->foreign('id_user')->references('id')->on('users');
 
