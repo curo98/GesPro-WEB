@@ -74,43 +74,23 @@ class SupplierRequestController extends Controller
             $stateToValidate = $estadoPorValidar->id;
 
             $supplierRequestsWithTransitions = $supplierRequests->filter(function ($supplierRequest) use ($stateToReceive, $stateToValidate) {
-    $latestTransition = DB::table('transitions_state_requests')
-        ->select('from_state_id', 'to_state_id', 'id_reviewer')
-        ->where('id_supplier_request', $supplierRequest->id)
-        ->latest('id')
-        ->first();
+                $latestTransition = DB::table('transitions_state_requests')
+                    ->select('from_state_id', 'to_state_id', 'id_reviewer')
+                    ->where('id_supplier_request', $supplierRequest->id)
+                    ->latest('id')
+                    ->first();
 
-    if ($latestTransition && in_array($latestTransition->to_state_id, [$stateToReceive, $stateToValidate])) {
-        $fromState = StateRequest::find($latestTransition->from_state_id);
-        $toState = StateRequest::find($latestTransition->to_state_id);
-        $reviewer = User::find($latestTransition->id_reviewer);
+                if ($latestTransition && in_array($latestTransition->to_state_id, [$stateToReceive, $stateToValidate])) {
+                    $latestTransition->fromState = StateRequest::find($latestTransition->from_state_id);
+                    $latestTransition->toState = StateRequest::find($latestTransition->to_state_id);
+                    $latestTransition->reviewer = User::find($latestTransition->id_reviewer);
 
-        $stateTransitions = [
-            "from_state_id" => $latestTransition->from_state_id,
-            "to_state_id" => $latestTransition->to_state_id,
-            "id_reviewer" => $latestTransition->id_reviewer,
-            "fromState" => [
-                "id" => $fromState->id,
-                "name" => $fromState->name,
-            ],
-            "toState" => [
-                "id" => $toState->id,
-                "name" => $toState->name,
-            ],
-            "reviewer" => [
-                "id" => $reviewer->id,
-                "name" => $reviewer->name,
-                "email" => $reviewer->email,
-                "device_token" => $reviewer->device_token,
-            ],
-        ];
+                    $supplierRequest->stateTransitions = $latestTransition;
+                    return $supplierRequest->toArray();
+                }
+            })->values();
 
-        $supplierRequest->stateTransitions = $stateTransitions;
-        return $supplierRequest;
-    }
-})->values();
-
-return response()->json($supplierRequestsWithTransitions);
+            return response()->json($supplierRequestsWithTransitions);
 
         } elseif ($user->role->name === "contabilidad") {
             $supplierRequests = SupplierRequest::with(
