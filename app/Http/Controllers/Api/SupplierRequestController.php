@@ -78,7 +78,7 @@ $supplierRequestsWithTransitions = $supplierRequests->map(function ($supplierReq
         ->select('from_state_id', 'to_state_id', 'id_reviewer')
         ->where('id_supplier_request', $supplierRequest->id)
         ->whereIn('to_state_id', [$stateToReceive, $stateToValidate])
-        ->latest() // Obtener la última transición
+        ->latest('id') // Obtener la última transición
         ->first();
 
     if ($latestTransition) {
