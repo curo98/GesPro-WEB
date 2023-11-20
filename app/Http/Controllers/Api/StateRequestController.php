@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use \App\Models\StateRequest;
+use Illuminate\Support\Facades\DB;
+use App\Models\SupplierRequest;
 
 class StateRequestController extends Controller
 {
