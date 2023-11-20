@@ -94,7 +94,7 @@ class SupplierRequestController extends Controller
             return response()->json($supplierRequestsWithTransitions);
 
         } elseif ($user->role->name === "contabilidad") {
-            $estadoPorValidar = DB::table('state_requests')->where('name', 'Por validar')->first();
+            $estadoPorValidar = DB::table('state_requests')->where('name', 'Por aprobar')->first();
             $stateToValidate = $estadoPorValidar->id;
 
             $supplierRequests = SupplierRequest::with(
