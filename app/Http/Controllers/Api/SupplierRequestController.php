@@ -92,7 +92,9 @@ class SupplierRequestController extends Controller
                 return false;
             });
 
-            return response()->json($supplierRequestsWithTransitions);
+            return response()->json([
+    'supplierRequests' => $supplierRequestsWithTransitions->toArray()
+]);
 
         } elseif ($user->role->name === "contabilidad") {
             $supplierRequests = SupplierRequest::with(
