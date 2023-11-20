@@ -112,7 +112,8 @@ class SupplierRequestController extends Controller
 
 $estadosPermitidos = DB::table('state_requests')
     ->whereIn('name', ['Por aprobar', 'Recibida', 'Validada', 'Aprobada'])
-    ->pluck('id');
+    ->pluck('id')
+    ->toArray();
 
 $supplierRequestsWithTransitions = $supplierRequests->filter(function ($supplierRequest) use ($estadosPermitidos) {
     $latestTransition = DB::table('transitions_state_requests')
