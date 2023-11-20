@@ -74,23 +74,23 @@ class SupplierRequestController extends Controller
             $stateToValidate = $estadoPorValidar->id;
 
             $supplierRequestsWithTransitions = $supplierRequests->filter(function ($supplierRequest) use ($stateToReceive, $stateToValidate) {
-                $latestTransition = DB::table('transitions_state_requests')
-                    ->select('from_state_id', 'to_state_id', 'id_reviewer')
-                    ->where('id_supplier_request', $supplierRequest->id)
-                    ->latest('id')
-                    ->first();
+    $latestTransition = DB::table('transitions_state_requests')
+        ->select('from_state_id', 'to_state_id', 'id_reviewer')
+        ->where('id_supplier_request', $supplierRequest->id)
+        ->latest('id')
+        ->first();
 
-                if ($latestTransition && in_array($latestTransition->to_state_id, [$stateToReceive, $stateToValidate])) {
-                    $latestTransition->fromState = StateRequest::find($latestTransition->from_state_id);
-                    $latestTransition->toState = StateRequest::find($latestTransition->to_state_id);
-                    $latestTransition->reviewer = User::find($latestTransition->id_reviewer);
+    if ($latestTransition && in_array($latestTransition->to_state_id, [$stateToReceive, $stateToValidate])) {
+        $latestTransition->fromState = StateRequest::find($latestTransition->from_state_id);
+        $latestTransition->toState = StateRequest::find($latestTransition->to_state_id);
+        $latestTransition->reviewer = User::find($latestTransition->id_reviewer);
 
-                    $supplierRequest->stateTransitions = $latestTransition;
-                    return $supplierRequest;
-                }
-            });
+        $supplierRequest->stateTransitions = $latestTransition;
+        return $supplierRequest;
+    }
+})->values();  // Convertir la colección en una matriz numérica.
 
-            return response()->json($supplierRequestsWithTransitions);
+return response()->json($supplierRequestsWithTransitions);
 
         } elseif ($user->role->name === "contabilidad") {
             $supplierRequests = SupplierRequest::with(
