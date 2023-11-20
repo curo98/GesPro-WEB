@@ -56,41 +56,46 @@ class SupplierRequestController extends Controller
             return response()->json($supplierRequestsWithTransitions);
         } elseif ($user->role->name === "compras") {
             $supplierRequests = SupplierRequest::with(
-                'user',
-                'typePayment',
-                'methodPayment',
-                'documents',
-                'questions'
-            )->get();
+    'user',
+    'typePayment',
+    'methodPayment',
+    'documents',
+    'questions'
+)->get();
 
-            $estadoPorRecibir = DB::table('state_requests')
-                ->where('name', 'Por recibir')
-                ->first();
-            $stateToReceive = $estadoPorRecibir->id;
+$estadoPorRecibir = DB::table('state_requests')
+    ->where('name', 'Por recibir')
+    ->first();
+$stateToReceive = $estadoPorRecibir->id;
 
-            $estadoPorValidar = DB::table('state_requests')
-                ->where('name', 'Por validar')
-                ->first();
-            $stateToValidate = $estadoPorValidar->id;
+$estadoPorValidar = DB::table('state_requests')
+    ->where('name', 'Por validar')
+    ->first();
+$stateToValidate = $estadoPorValidar->id;
 
-            $supplierRequestsWithTransitions = $supplierRequests->filter(function ($supplierRequest) use ($stateToReceive, $stateToValidate) {
-                $latestTransition = DB::table('transitions_state_requests')
-                    ->select('from_state_id', 'to_state_id', 'id_reviewer')
-                    ->where('id_supplier_request', $supplierRequest->id)
-                    ->latest('id')
-                    ->first();
+$supplierRequestsWithTransitions = $supplierRequests->map(function ($supplierRequest) use ($stateToReceive, $stateToValidate) {
+    $latestTransition = DB::table('transitions_state_requests')
+        ->select('from_state_id', 'to_state_id', 'id_reviewer')
+        ->where('id_supplier_request', $supplierRequest->id)
+        ->whereIn('to_state_id', [$stateToReceive, $stateToValidate])
+        ->latest() // Obtener la última transición
+        ->first();
 
-                if ($latestTransition && in_array($latestTransition->to_state_id, [$stateToReceive, $stateToValidate])) {
-                    $latestTransition->fromState = StateRequest::find($latestTransition->from_state_id);
-                    $latestTransition->toState = StateRequest::find($latestTransition->to_state_id);
-                    $latestTransition->reviewer = User::find($latestTransition->id_reviewer);
+    if ($latestTransition) {
+        $latestTransition->fromState = StateRequest::find($latestTransition->from_state_id);
+        $latestTransition->toState = StateRequest::find($latestTransition->to_state_id);
+        $latestTransition->reviewer = User::find($latestTransition->id_reviewer);
 
-                    $supplierRequest->stateTransitions = $latestTransition;
-                    return $supplierRequest->values();
-                }
-            })->values();
+        $supplierRequest->stateTransitions = $latestTransition;
+    } else {
+        $supplierRequest->stateTransitions = null;
+    }
 
-            return response()->json($supplierRequestsWithTransitions);
+    return $supplierRequest;
+});
+
+return response()->json($supplierRequestsWithTransitions);
+
 
         } elseif ($user->role->name === "contabilidad") {
             $supplierRequests = SupplierRequest::with(
