@@ -86,7 +86,7 @@ class SupplierRequestController extends Controller
                     $latestTransition->reviewer = User::find($latestTransition->id_reviewer);
 
                     $supplierRequest->stateTransitions = $latestTransition;
-                    return $supplierRequest->toArray();
+                    return $supplierRequest->values();
                 }
             })->values();
 
