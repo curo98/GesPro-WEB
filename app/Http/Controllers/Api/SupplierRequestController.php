@@ -75,10 +75,10 @@ $stateToValidate = $estadoPorValidar->id;
 
 $supplierRequestsWithTransitions = $supplierRequests->map(function ($supplierRequest) use ($stateToReceive, $stateToValidate) {
     $latestTransition = DB::table('transitions_state_requests')
-        ->select('from_state_id', 'to_state_id', 'id_reviewer')
+        ->select('from_state_id', 'to_state_id', 'id_reviewer', 'created_at')
         ->where('id_supplier_request', $supplierRequest->id)
         ->whereIn('to_state_id', [$stateToReceive, $stateToValidate])
-        ->latest('id') // Obtener la última transición
+        ->latest('created_at') // Obtener la última transición basada en la fecha de creación
         ->first();
 
     if ($latestTransition) {
