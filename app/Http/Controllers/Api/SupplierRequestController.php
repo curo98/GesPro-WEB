@@ -94,8 +94,11 @@ class SupplierRequestController extends Controller
             return response()->json($supplierRequestsWithTransitions);
 
         } elseif ($user->role->name === "contabilidad") {
-            $estadoPorValidar = DB::table('state_requests')->where('name', 'Por aprobar')->first();
-            $stateToValidate = $estadoPorValidar->id;
+
+            $estadoPorAProbar = DB::table('state_requests')->where('name', 'Por aprobar')->first();
+            $stateToApprove = $estadoPorAProbar->id;
+
+            $targetStates = [$stateToApprove];
 
             $supplierRequests = SupplierRequest::with(
                 'user',
@@ -105,14 +108,14 @@ class SupplierRequestController extends Controller
                 'questions'
             )->get();
 
-            $supplierRequestsWithLastTransition = $supplierRequests->filter(function ($supplierRequest) use ($stateToValidate) {
+            $supplierRequestsWithTransitions = $supplierRequests->filter(function ($supplierRequest) use ($targetStates) {
                 $latestTransition = DB::table('transitions_state_requests')
                     ->select('from_state_id', 'to_state_id', 'id_reviewer')
                     ->where('id_supplier_request', $supplierRequest->id)
-                    ->orderByDesc('id') // Ordena por ID de manera descendente para obtener el último registro
+                    ->orderByDesc('created_at')
                     ->first();
 
-                if ($latestTransition && $latestTransition->to_state_id === $stateToValidate) {
+                if ($latestTransition && in_array($latestTransition->to_state_id, $targetStates)) {
                     $supplierRequest->stateTransitions = [$latestTransition];
 
                     $latestTransition->fromState = StateRequest::find($latestTransition->from_state_id);
@@ -125,7 +128,7 @@ class SupplierRequestController extends Controller
                 return false;
             });
 
-            return response()->json($supplierRequestsWithLastTransition);
+            return response()->json($supplierRequestsWithTransitions);
 
         } elseif ($user->role->name === "admin") {
             $supplierRequests = SupplierRequest::with(
