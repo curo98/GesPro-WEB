@@ -103,72 +103,72 @@ class SupplierRequestController extends Controller
 
         } elseif ($user->role->name === "contabilidad") {
             $supplierRequests = SupplierRequest::with(
-    'user',
-    'typePayment',
-    'methodPayment',
-    'documents',
-    'questions'
-)->get();
+                'user',
+                'typePayment',
+                'methodPayment',
+                'documents',
+                'questions'
+            )->get();
 
-// Obtener el estado "Por aprobar"
-$estadoPorRecibir = DB::table('state_requests')
-    ->where('name', 'Por aprobar')
-    ->first();
-$stateToReceive = $estadoPorRecibir->id;
+            // Obtener el estado "Por aprobar"
+            $estadoPorAprobar = DB::table('state_requests')
+                ->where('name', 'Por aprobar')
+                ->first();
+            $stateToApprove = $estadoPorAprobar->id;
 
-// Obtener el estado "Aprobada"
-$estadoAprobada = DB::table('state_requests')
-    ->where('name', 'Aprobada')
-    ->first();
-$stateToApprove = $estadoAprobada->id;
+            // Obtener el estado "Aprobada"
+            $estadoAprobada = DB::table('state_requests')
+                ->where('name', 'Aprobada')
+                ->first();
+            $stateApproved = $estadoAprobada->id;
 
-// Obtener el estado "Validada"
-$estadoValidada = DB::table('state_requests')
-    ->where('name', 'Validada')
-    ->first();
-$stateToValidate = $estadoValidada->id;
+            // Obtener el estado "Validada"
+            $estadoValidada = DB::table('state_requests')
+                ->where('name', 'Validada')
+                ->first();
+            $stateValidated = $estadoValidada->id;
 
-// Obtener el estado "Recibida"
-$estadoRecibida = DB::table('state_requests')
-    ->where('name', 'Recibida')
-    ->first();
-$stateToReceive1 = $estadoRecibida->id;
+            // Obtener el estado "Recibida"
+            $estadoRecibida = DB::table('state_requests')
+                ->where('name', 'Recibida')
+                ->first();
+            $stateReceived = $estadoRecibida->id;
 
-// Filtrar las solicitudes de proveedores con las transiciones específicas
-$supplierRequestsWithTransitions = $supplierRequests->filter(function ($supplierRequest) use ($stateToReceive, $stateToApprove, $stateToValidate, $stateToReceive1) {
-    // Obtener la última transición para la solicitud de proveedor
-    $latestTransition = DB::table('transitions_state_requests')
-        ->where('id_supplier_request', $supplierRequest->id)
-        ->orderByDesc('id')
-        ->first();
+            // Filtrar las solicitudes de proveedores con las transiciones específicas
+            $supplierRequestsWithTransitions = $supplierRequests->filter(function ($supplierRequest) use ($stateToApprove, $stateApproved, $stateValidated, $stateReceived) {
+                // Obtener la última transición para la solicitud de proveedor
+                $latestTransition = DB::table('transitions_state_requests')
+                    ->where('id_supplier_request', $supplierRequest->id)
+                    ->orderByDesc('id')
+                    ->first();
 
-    if ($latestTransition && in_array($latestTransition->to_state_id, [$stateToReceive, $stateToValidate, $stateToApprove, $stateToReceive1 ])) {
-        // Obtener todas las transiciones para la solicitud de proveedor
-        $transitions = DB::table('transitions_state_requests')
-            ->select('from_state_id', 'to_state_id', 'id_reviewer')
-            ->where('id_supplier_request', $supplierRequest->id)
-            ->get();
+                if ($latestTransition && in_array($latestTransition->to_state_id, [$stateToApprove, $stateApproved, $stateValidated, $stateReceived ])) {
+                    // Obtener todas las transiciones para la solicitud de proveedor
+                    $transitions = DB::table('transitions_state_requests')
+                        ->select('from_state_id', 'to_state_id', 'id_reviewer')
+                        ->where('id_supplier_request', $supplierRequest->id)
+                        ->get();
 
-        // Asignar a cada transición el estado de origen, el estado de destino y el revisor
-        $transitions->each(function ($transition) {
-            $transition->fromState = StateRequest::find($transition->from_state_id);
-            $transition->toState = StateRequest::find($transition->to_state_id);
-            $transition->reviewer = User::find($transition->id_reviewer);
-        });
+                    // Asignar a cada transición el estado de origen, el estado de destino y el revisor
+                    $transitions->each(function ($transition) {
+                        $transition->fromState = StateRequest::find($transition->from_state_id);
+                        $transition->toState = StateRequest::find($transition->to_state_id);
+                        $transition->reviewer = User::find($transition->id_reviewer);
+                    });
 
-        // Asignar las transiciones al objeto $supplierRequest
-        $supplierRequest->stateTransitions = $transitions;
+                    // Asignar las transiciones al objeto $supplierRequest
+                    $supplierRequest->stateTransitions = $transitions;
 
-        // Devolver la solicitud de proveedor modificada
-        return $supplierRequest;
-    }
-});
+                    // Devolver la solicitud de proveedor modificada
+                    return $supplierRequest;
+                }
+            });
 
-// Reindexar el resultado para asegurar claves numéricas consecutivas
-$supplierRequestsWithTransitions = $supplierRequestsWithTransitions->values();
+            // Reindexar el resultado para asegurar claves numéricas consecutivas
+            $supplierRequestsWithTransitions = $supplierRequestsWithTransitions->values();
 
-// Devolver la respuesta JSON
-return response()->json($supplierRequestsWithTransitions);
+            // Devolver la respuesta JSON
+            return response()->json($supplierRequestsWithTransitions);
 
 
         } elseif ($user->role->name === "admin") {
