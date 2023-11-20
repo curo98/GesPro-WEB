@@ -348,6 +348,7 @@ class SupplierRequestController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $user = Auth::guard('api')->user();
         // Obtener los datos del formulario
         $data = $request->all();
 
@@ -367,6 +368,14 @@ class SupplierRequestController extends Controller
         // Asociar el TypePayment y MethodPayment al SupplierRequest
         $supplierRequest->typePayment()->associate($typePayment);
         $supplierRequest->methodPayment()->associate($methodPayment);
+
+        $supplier = Supplier::where('id_user', $user->id)->first();
+        $supplier->update([
+            'nacionality' => $data['nacionality'],
+            'nic_ruc' => $data['nic_ruc'],
+            'locality' => $data['locality'],
+            'street_and_number' => $data['street_and_number'],
+        ]);
         // Actualizar las políticas aceptadas en la tabla intermedia (suponiendo que también hay una relación many-to-many con policies)
         // foreach ($data['requestData']['selectedPolicies'] as $policyData) {
         //     $policyId = $policyData['id'];
