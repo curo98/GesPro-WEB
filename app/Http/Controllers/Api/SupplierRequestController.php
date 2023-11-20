@@ -96,7 +96,7 @@ foreach ($supplierRequests as $supplierRequest) {
             ];
         }
     }
-}
+}return $supplierRequestsWithLastState;
 
         } elseif ($user->role->name === "contabilidad") {
             $supplierRequests = SupplierRequest::with(
