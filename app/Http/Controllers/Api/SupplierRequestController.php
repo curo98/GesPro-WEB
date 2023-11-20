@@ -346,7 +346,7 @@ class SupplierRequestController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function updateRequest(Request $request, $id)
+    public function update(Request $request, $id)
     {
         // Obtener los datos del formulario
         $data = $request->all();
