@@ -376,12 +376,13 @@ class SupplierRequestController extends Controller
             'locality' => $data['locality'],
             'street_and_number' => $data['street_and_number'],
         ]);
-        // Actualizar las políticas aceptadas en la tabla intermedia (suponiendo que también hay una relación many-to-many con policies)
-        foreach ($data['requestData']['selectedPolicies'] as $policyData) {
-            $policyId = $policyData['id'];
-            $accepted = $policyData['isChecked'];
 
-            $supplierRequest->policies()->updateExistingPivot($policyId, ['accepted' => $accepted]);
+        $selectedPoliciesRequest = $data['selectedPolicies'];
+        foreach ($selectedPoliciesRequest as $policy) {
+            DB::table('supplier_requests_policies')
+                ->where('id_supplier_request', $id)
+                ->where('id_policie', $policy['id'])
+                ->update(['accepted' => $policy['isChecked']]);
         }
 
         // // Actualizar las respuestas a las preguntas en la tabla intermedia (suponiendo que también hay una relación many-to-many con questions)
