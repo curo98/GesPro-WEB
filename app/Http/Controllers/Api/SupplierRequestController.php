@@ -78,7 +78,7 @@ class SupplierRequestController extends Controller
                     ->select('from_state_id', 'to_state_id', 'id_reviewer')
                     ->where('id_supplier_request', $supplierRequest->id)
                     ->latest('created_at')
-                    ->first();
+                    ->last();
 
                 if ($latestTransition && in_array($latestTransition->to_state_id, [$stateToReceive, $stateToValidate])) {
                     $latestTransition->fromState = StateRequest::find($latestTransition->from_state_id);
