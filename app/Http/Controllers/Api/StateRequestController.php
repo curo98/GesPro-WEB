@@ -171,4 +171,82 @@ class StateRequestController extends Controller
 
         return response()->json(['success' => false, 'error' => 'No se encontró la última transición']);
     }
+
+    public function cancelRequest($id)
+    {
+        $sr = SupplierRequest::findOrFail($id);
+
+        $estadoCancelado = DB::table('state_requests')
+            ->where('name', 'Cancelada')
+            ->first();
+        $to_state_id = $estadoCancelado->id;
+
+        $ultimoEstado = DB::table('transitions_state_requests')
+            ->select('from_state_id', 'to_state_id')
+            ->where('id_supplier_request', $id)
+            ->orderBy('id', 'desc')
+            ->first();
+
+        if ($ultimoEstado) {
+            $estadoActual = $ultimoEstado->to_state_id ?? $ultimoEstado->from_state_id;
+            // Inserta un nuevo registro en la tabla intermedia con el último estado en from_state_id y el nuevo estado en to_state_id
+            DB::table('transitions_state_requests')->insert([
+                'id_supplier_request' => $id,
+                'from_state_id' => $estadoActual,
+                'to_state_id' => $to_state_id,
+                'id_reviewer' => auth()->user()->id, // El ID del revisor, ajústalo según tus necesidades
+                'created_at' => now(), // Fecha actual de creación
+                'updated_at' => now(), // Fecha actual de actualización
+            ]);
+
+            $sr->user->supplier->update(['state' => 'activo']);
+
+            $sr->user->sendFCM('Su solicitud ha sido cancelada :(');
+
+            $notification = 'La solicitud ha sido cancelada';
+
+            return response()->json(['success' => true, 'notification' => $notification]);
+        }
+
+        return response()->json(['success' => false, 'error' => 'No se encontró la última transición']);
+    }
+
+    public function disapproveRequest($id)
+    {
+        $sr = SupplierRequest::findOrFail($id);
+
+        $estadoCancelado = DB::table('state_requests')
+            ->where('name', 'Desaprobada')
+            ->first();
+        $to_state_id = $estadoCancelado->id;
+
+        $ultimoEstado = DB::table('transitions_state_requests')
+            ->select('from_state_id', 'to_state_id')
+            ->where('id_supplier_request', $id)
+            ->orderBy('id', 'desc')
+            ->first();
+
+        if ($ultimoEstado) {
+            $estadoActual = $ultimoEstado->to_state_id ?? $ultimoEstado->from_state_id;
+            // Inserta un nuevo registro en la tabla intermedia con el último estado en from_state_id y el nuevo estado en to_state_id
+            DB::table('transitions_state_requests')->insert([
+                'id_supplier_request' => $id,
+                'from_state_id' => $estadoActual,
+                'to_state_id' => $to_state_id,
+                'id_reviewer' => auth()->user()->id, // El ID del revisor, ajústalo según tus necesidades
+                'created_at' => now(), // Fecha actual de creación
+                'updated_at' => now(), // Fecha actual de actualización
+            ]);
+
+            $sr->user->supplier->update(['state' => 'activo']);
+
+            $sr->user->sendFCM('Su solicitud ha sido desaprobada :(');
+
+            $notification = 'La solicitud ha sido desaprobada';
+
+            return response()->json(['success' => true, 'notification' => $notification]);
+        }
+
+        return response()->json(['success' => false, 'error' => 'No se encontró la última transición']);
+    }
 }

@@ -80,6 +80,8 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/request/{id}/validate', [App\Http\Controllers\Api\StateRequestController::class, 'validateRequest']);
     Route::post('/request/{id}/receive', [App\Http\Controllers\Api\StateRequestController::class, 'receiveRequest']);
     Route::post('/request/{id}/approve', [App\Http\Controllers\Api\StateRequestController::class, 'approveRequest']);
+    Route::post('/request/{id}/disapprove', [App\Http\Controllers\Api\StateRequestController::class, 'disapproveRequest']);
+    Route::post('/request/{id}/cancel', [App\Http\Controllers\Api\StateRequestController::class, 'cancelRequest']);
 
     Route::get('/documents-request', [App\Http\Controllers\Api\DocumentController::class, 'index']);
 
