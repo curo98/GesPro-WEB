@@ -80,7 +80,8 @@ class SupplierRequestController extends Controller
                     ->where(function ($query) use ($stateToReceive, $stateToValidate) {
                         $query->whereIn('to_state_id', [$stateToReceive, $stateToValidate]);
                     })
-                    ->get();
+                     ->orderByDesc('id') // Ordenar por fecha de creación en orden descendente
+        ->first();
 
                 $transitions->each(function ($transition) {
                     $transition->fromState = StateRequest::find($transition->from_state_id);
