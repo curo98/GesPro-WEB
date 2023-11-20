@@ -176,10 +176,10 @@ class StateRequestController extends Controller
     {
         $sr = SupplierRequest::findOrFail($id);
 
-        $estadoCancelado = DB::table('state_requests')
+        $estadoRecibido = DB::table('state_requests')
             ->where('name', 'Cancelada')
             ->first();
-        $to_state_id = $estadoCancelado->id;
+        $to_state_id = $estadoRecibido->id;
 
         $ultimoEstado = DB::table('transitions_state_requests')
             ->select('from_state_id', 'to_state_id')
@@ -198,8 +198,6 @@ class StateRequestController extends Controller
                 'created_at' => now(), // Fecha actual de creación
                 'updated_at' => now(), // Fecha actual de actualización
             ]);
-
-            $sr->user->supplier->update(['state' => 'activo']);
 
             $sr->user->sendFCM('Su solicitud ha sido cancelada :(');
 
@@ -215,10 +213,10 @@ class StateRequestController extends Controller
     {
         $sr = SupplierRequest::findOrFail($id);
 
-        $estadoCancelado = DB::table('state_requests')
+        $estadoRecibido = DB::table('state_requests')
             ->where('name', 'Desaprobada')
             ->first();
-        $to_state_id = $estadoCancelado->id;
+        $to_state_id = $estadoRecibido->id;
 
         $ultimoEstado = DB::table('transitions_state_requests')
             ->select('from_state_id', 'to_state_id')
@@ -237,8 +235,6 @@ class StateRequestController extends Controller
                 'created_at' => now(), // Fecha actual de creación
                 'updated_at' => now(), // Fecha actual de actualización
             ]);
-
-            $sr->user->supplier->update(['state' => 'activo']);
 
             $sr->user->sendFCM('Su solicitud ha sido desaprobada :(');
 
