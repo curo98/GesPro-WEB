@@ -94,14 +94,8 @@ class SupplierRequestController extends Controller
             return response()->json($supplierRequestsWithTransitions);
 
         } elseif ($user->role->name === "contabilidad") {
-
-            $estadoPorAProbar = DB::table('state_requests')->where('name', 'Por aprobar')->first();
-
-if (!$estadoPorAProbar) {
-    // Manejar el caso en que el estado no existe
-}
-
-$stateToApprove = $estadoPorAProbar->id;
+            $estadoPorAprobar = DB::table('state_requests')->where('name', 'Por aprobar')->first();
+$stateToApprove = $estadoPorAprobar->id;
 
 $supplierRequests = SupplierRequest::with(
     'user',
