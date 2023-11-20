@@ -12,8 +12,6 @@ use App\Models\MethodPayment;
 use App\Models\Role;
 use App\Models\Supplier;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Collection;
-
 use Illuminate\Support\Facades\Auth;
 
 class SupplierRequestController extends Controller
@@ -57,36 +55,23 @@ class SupplierRequestController extends Controller
 
             return response()->json($supplierRequestsWithTransitions);
         } elseif ($user->role->name === "compras") {
-            $estadoPorRecibir = DB::table('state_requests')->where('name', 'Por recibir')->first();
-$stateToReceive = $estadoPorRecibir->id;
+            $supplierRequests = SupplierRequest::with('user', 'typePayment', 'methodPayment', 'documents', 'questions')
+    ->get();
 
-$estadoPorValidar = DB::table('state_requests')->where('name', 'Por validar')->first();
-$stateToValidate = $estadoPorValidar->id;
+$stateToReceive = StateRequest::where('name', 'Por recibir')->firstOrFail();
+$stateToValidate = StateRequest::where('name', 'Por validar')->firstOrFail();
 
-$targetStates = [$stateToReceive, $stateToValidate];
-
-$supplierRequests = SupplierRequest::with(
-    'user',
-    'typePayment',
-    'methodPayment',
-    'documents',
-    'questions'
-)->get();
-
-$supplierRequestsWithTransitions = $supplierRequests->filter(function ($supplierRequest) use ($targetStates) {
-    $latestTransition = DB::table('transitions_state_requests')
-        ->select('from_state_id', 'to_state_id', 'id_reviewer')
-        ->where('id_supplier_request', $supplierRequest->id)
-        ->orderByDesc('id')
+$supplierRequestsWithTransitions = $supplierRequests->filter(function ($supplierRequest) use ($stateToReceive, $stateToValidate) {
+    $latestTransition = TransitionStateRequest::where('id_supplier_request', $supplierRequest->id)
+        ->orderByDesc('created_at')
         ->first();
 
-    if ($latestTransition && in_array($latestTransition->to_state_id, $targetStates)) {
-        $supplierRequest->stateTransitions = collect([$latestTransition]);
+    if ($latestTransition && in_array($latestTransition->to_state_id, [$stateToReceive->id, $stateToValidate->id])) {
+        $latestTransition->fromState = $latestTransition->fromState; // Assuming you have the relationships set up
+        $latestTransition->toState = $latestTransition->toState;
+        $latestTransition->reviewer = $latestTransition->reviewer;
 
-        $latestTransition->fromState = StateRequest::find($latestTransition->from_state_id);
-        $latestTransition->toState = StateRequest::find($latestTransition->to_state_id);
-        $latestTransition->reviewer = User::find($latestTransition->id_reviewer);
-
+        $supplierRequest->stateTransitions = $latestTransition;
         return true;
     }
 
