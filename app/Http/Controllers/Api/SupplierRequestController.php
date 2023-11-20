@@ -91,43 +91,41 @@ class SupplierRequestController extends Controller
                 return false;
             });
 
-            $responseArray = $supplierRequestsWithTransitions->toArray();
-            return response()->json($responseArray);
+            return response()->json($supplierRequestsWithTransitions);
 
         } elseif ($user->role->name === "contabilidad") {
-            $estadoPorAprobar = DB::table('state_requests')->where('name', 'Por aprobar')->first();
-$stateToApprove = $estadoPorAprobar->id;
+            $supplierRequests = SupplierRequest::with(
+                'user',
+                'typePayment',
+                'methodPayment',
+                'documents',
+                'questions'
+            )->get();
 
-$supplierRequests = SupplierRequest::with(
-    'user',
-    'typePayment',
-    'methodPayment',
-    'documents',
-    'questions'
-)->get();
+            $estadoPorValidar = DB::table('state_requests')
+                ->where('name', 'Por aprobar')
+                ->first();
+            $stateToApprove = $estadoPorValidar->id;
 
-$supplierRequestsWithTransitions = $supplierRequests->filter(function ($supplierRequest) use ($stateToApprove) {
-    $latestTransition = DB::table('transitions_state_requests')
-        ->select('from_state_id', 'to_state_id', 'id_reviewer')
-        ->where('id_supplier_request', $supplierRequest->id)
-        ->orderByDesc('id')
-        ->first();
+            $supplierRequestsWithTransitions = $supplierRequests->map(function ($supplierRequest) use ($stateToApprove) {
+                $transitions = DB::table('transitions_state_requests')
+                    ->select('from_state_id', 'to_state_id', 'id_reviewer')
+                    ->where('id_supplier_request', $supplierRequest->id)
+                    ->where('to_state_id', $stateToApprove)
+                    ->get();
 
-    if ($latestTransition && $latestTransition->to_state_id == $stateToApprove) {
-        $supplierRequest->stateTransitions = [$latestTransition];
+                $transitions->each(function ($transition) {
+                    $transition->fromState = StateRequest::find($transition->from_state_id);
+                    $transition->toState = StateRequest::find($transition->to_state_id);
+                    $transition->reviewer = User::find($transition->id_reviewer);
+                });
 
-        $latestTransition->fromState = StateRequest::find($latestTransition->from_state_id);
-        $latestTransition->toState = StateRequest::find($latestTransition->to_state_id);
-        $latestTransition->reviewer = User::find($latestTransition->id_reviewer);
+                $supplierRequest->stateTransitions = $transitions;
 
-        return true;
-    }
+                return $supplierRequest;
+            });
 
-    return false;
-});
-
-return response()->json($supplierRequestsWithTransitions);
-
+            return response()->json($supplierRequestsWithTransitions);
 
         } elseif ($user->role->name === "admin") {
             $supplierRequests = SupplierRequest::with(
