@@ -385,13 +385,13 @@ class SupplierRequestController extends Controller
                 ->update(['accepted' => $policy['isChecked']]);
         }
 
-        // // Actualizar las respuestas a las preguntas en la tabla intermedia (suponiendo que también hay una relación many-to-many con questions)
-        // foreach ($data['requestData']['questionResponses'] as $questionResponse) {
-        //     $questionId = $questionResponse['preguntaId'];
-        //     $response = $questionResponse['respuesta'];
-
-        //     $supplierRequest->questions()->updateExistingPivot($questionId, ['response' => $response]);
-        // }
+        $selectedQuestionsRequest = $data['questionResponses'];
+        foreach ($selectedQuestionsRequest as $questionResponse) {
+            DB::table('supplier_requests_questions')
+                ->where('id_supplier_request', $id)
+                ->where('id_question', $questionResponse['id'])
+                ->update(['response' => $questionResponse['respuesta']]);
+        }
 
         // Devolver una respuesta exitosa o algún otro tipo de respuesta según tu lógica de la aplicación
         return response()->json(['message' => 'Supplier request updated successfully']);
