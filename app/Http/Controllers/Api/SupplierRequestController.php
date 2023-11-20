@@ -89,7 +89,7 @@ $supplierRequestsWithLastState = $supplierRequests->map(function ($supplierReque
         $lastTransition->reviewer = User::find($lastTransition->id_reviewer);
 
         // Agregar la información del último estado a la solicitud
-        $supplierRequest->lastStateTransition = $lastTransition;
+        $supplierRequest->stateTransitions = $lastTransition;
     }
 
     return $supplierRequest;
