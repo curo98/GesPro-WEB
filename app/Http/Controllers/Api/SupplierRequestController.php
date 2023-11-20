@@ -97,7 +97,9 @@ $supplierRequestsWithTransitions = $supplierRequests->filter(function ($supplier
     }
 });
 
-return response()->json($supplierRequestsWithTransitions);
+$sp = $supplierRequestsWithTransitions->values();
+
+return response()->json($sp);
 
         } elseif ($user->role->name === "contabilidad") {
             $supplierRequests = SupplierRequest::with(
