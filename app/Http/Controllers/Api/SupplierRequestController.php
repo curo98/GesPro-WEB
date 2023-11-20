@@ -93,10 +93,8 @@ $supplierRequestsWithTransitions = $supplierRequests->filter(function ($supplier
 
         $supplierRequest->stateTransitions = $transitions;
 
-        return true;
+        return $supplierRequest;
     }
-
-    return false;
 });
 
 return response()->json($supplierRequestsWithTransitions);
