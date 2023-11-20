@@ -55,17 +55,6 @@ class SupplierRequestController extends Controller
 
             return response()->json($supplierRequestsWithTransitions);
         } elseif ($user->role->name === "compras") {
-
-            $estadoPorRecibir = DB::table('state_requests')
-                ->where('name', 'Por recibir')
-                ->first();
-            $stateToReceive = $estadoPorRecibir->id;
-
-            $estadoPorValidar = DB::table('state_requests')
-                ->where('name', 'Por validar')
-                ->first();
-            $stateToValidate = $estadoPorValidar->id;
-
             $supplierRequests = SupplierRequest::with(
     'user',
     'typePayment',
@@ -74,29 +63,39 @@ class SupplierRequestController extends Controller
     'questions'
 )->get();
 
-// Array para almacenar las solicitudes con su último estado
-$supplierRequestsWithLastState = [];
+$estadoPorRecibir = DB::table('state_requests')
+    ->where('name', 'Por recibir')
+    ->first();
+$stateToReceive = $estadoPorRecibir->id;
 
-// Iterar sobre las solicitudes de proveedores
-foreach ($supplierRequests as $supplierRequest) {
+$estadoPorValidar = DB::table('state_requests')
+    ->where('name', 'Por validar')
+    ->first();
+$stateToValidate = $estadoPorValidar->id;
+
+$supplierRequestsWithLastState = $supplierRequests->map(function ($supplierRequest) use ($stateToReceive, $stateToValidate) {
     // Obtener el último registro de transitions_state_requests para la solicitud actual
     $lastTransition = DB::table('transitions_state_requests')
+        ->select('from_state_id', 'to_state_id', 'id_reviewer')
         ->where('id_supplier_request', $supplierRequest->id)
+        ->whereIn('to_state_id', [$stateToReceive, $stateToValidate])
         ->orderBy('created_at', 'desc')
         ->first();
 
-    // Verificar si se encontró un registro en transitions_state_requests
     if ($lastTransition) {
-        // Verificar si el último estado es "por validar" o "por recibir"
-        if ($lastTransition->to_state_id == $stateToValidate || $lastTransition->to_state_id == $stateToReceive) {
-            // Agregar la solicitud con su último estado al array resultante
-            $supplierRequestsWithLastState[] = [
-                'supplier_request' => $supplierRequest,
-                'last_transition' => $lastTransition,
-            ];
-        }
+        // Obtener los detalles de los estados y el revisor
+        $lastTransition->fromState = StateRequest::find($lastTransition->from_state_id);
+        $lastTransition->toState = StateRequest::find($lastTransition->to_state_id);
+        $lastTransition->reviewer = User::find($lastTransition->id_reviewer);
+
+        // Agregar la información del último estado a la solicitud
+        $supplierRequest->lastStateTransition = $lastTransition;
     }
-}return $supplierRequestsWithLastState;
+
+    return $supplierRequest;
+});
+
+return response()->json($supplierRequestsWithLastState);
 
         } elseif ($user->role->name === "contabilidad") {
             $supplierRequests = SupplierRequest::with(
