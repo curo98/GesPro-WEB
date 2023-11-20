@@ -91,7 +91,8 @@ class SupplierRequestController extends Controller
                 return false;
             });
 
-            return response()->json($supplierRequestsWithTransitions);
+            $responseArray = $supplierRequestsWithTransitions->toArray();
+            return response()->json($responseArray);
 
         } elseif ($user->role->name === "contabilidad") {
             $estadoPorAprobar = DB::table('state_requests')->where('name', 'Por aprobar')->first();
