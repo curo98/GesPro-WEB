@@ -377,12 +377,12 @@ class SupplierRequestController extends Controller
             'street_and_number' => $data['street_and_number'],
         ]);
         // Actualizar las políticas aceptadas en la tabla intermedia (suponiendo que también hay una relación many-to-many con policies)
-        // foreach ($data['requestData']['selectedPolicies'] as $policyData) {
-        //     $policyId = $policyData['id'];
-        //     $accepted = $policyData['isChecked'];
+        foreach ($data['requestData']['selectedPolicies'] as $policyData) {
+            $policyId = $policyData['id'];
+            $accepted = $policyData['isChecked'];
 
-        //     $supplierRequest->policies()->updateExistingPivot($policyId, ['accepted' => $accepted]);
-        // }
+            $supplierRequest->policies()->updateExistingPivot($policyId, ['accepted' => $accepted]);
+        }
 
         // // Actualizar las respuestas a las preguntas en la tabla intermedia (suponiendo que también hay una relación many-to-many con questions)
         // foreach ($data['requestData']['questionResponses'] as $questionResponse) {
