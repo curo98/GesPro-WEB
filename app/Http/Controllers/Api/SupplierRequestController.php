@@ -389,7 +389,7 @@ class SupplierRequestController extends Controller
         foreach ($selectedQuestionsRequest as $questionResponse) {
             DB::table('supplier_requests_questions')
                 ->where('id_supplier_request', $id)
-                ->where('id_question', $questionResponse['id'])
+                ->where('id_question', $questionResponse['preguntaId'])
                 ->update(['response' => $questionResponse['respuesta']]);
         }
 
