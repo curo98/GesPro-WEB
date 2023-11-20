@@ -77,6 +77,10 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/request/{id}/update', [App\Http\Controllers\Api\SupplierRequestController::class, 'update']);
     /* END RUTAS CRUD SP */
 
+    Route::post('/request/{id}/check', [App\Http\Controllers\Api\StateRequestController::class, 'check']);
+    Route::post('/request/{id}/receive', [App\Http\Controllers\Api\StateRequestController::class, 'receive']);
+    Route::post('/request/{id}/approve', [App\Http\Controllers\Api\StateRequestController::class, 'approve']);
+
     Route::get('/documents-request', [App\Http\Controllers\Api\DocumentController::class, 'index']);
 
     /* FCM */
