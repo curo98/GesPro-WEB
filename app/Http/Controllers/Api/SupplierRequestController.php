@@ -79,6 +79,9 @@ class SupplierRequestController extends Controller
         ->orderBy('created_at', 'desc')
         ->first();
 
+    // Depuración
+    dd($latestTransition, $stateToReceive, $stateToValidate);
+
     if ($latestTransition && ($latestTransition->to_state_id == $stateToReceive || $latestTransition->to_state_id == $stateToValidate)) {
         $transitions = DB::table('transitions_state_requests')
             ->select('from_state_id', 'to_state_id', 'id_reviewer')
@@ -98,6 +101,9 @@ class SupplierRequestController extends Controller
 });
 
 $supplierRequestsWithTransitions = $supplierRequestsWithTransitions->values();
+
+// Depuración
+dd($supplierRequestsWithTransitions);
 
 return response()->json($supplierRequestsWithTransitions);
 
