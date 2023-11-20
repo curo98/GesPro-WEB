@@ -145,14 +145,17 @@ class SupplierRequestController extends Controller
 
         } elseif ($user->role->name === "admin") {
             $supplierRequests = SupplierRequest::with(
-                'user',
-                'typePayment',
-                'methodPayment',
-                'documents',
-                'questions'
-            )->get();
+                    'user',
+                    'typePayment',
+                    'methodPayment',
+                    'documents',
+                    'questions'
+                    )
+                ->get();
 
-            $supplierRequestsWithTransitions = $supplierRequests->map(function ($supplierRequest){
+            // Obtener las transiciones de estado para cada solicitud
+            $supplierRequestsWithTransitions = $supplierRequests->map(function ($supplierRequest) {
+                // Resto del código para obtener transiciones
                 $transitions = DB::table('transitions_state_requests')
                     ->select('from_state_id', 'to_state_id', 'id_reviewer')
                     ->where('id_supplier_request', $supplierRequest->id)
