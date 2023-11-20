@@ -107,16 +107,16 @@ class SupplierRequestController extends Controller
 
             $supplierRequestsWithLastTransition = $supplierRequests->filter(function ($supplierRequest) use ($stateToValidate) {
                 $latestTransition = DB::table('transitions_state_requests')
-                    ->select('from_state', 'to_state', 'id_reviewer')
+                    ->select('from_state_id', 'to_state_id', 'id_reviewer')
                     ->where('id_supplier_request', $supplierRequest->id)
                     ->orderByDesc('id') // Ordena por ID de manera descendente para obtener el último registro
                     ->first();
 
-                if ($latestTransition && $latestTransition->to_state === $stateToValidate) {
+                if ($latestTransition && $latestTransition->to_state_id === $stateToValidate) {
                     $supplierRequest->stateTransitions = [$latestTransition];
 
-                    $latestTransition->fromState = StateRequest::find($latestTransition->from_state);
-                    $latestTransition->toState = StateRequest::find($latestTransition->to_state);
+                    $latestTransition->fromState = StateRequest::find($latestTransition->from_state_id);
+                    $latestTransition->toState = StateRequest::find($latestTransition->to_state_id);
                     $latestTransition->reviewer = User::find($latestTransition->id_reviewer);
 
                     return true;
