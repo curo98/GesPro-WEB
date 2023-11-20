@@ -86,7 +86,7 @@ class SupplierRequestController extends Controller
         $latestTransition->reviewer = User::find($latestTransition->id_reviewer);
 
         $supplierRequest->stateTransitions = $latestTransition;
-        return $supplierRequest;
+        return true;
     }
 })->values();  // Convertir la colección en una matriz numérica.
 
