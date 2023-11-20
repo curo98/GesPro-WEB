@@ -56,42 +56,46 @@ class SupplierRequestController extends Controller
             return response()->json($supplierRequestsWithTransitions);
         } elseif ($user->role->name === "compras") {
             $estadoPorRecibir = DB::table('state_requests')->where('name', 'Por recibir')->first();
-            $stateToReceive = $estadoPorRecibir->id;
+$stateToReceive = $estadoPorRecibir->id;
 
-            $estadoPorValidar = DB::table('state_requests')->where('name', 'Por validar')->first();
-            $stateToValidate = $estadoPorValidar->id;
+$estadoPorValidar = DB::table('state_requests')->where('name', 'Por validar')->first();
+$stateToValidate = $estadoPorValidar->id;
 
-            $targetStates = [$stateToReceive, $stateToValidate];
+$targetStates = [$stateToReceive, $stateToValidate];
 
-            $supplierRequests = SupplierRequest::with(
-                'user',
-                'typePayment',
-                'methodPayment',
-                'documents',
-                'questions'
-            )->get();
+$supplierRequests = SupplierRequest::with(
+    'user',
+    'typePayment',
+    'methodPayment',
+    'documents',
+    'questions'
+)->get();
 
-            $supplierRequestsWithTransitions = $supplierRequests->filter(function ($supplierRequest) use ($targetStates) {
-                $latestTransition = DB::table('transitions_state_requests')
-                    ->select('from_state_id', 'to_state_id', 'id_reviewer')
-                    ->where('id_supplier_request', $supplierRequest->id)
-                    ->orderByDesc('id')
-                    ->first();
+$supplierRequestsWithTransitions = $supplierRequests->filter(function ($supplierRequest) use ($targetStates) {
+    $latestTransition = DB::table('transitions_state_requests')
+        ->select('from_state_id', 'to_state_id', 'id_reviewer')
+        ->where('id_supplier_request', $supplierRequest->id)
+        ->orderByDesc('id')
+        ->first();
 
-                if ($latestTransition && in_array($latestTransition->to_state_id, $targetStates)) {
-                    $supplierRequest->stateTransitions = [$latestTransition];
+    if ($latestTransition && in_array($latestTransition->to_state_id, $targetStates)) {
+        $latestTransition->fromState = StateRequest::find($latestTransition->from_state_id);
+        $latestTransition->toState = StateRequest::find($latestTransition->to_state_id);
+        $latestTransition->reviewer = User::find($latestTransition->id_reviewer);
 
-                    $latestTransition->fromState = StateRequest::find($latestTransition->from_state_id);
-                    $latestTransition->toState = StateRequest::find($latestTransition->to_state_id);
-                    $latestTransition->reviewer = User::find($latestTransition->id_reviewer);
+        $supplierRequest->stateTransitions = [$latestTransition];
 
-                    return true;
-                }
+        return true;
+    }
 
-                return false;
-            });
+    return false;
+});
 
-            return response()->json($supplierRequestsWithTransitions);
+// Convertir la colección a un array antes de devolverlo como JSON
+$responseData = $supplierRequestsWithTransitions->toArray();
+
+return response()->json($responseData);
+
 
         } elseif ($user->role->name === "contabilidad") {
             $estadoPorRecibir = DB::table('state_requests')->where('name', 'Por recibir')->first();
