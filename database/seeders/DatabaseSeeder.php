@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'admin',
                 'description' => 'Usuario con todos los permisos',
             ]);
-        \App\Models\User::factory(10)->create();
+        \App\Models\User::factory(2)->create();
         \App\Models\User::create([
                 'name' => 'Alexis',
                 'email' => 'admin@admin.com',
@@ -64,7 +64,7 @@ class DatabaseSeeder extends Seeder
 
 
        // Crear 10 registros de SupplierRequest
-        $supplierRequests = \App\Models\SupplierRequest::factory(100)->create();
+        $supplierRequests = \App\Models\SupplierRequest::factory(1)->create();
 
         $supplierRequests->each(function ($supplierRequest) {
             // Asignar preguntas aleatorias
@@ -108,7 +108,7 @@ class DatabaseSeeder extends Seeder
         });
 
         \App\Models\User::factory()
-            ->count(50)
+            ->count(2)
             ->create([
                 'id_role' => 2,
                 'password' => bcrypt('1234'),
