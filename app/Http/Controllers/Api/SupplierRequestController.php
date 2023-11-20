@@ -12,6 +12,8 @@ use App\Models\MethodPayment;
 use App\Models\Role;
 use App\Models\Supplier;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Collection;
+
 use Illuminate\Support\Facades\Auth;
 
 class SupplierRequestController extends Controller
@@ -71,31 +73,27 @@ $supplierRequests = SupplierRequest::with(
     'questions'
 )->get();
 
-$supplierRequestsWithTransitions = $supplierRequests->map(function ($supplierRequest) use ($targetStates) {
-    $transitions = DB::table('transitions_state_requests')
+$supplierRequestsWithTransitions = $supplierRequests->filter(function ($supplierRequest) use ($targetStates) {
+    $latestTransition = DB::table('transitions_state_requests')
         ->select('from_state_id', 'to_state_id', 'id_reviewer')
         ->where('id_supplier_request', $supplierRequest->id)
-        ->where(function ($query) use ($targetStates) {
-            $query->whereIn('to_state_id', $targetStates);
-        })
-        ->get();
+        ->orderByDesc('id')
+        ->first();
 
-    $transitions->each(function ($transition) {
-        $transition->fromState = StateRequest::find($transition->from_state_id);
-        $transition->toState = StateRequest::find($transition->to_state_id);
-        $transition->reviewer = User::find($transition->id_reviewer);
-    });
+    if ($latestTransition && in_array($latestTransition->to_state_id, $targetStates)) {
+        $supplierRequest->stateTransitions = collect([$latestTransition]);
 
-    $supplierRequest->stateTransitions = $transitions;
+        $latestTransition->fromState = StateRequest::find($latestTransition->from_state_id);
+        $latestTransition->toState = StateRequest::find($latestTransition->to_state_id);
+        $latestTransition->reviewer = User::find($latestTransition->id_reviewer);
 
-    return $supplierRequest;
+        return true;
+    }
+
+    return false;
 });
 
-// Convertir la colección a un array antes de devolverlo como JSON
-$responseData = $supplierRequestsWithTransitions->toArray();
-
-return response()->json($responseData);
-
+return response()->json($supplierRequestsWithTransitions);
 
         } elseif ($user->role->name === "contabilidad") {
             $supplierRequests = SupplierRequest::with(
