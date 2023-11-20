@@ -17,7 +17,7 @@ class StateRequestController extends Controller
         return response()->json($stateRequests);
     }
 
-    public function receive($id)
+    public function receiveRequest($id)
     {
         $sr = SupplierRequest::findOrFail($id);
 
@@ -76,7 +76,7 @@ class StateRequestController extends Controller
         return response()->json(['success' => false, 'error' => 'No se encontró la última transición']);
     }
 
-    public function validate($id)
+    public function validateRequest($id)
     {
         $sr = SupplierRequest::findOrFail($id);
 
@@ -133,7 +133,7 @@ class StateRequestController extends Controller
         return response()->json(['success' => false, 'error' => 'No se encontró la última transición']);
     }
 
-    public function approve($id)
+    public function approveRequest($id)
     {
         $sr = SupplierRequest::findOrFail($id);
 
