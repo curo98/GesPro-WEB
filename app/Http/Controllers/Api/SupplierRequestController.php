@@ -56,30 +56,30 @@ class SupplierRequestController extends Controller
             return response()->json($supplierRequestsWithTransitions);
         } elseif ($user->role->name === "compras") {
             $supplierRequests = SupplierRequest::with(
-    'user',
-    'typePayment',
-    'methodPayment',
-    'documents',
-    'questions'
-)->get();
+                'user',
+                'typePayment',
+                'methodPayment',
+                'documents',
+                'questions'
+            )->get();
 
-$estadoPorRecibir = DB::table('state_requests')
-    ->where('name', 'Por recibir')
-    ->first();
-$stateToReceive = $estadoPorRecibir->id;
+            $estadoPorRecibir = DB::table('state_requests')
+                ->where('name', 'Por recibir')
+                ->first();
+            $stateToReceive = $estadoPorRecibir->id;
 
-$estadoPorValidar = DB::table('state_requests')
-    ->where('name', 'Por validar')
-    ->first();
-$stateToValidate = $estadoPorValidar->id;
+            $estadoPorValidar = DB::table('state_requests')
+                ->where('name', 'Por validar')
+                ->first();
+            $stateToValidate = $estadoPorValidar->id;
 
-$supplierRequestsWithTransitions = $supplierRequests->filter(function ($supplierRequest) use ($stateToReceive, $stateToValidate) {
+            $supplierRequestsWithTransitions = $supplierRequests->filter(function ($supplierRequest) use ($stateToReceive, $stateToValidate) {
     $latestTransition = DB::table('transitions_state_requests')
         ->where('id_supplier_request', $supplierRequest->id)
         ->orderBy('created_at', 'desc')
         ->first();
 
-    if ($latestTransition && in_array($latestTransition->to_state_id, [$stateToReceive, $stateToValidate])) {
+    if ($latestTransition && ($latestTransition->to_state_id == $stateToReceive || $latestTransition->to_state_id == $stateToValidate)) {
         $transitions = DB::table('transitions_state_requests')
             ->select('from_state_id', 'to_state_id', 'id_reviewer')
             ->where('id_supplier_request', $supplierRequest->id)
@@ -97,9 +97,9 @@ $supplierRequestsWithTransitions = $supplierRequests->filter(function ($supplier
     }
 });
 
-$sp = $supplierRequestsWithTransitions->values();
+$supplierRequestsWithTransitions = $supplierRequestsWithTransitions->values();
 
-return response()->json($sp);
+return response()->json($supplierRequestsWithTransitions);
 
         } elseif ($user->role->name === "contabilidad") {
             $supplierRequests = SupplierRequest::with(
