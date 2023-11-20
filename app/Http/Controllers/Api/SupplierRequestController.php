@@ -142,7 +142,7 @@ $supplierRequestsWithTransitions = $supplierRequests->filter(function ($supplier
         ->orderByDesc('id')
         ->first();
 
-    if ($latestTransition && $latestTransition->to_state_id == $stateToApprove) {
+    if ($latestTransition && in_array($latestTransition->to_state_id, [$stateToReceive, $stateToValidate, $stateToApprove, $stateToReceive1 ])) {
         // Obtener todas las transiciones para la solicitud de proveedor
         $transitions = DB::table('transitions_state_requests')
             ->select('from_state_id', 'to_state_id', 'id_reviewer')
