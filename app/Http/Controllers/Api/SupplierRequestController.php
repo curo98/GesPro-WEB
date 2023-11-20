@@ -132,10 +132,10 @@ $stateToValidate = $estadoValidada->id;
 $estadoRecibida = DB::table('state_requests')
     ->where('name', 'Recibida')
     ->first();
-$stateToReceive = $estadoRecibida->id;
+$stateToReceive1 = $estadoRecibida->id;
 
 // Filtrar las solicitudes de proveedores con las transiciones específicas
-$supplierRequestsWithTransitions = $supplierRequests->filter(function ($supplierRequest) use ($stateToReceive, $stateToApprove) {
+$supplierRequestsWithTransitions = $supplierRequests->filter(function ($supplierRequest) use ($stateToReceive, $stateToApprove, $stateToValidate, $stateToReceive1) {
     // Obtener la última transición para la solicitud de proveedor
     $latestTransition = DB::table('transitions_state_requests')
         ->where('id_supplier_request', $supplierRequest->id)
