@@ -346,10 +346,47 @@ class SupplierRequestController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update($id)
+    public function updateRequest(Request $request, $id)
     {
-        return 'llegue';
+        // Obtener los datos del formulario
+        $data = $request->all();
+
+        // Buscar el ID del TypePayment basándose en el nombre
+        $typePayment = TypePayment::where('name', $data['typePayment'])->first();
+
+        // Buscar el ID del MethodPayment basándose en el nombre
+        $methodPayment = MethodPayment::where('name', $data['methodPayment'])->first();
+
+        // Actualizar los campos básicos en la tabla supplier_requests
+        $supplierRequest = SupplierRequest::find($id);
+        $supplierRequest->update([
+            'id_type_payment' => $typePayment->id,
+            'id_method_payment' => $methodPayment->id,
+        ]);
+
+        // Asociar el TypePayment y MethodPayment al SupplierRequest
+        $supplierRequest->typePayment()->associate($typePayment);
+        $supplierRequest->methodPayment()->associate($methodPayment);
+        // Actualizar las políticas aceptadas en la tabla intermedia (suponiendo que también hay una relación many-to-many con policies)
+        // foreach ($data['requestData']['selectedPolicies'] as $policyData) {
+        //     $policyId = $policyData['id'];
+        //     $accepted = $policyData['isChecked'];
+
+        //     $supplierRequest->policies()->updateExistingPivot($policyId, ['accepted' => $accepted]);
+        // }
+
+        // // Actualizar las respuestas a las preguntas en la tabla intermedia (suponiendo que también hay una relación many-to-many con questions)
+        // foreach ($data['requestData']['questionResponses'] as $questionResponse) {
+        //     $questionId = $questionResponse['preguntaId'];
+        //     $response = $questionResponse['respuesta'];
+
+        //     $supplierRequest->questions()->updateExistingPivot($questionId, ['response' => $response]);
+        // }
+
+        // Devolver una respuesta exitosa o algún otro tipo de respuesta según tu lógica de la aplicación
+        return response()->json(['message' => 'Supplier request updated successfully']);
     }
+
 
     /**
      * Remove the specified resource from storage.
