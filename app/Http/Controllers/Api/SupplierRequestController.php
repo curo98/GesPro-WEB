@@ -73,14 +73,41 @@ class SupplierRequestController extends Controller
                 ->where('name', 'Por validar')
                 ->first();
             $stateToValidate = $estadoPorValidar->id;
+            // Obtener el estado "Aprobada"
+            $estadoAprobada = DB::table('state_requests')
+                ->where('name', 'Aprobada')
+                ->first();
+            $stateApproved = $estadoAprobada->id;
 
-            $supplierRequestsWithTransitions = $supplierRequests->filter(function ($supplierRequest) use ($stateToReceive, $stateToValidate) {
+            // Obtener el estado "Validada"
+            $estadoValidada = DB::table('state_requests')
+                ->where('name', 'Validada')
+                ->first();
+            $stateValidated = $estadoValidada->id;
+
+            // Obtener el estado "Recibida"
+            $estadoRecibida = DB::table('state_requests')
+                ->where('name', 'Recibida')
+                ->first();
+            $stateReceived = $estadoRecibida->id;
+            // Obtener el estado "Rechazada"
+            $estadoReject = DB::table('state_requests')
+                ->where('name', 'Desaprobada')
+                ->first();
+            $stateRejected = $estadoReject->id;
+            // Obtener el estado "Cancelada"
+            $estadoCancelada = DB::table('state_requests')
+                ->where('name', 'Cancelada')
+                ->first();
+            $stateCanceled = $estadoCancelada->id;
+
+            $supplierRequestsWithTransitions = $supplierRequests->filter(function ($supplierRequest) use ($stateToReceive, $stateToValidate, $stateApproved, $stateValidated, $stateReceived, $stateRejected, $stateCanceled) {
                 $latestTransition = DB::table('transitions_state_requests')
                     ->where('id_supplier_request', $supplierRequest->id)
                     ->orderBy('id', 'desc')
                     ->first();
 
-                if ($latestTransition && in_array($latestTransition->to_state_id, [$stateToReceive, $stateToValidate])) {
+                if ($latestTransition && in_array($latestTransition->to_state_id, [$stateToReceive, $stateToValidate, $stateApproved, $stateValidated, $stateReceived, $stateRejected, $stateCanceled])) {
                     $transitions = DB::table('transitions_state_requests')
                         ->select('from_state_id', 'to_state_id', 'id_reviewer')
                         ->where('id_supplier_request', $supplierRequest->id)
