@@ -187,7 +187,7 @@ class SupplierRequestController extends Controller
         }
     }
 
-    function getStateId($stateName)
+    public function getStateId($stateName)
     {
         return DB::table('state_requests')->where('name', $stateName)->value('id');
     }
