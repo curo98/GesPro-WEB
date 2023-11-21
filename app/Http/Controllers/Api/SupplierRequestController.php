@@ -73,6 +73,10 @@ class SupplierRequestController extends Controller
                 ->where('name', 'Por validar')
                 ->first();
             $stateToValidate = $estadoPorValidar->id;
+            $estadoPorAprobar = DB::table('state_requests')
+                ->where('name', 'Por aprobar')
+                ->first();
+            $stateToApprove = $estadoPorAprobar->id;
             // Obtener el estado "Aprobada"
             $estadoAprobada = DB::table('state_requests')
                 ->where('name', 'Aprobada')
@@ -101,13 +105,13 @@ class SupplierRequestController extends Controller
                 ->first();
             $stateCanceled = $estadoCancelada->id;
 
-            $supplierRequestsWithTransitions = $supplierRequests->filter(function ($supplierRequest) use ($stateToReceive, $stateToValidate, $stateApproved, $stateValidated, $stateReceived, $stateRejected, $stateCanceled) {
+            $supplierRequestsWithTransitions = $supplierRequests->filter(function ($supplierRequest) use ($stateToApprove, $stateToReceive, $stateToValidate, $stateApproved, $stateValidated, $stateReceived, $stateRejected, $stateCanceled) {
                 $latestTransition = DB::table('transitions_state_requests')
                     ->where('id_supplier_request', $supplierRequest->id)
                     ->orderBy('id', 'desc')
                     ->first();
 
-                if ($latestTransition && in_array($latestTransition->to_state_id, [$stateToReceive, $stateToValidate, $stateApproved, $stateValidated, $stateReceived, $stateRejected, $stateCanceled])) {
+                if ($latestTransition && in_array($latestTransition->to_state_id, [$stateToApprove, $stateToReceive, $stateToValidate, $stateApproved, $stateValidated, $stateReceived, $stateRejected, $stateCanceled])) {
                     $transitions = DB::table('transitions_state_requests')
                         ->select('from_state_id', 'to_state_id', 'id_reviewer')
                         ->where('id_supplier_request', $supplierRequest->id)
