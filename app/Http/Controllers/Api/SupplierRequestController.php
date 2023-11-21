@@ -136,7 +136,7 @@ class SupplierRequestController extends Controller
             $stateReceived = $estadoRecibida->id;
             // Obtener el estado "Rechazada"
             $estadoReject = DB::table('state_requests')
-                ->where('name', 'Rechazada')
+                ->where('name', 'Desaprobada')
                 ->first();
             $stateRejected = $estadoReject->id;
             // Obtener el estado "Cancelada"
