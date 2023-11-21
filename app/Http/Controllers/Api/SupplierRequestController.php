@@ -16,10 +16,9 @@ use Illuminate\Support\Facades\Auth;
 
 class SupplierRequestController extends Controller
 {
-    function getStateId($stateName)
-    {
-        return DB::table('state_requests')->where('name', $stateName)->value('id');
-    }
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
         // return "LLegue";
@@ -111,11 +110,29 @@ class SupplierRequestController extends Controller
                 'questions'
             )->get();
 
-            // Definir estados
-            $stateToApprove = getStateId('Por aprobar');
-            $stateApproved = getStateId('Aprobada');
-            $stateValidated = getStateId('Validada');
-            $stateReceived = getStateId('Recibida');
+            // Obtener el estado "Por aprobar"
+            $estadoPorAprobar = DB::table('state_requests')
+                ->where('name', 'Por aprobar')
+                ->first();
+            $stateToApprove = $estadoPorAprobar->id;
+
+            // Obtener el estado "Aprobada"
+            $estadoAprobada = DB::table('state_requests')
+                ->where('name', 'Aprobada')
+                ->first();
+            $stateApproved = $estadoAprobada->id;
+
+            // Obtener el estado "Validada"
+            $estadoValidada = DB::table('state_requests')
+                ->where('name', 'Validada')
+                ->first();
+            $stateValidated = $estadoValidada->id;
+
+            // Obtener el estado "Recibida"
+            $estadoRecibida = DB::table('state_requests')
+                ->where('name', 'Recibida')
+                ->first();
+            $stateReceived = $estadoRecibida->id;
 
             // Filtrar las solicitudes de proveedores con las transiciones específicas
             $supplierRequestsWithTransitions = $supplierRequests->filter(function ($supplierRequest) use ($stateToApprove, $stateApproved, $stateValidated, $stateReceived) {
