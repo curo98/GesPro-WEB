@@ -16,7 +16,10 @@ use Illuminate\Support\Facades\Auth;
 
 class SupplierRequestController extends Controller
 {
-
+    function getStateId($stateName)
+    {
+        return DB::table('state_requests')->where('name', $stateName)->value('id');
+    }
     public function index()
     {
         // return "LLegue";
@@ -108,21 +111,49 @@ class SupplierRequestController extends Controller
                 'questions'
             )->get();
 
-            // Definir estados
-            $stateToApprove = getStateId('Por aprobar');
-            $stateApproved = getStateId('Aprobada');
-            $stateValidated = getStateId('Validada');
-            $stateReceived = getStateId('Recibida');
+            // Obtener el estado "Por aprobar"
+            $estadoPorAprobar = DB::table('state_requests')
+                ->where('name', 'Por aprobar')
+                ->first();
+            $stateToApprove = $estadoPorAprobar->id;
+
+            // Obtener el estado "Aprobada"
+            $estadoAprobada = DB::table('state_requests')
+                ->where('name', 'Aprobada')
+                ->first();
+            $stateApproved = $estadoAprobada->id;
+
+            // Obtener el estado "Validada"
+            $estadoValidada = DB::table('state_requests')
+                ->where('name', 'Validada')
+                ->first();
+            $stateValidated = $estadoValidada->id;
+
+            // Obtener el estado "Recibida"
+            $estadoRecibida = DB::table('state_requests')
+                ->where('name', 'Recibida')
+                ->first();
+            $stateReceived = $estadoRecibida->id;
+            // Obtener el estado "Rechazada"
+            $estadoReject = DB::table('state_requests')
+                ->where('name', 'Rechazada')
+                ->first();
+            $stateRejected = $estadoReject->id;
+            // Obtener el estado "Cancelada"
+            $estadoCancelada = DB::table('state_requests')
+                ->where('name', 'Cancelada')
+                ->first();
+            $stateCanceled = $estadoCancelada->id;
 
             // Filtrar las solicitudes de proveedores con las transiciones específicas
-            $supplierRequestsWithTransitions = $supplierRequests->filter(function ($supplierRequest) use ($stateToApprove, $stateApproved, $stateValidated, $stateReceived) {
+            $supplierRequestsWithTransitions = $supplierRequests->filter(function ($supplierRequest) use ($stateRejected, $stateCanceled, $stateToApprove, $stateApproved, $stateValidated, $stateReceived) {
                 // Obtener la última transición para la solicitud de proveedor
                 $latestTransition = DB::table('transitions_state_requests')
                     ->where('id_supplier_request', $supplierRequest->id)
                     ->orderByDesc('id')
                     ->first();
 
-                if ($latestTransition && in_array($latestTransition->to_state_id, [$stateToApprove, $stateApproved, $stateValidated, $stateReceived ])) {
+                if ($latestTransition && in_array($latestTransition->to_state_id, [$stateRejected, $stateCanceled, $stateToApprove, $stateApproved, $stateValidated, $stateReceived ])) {
                     // Obtener todas las transiciones para la solicitud de proveedor
                     $transitions = DB::table('transitions_state_requests')
                         ->select('from_state_id', 'to_state_id', 'id_reviewer')
@@ -187,10 +218,6 @@ class SupplierRequestController extends Controller
         }
     }
 
-    public function getStateId($stateName)
-    {
-        return DB::table('state_requests')->where('name', $stateName)->value('id');
-    }
 
     /**
      * Show the form for creating a new resource.
