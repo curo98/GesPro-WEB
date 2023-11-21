@@ -146,14 +146,14 @@ class SupplierRequestController extends Controller
             $stateCanceled = $estadoCancelada->id;
 
             // Filtrar las solicitudes de proveedores con las transiciones específicas
-            $supplierRequestsWithTransitions = $supplierRequests->filter(function ($supplierRequest) use ($stateRejected, $stateCanceled, $stateToApprove, $stateApproved, $stateValidated, $stateReceived) {
+            $supplierRequestsWithTransitions = $supplierRequests->filter(function ($supplierRequest) use ($stateToApprove, $stateApproved, $stateValidated, $stateReceived, $stateRejected, $stateCanceled) {
                 // Obtener la última transición para la solicitud de proveedor
                 $latestTransition = DB::table('transitions_state_requests')
                     ->where('id_supplier_request', $supplierRequest->id)
                     ->orderByDesc('id')
                     ->first();
 
-                if ($latestTransition && in_array($latestTransition->to_state_id, [$stateRejected, $stateCanceled, $stateToApprove, $stateApproved, $stateValidated, $stateReceived ])) {
+                if ($latestTransition && in_array($latestTransition->to_state_id, [$stateToApprove, $stateApproved, $stateValidated, $stateReceived, $stateRejected, $stateCanceled ])) {
                     // Obtener todas las transiciones para la solicitud de proveedor
                     $transitions = DB::table('transitions_state_requests')
                         ->select('from_state_id', 'to_state_id', 'id_reviewer')
