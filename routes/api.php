@@ -87,5 +87,12 @@ Route::middleware('auth:api')->group(function () {
 
     /* FCM */
 
+    Route::get('/roles', [App\Http\Controllers\Api\RoleController::class, 'index']);
+    Route::post('/role/store', [App\Http\Controllers\Api\RoleController::class, 'store']);
+    Route::get('/role/{id}', [App\Http\Controllers\Api\RoleController::class, 'show']);
+    Route::get('/role/{id}/edit', [App\Http\Controllers\Api\RoleController::class, 'editRole']);
+    Route::post('/role/{id}/update', [App\Http\Controllers\Api\RoleController::class, 'updateRole']);
+
+
 
 });

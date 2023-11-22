@@ -71,7 +71,7 @@ class StateRequestController extends Controller
             $notification = 'Solicitud recibida satisfactoriamente';
 
             // return response()->json(['success' => true, 'notification' => $notification]);
-            return response()->json(['success' => true, 'notification' => $notification, 'request' => $sr]);
+            return response()->json(['request' => $sr]);
 
         }
 
