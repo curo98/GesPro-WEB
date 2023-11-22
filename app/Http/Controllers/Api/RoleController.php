@@ -61,7 +61,7 @@ class RoleController extends Controller
         $description = $request->input('description');
 
         // Ejecuta una consulta SQL para actualizar los campos en la base de datos
-        DB::table('Roles')
+        DB::table('roles')
             ->where('id', $id)
             ->update([
                 'description' => $description
