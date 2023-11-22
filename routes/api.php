@@ -93,6 +93,10 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/role/{id}/edit', [App\Http\Controllers\Api\RoleController::class, 'editRole']);
     Route::post('/role/{id}/update', [App\Http\Controllers\Api\RoleController::class, 'updateRole']);
 
+    Route::get('/questions', [App\Http\Controllers\Api\QuestionController::class, 'index']);
+    Route::post('/question/store', [App\Http\Controllers\Api\QuestionController::class, 'store']);
+    Route::get('/question/{id}/edit', [App\Http\Controllers\Api\QuestionController::class, 'edit']);
+    Route::post('/question/{id}/update', [App\Http\Controllers\Api\QuestionController::class, 'update']);
 
 
 });
