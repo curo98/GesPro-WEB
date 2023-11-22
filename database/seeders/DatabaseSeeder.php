@@ -64,7 +64,7 @@ class DatabaseSeeder extends Seeder
 
 
        // Crear 10 registros de SupplierRequest
-        $supplierRequests = \App\Models\SupplierRequest::factory(5)->create();
+        $supplierRequests = \App\Models\SupplierRequest::factory(50)->create();
 
         $supplierRequests->each(function ($supplierRequest) {
             // Asignar preguntas aleatorias
