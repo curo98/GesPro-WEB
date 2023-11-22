@@ -56,7 +56,6 @@ class RoleController extends Controller
      */
     public function updateRole(Request $request, $id)
     {
-        dd($request->toArray());
         $description = $request->input('description');
 
         // Ejecuta una consulta SQL para actualizar los campos en la base de datos
