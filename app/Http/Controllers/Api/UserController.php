@@ -30,10 +30,12 @@ class UserController extends Controller
         return response()->json(['message' => 'Usuario creado con éxito'], 200);
     }
 
+    //Profile
     public function edit(){
 
         return Auth::guard('api')->user();
     }
+    // end Profile
 
     public function show($id)
     {

@@ -45,14 +45,6 @@ Route::get('/questions-requests', [App\Http\Controllers\Api\QuestionController::
 Route::post('/fcm/token', [App\Http\Controllers\Api\FirebaseController::class, 'postToken']);
 Route::post('/fcm/deviceToken', [App\Http\Controllers\Api\FirebaseController::class, 'deviceToken']);
 
-Route::get('/users', [App\Http\Controllers\Api\UserController::class, 'index']);
-Route::post('/user/store', [App\Http\Controllers\Api\UserController::class, 'store']);
-Route::get('/user/{id}', [App\Http\Controllers\Api\UserController::class, 'show']);
-Route::get('/user/{id}/edit', [App\Http\Controllers\Api\UserController::class, 'editUser']);
-Route::post('/user/{id}/update', [App\Http\Controllers\Api\UserController::class, 'updateUser']);
-Route::post('/user/{id}/destroy', [App\Http\Controllers\Api\UserController::class, 'destroyUser']);
-
-
 // Rutas protegidas con autenticación
 Route::middleware('auth:api')->group(function () {
 
@@ -112,4 +104,9 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/method-payment/store', [App\Http\Controllers\Api\MethodPaymentRequestController::class, 'store']);
     Route::get('/method-payment/{id}/edit', [App\Http\Controllers\Api\MethodPaymentRequestController::class, 'edit']);
     Route::post('/method-payment/{id}/update', [App\Http\Controllers\Api\MethodPaymentRequestController::class, 'update']);
+
+    Route::get('/users', [App\Http\Controllers\Api\UserController::class, 'index']);
+    Route::post('/user/store', [App\Http\Controllers\Api\UserController::class, 'store']);
+    Route::get('/user/{id}/edit', [App\Http\Controllers\Api\UserController::class, 'editUser']);
+    Route::post('/user/{id}/update', [App\Http\Controllers\Api\UserController::class, 'updateUser']);
 });
