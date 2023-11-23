@@ -18,7 +18,7 @@ use App\Http\Controllers\Auth\AuthController;
 
 //Route::post('register', [AuthController::class, 'register']);
 //Route::post('/register', [App\Http\Controllers\Auth\AuthController::class, 'register']);
-
+Route::get('/getUsersByRole', [App\Http\Controllers\Api\ChartController::class, 'getUsersByRole']);
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
@@ -109,6 +109,6 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/user/store', [App\Http\Controllers\Api\UserController::class, 'store']);
     Route::get('/user/{id}/edit', [App\Http\Controllers\Api\UserController::class, 'editUser']);
     Route::post('/user/{id}/update', [App\Http\Controllers\Api\UserController::class, 'updateUser']);
-    Route::get('/getUsersByRole', [App\Http\Controllers\Api\ChartController::class, 'getUsersByRole']);
+
 
 });
