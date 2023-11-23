@@ -20,20 +20,13 @@ class UserController extends Controller
     }
 
     public function store(Request $request) {
-        // Buscar el rol por el nombre proporcionado
-        $role = Role::where('name', $request->id_role)->first();
-
-        // Verificar si el rol existe
-        if (!$role) {
-            return response()->json(['message' => 'Rol no encontrado'], 404);
-        }
 
         // Crear el usuario con el rol asociado
         $user = User::create([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'password' => bcrypt('1234556'), // Utilizar bcrypt para hashear la contraseña
-            'id_role' => $role->id
+            'id_role' => $request->input('id_role')
             // Agrega otros campos de usuario si es necesario
         ]);
 
@@ -63,12 +56,12 @@ class UserController extends Controller
      */
     public function editUser($id)
     {
-        $user = User::find($id);
-        return $user;
+        $user = User::with('role')->find($id);
+
         if ($user) {
             return response()->json($user);
         } else {
-            return response()->json(['message' => 'Proveedor no encontrado'], 404);
+            return response()->json(['message' => 'Usuario no encontrado'], 404);
         }
     }
 
@@ -80,13 +73,23 @@ class UserController extends Controller
         // Obtén los datos del request
         $name = $request->input('name');
         $email = $request->input('email');
+        $id_role = $request->input('id_role'); // Asegúrate de tener este campo en tu formulario
+
+        // Busca el rol por su id
+        $role = Role::find($id_role);
+
+        // Verifica si el rol existe
+        if (!$role) {
+            return response()->json(['message' => 'Rol no encontrado'], 404);
+        }
 
         // Ejecuta una consulta SQL para actualizar los campos en la base de datos
         DB::table('users')
             ->where('id', $id)
             ->update([
                 'name' => $name,
-                'email' => $email
+                'email' => $email,
+                'id_role' => $role->id
             ]);
 
         return response()->json(['message' => 'Usuario actualizado']);
