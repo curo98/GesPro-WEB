@@ -107,4 +107,9 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/type-or-condition-payment/store', [App\Http\Controllers\Api\TypePaymentRequestController::class, 'store']);
     Route::get('/type-or-condition-payment/{id}/edit', [App\Http\Controllers\Api\TypePaymentRequestController::class, 'edit']);
     Route::post('/type-or-condition-payment/{id}/update', [App\Http\Controllers\Api\TypePaymentRequestController::class, 'update']);
+
+    Route::get('/methods-payments', [App\Http\Controllers\Api\MethodPaymentRequestController::class, 'index']);
+    Route::post('/method-payment/store', [App\Http\Controllers\Api\MethodPaymentRequestController::class, 'store']);
+    Route::get('/method-payment/{id}/edit', [App\Http\Controllers\Api\MethodPaymentRequestController::class, 'edit']);
+    Route::post('/method-payment/{id}/update', [App\Http\Controllers\Api\MethodPaymentRequestController::class, 'update']);
 });
