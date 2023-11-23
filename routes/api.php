@@ -98,5 +98,8 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/question/{id}/edit', [App\Http\Controllers\Api\QuestionController::class, 'edit']);
     Route::post('/question/{id}/update', [App\Http\Controllers\Api\QuestionController::class, 'update']);
 
-
+    Route::get('/states', [App\Http\Controllers\Api\StateRequestController::class, 'index']);
+    Route::post('/state/store', [App\Http\Controllers\Api\StateRequestController::class, 'store']);
+    Route::get('/state/{id}/edit', [App\Http\Controllers\Api\StateRequestController::class, 'edit']);
+    Route::post('/state/{id}/update', [App\Http\Controllers\Api\StateRequestController::class, 'update']);
 });

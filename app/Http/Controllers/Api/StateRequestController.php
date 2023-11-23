@@ -16,6 +16,32 @@ class StateRequestController extends Controller
 
         return response()->json($stateRequests);
     }
+    public function store(Request $request) {
+        $estado = StateRequest::create($request->all());
+
+        return response()->json(['message' => 'Estado creado con éxito'], 200);
+    }
+    public function edit($id)
+    {
+        $estado = StateRequest::find($id);
+        return $estado;
+        if ($estado) {
+            return response()->json($estado);
+        } else {
+            return response()->json(['message' => 'Estado no encontrado'], 404);
+        }
+    }
+    public function update(Request $request, $id)
+    {
+        $estado = StateRequest::findOrFail($id);
+
+        // Actualiza solo el campo 'description' con el dato del request
+        $estado->update([
+            'description' => $request->input('description')
+        ]);
+
+        return response()->json(['message' => 'Estado actualizado']);
+    }
 
     public function receiveRequest($id)
     {
