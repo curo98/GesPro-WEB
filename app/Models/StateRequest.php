@@ -15,7 +15,6 @@ class StateRequest extends Model
     ];
 
     protected $hidden = [
-        'description',
         'created_at',
         'updated_at',
     ];
