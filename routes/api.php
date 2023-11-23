@@ -102,4 +102,9 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/state/store', [App\Http\Controllers\Api\StateRequestController::class, 'store']);
     Route::get('/state/{id}/edit', [App\Http\Controllers\Api\StateRequestController::class, 'edit']);
     Route::post('/state/{id}/update', [App\Http\Controllers\Api\StateRequestController::class, 'update']);
+
+    Route::get('/types-or-conditions-payments', [App\Http\Controllers\Api\StateRequestController::class, 'index']);
+    Route::post('/type-or-condition-payment/store', [App\Http\Controllers\Api\StateRequestController::class, 'store']);
+    Route::get('/type-or-condition-payment/{id}/edit', [App\Http\Controllers\Api\StateRequestController::class, 'edit']);
+    Route::post('/type-or-condition-payment/{id}/update', [App\Http\Controllers\Api\StateRequestController::class, 'update']);
 });
