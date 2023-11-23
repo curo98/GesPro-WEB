@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use \App\Models\User;
+use \App\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 
@@ -19,11 +20,20 @@ class UserController extends Controller
     }
 
     public function store(Request $request) {
+        // Buscar el rol por el nombre proporcionado
+        $role = Role::where('name', $request->id_role)->first();
+
+        // Verificar si el rol existe
+        if (!$role) {
+            return response()->json(['message' => 'Rol no encontrado'], 404);
+        }
+
+        // Crear el usuario con el rol asociado
         $user = User::create([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
-            'password' => Hash::make('1234556'),
-            'id_role' => 1
+            'password' => bcrypt('1234556'), // Utilizar bcrypt para hashear la contraseña
+            'id_role' => $role->id
             // Agrega otros campos de usuario si es necesario
         ]);
 
