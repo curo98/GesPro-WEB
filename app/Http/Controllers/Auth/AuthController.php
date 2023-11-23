@@ -43,18 +43,20 @@ class AuthController extends Controller
         return compact('success');
     }
 
-    public function register(Request $request){
-    $this->validator($request->all())->validate();
-    $user = $this->create($request->all());
-    event(new Registered($user));
+    public function register(Request $request)
+    {
+        $this->validator($request->all())->validate();
+        $user = $this->create($request->all());
+        event(new Registered($user));
 
-    $credentials = $request->only('email', 'password');
-        if ($token = JWTAuth::attempt($credentials)) {
-            $success = true;
-        } else {
-            $success = false;
-        }
+        $credentials = $request->only('email', 'password');
+            if ($jwt = JWTAuth::attempt($credentials)) {
+                $role = $user->role;
+                $success = true;
+            } else {
+                $success = false;
+            }
 
-        return compact('success', 'user', 'token');
+            return compact('success', 'user', 'role', 'jwt');
     }
 }
