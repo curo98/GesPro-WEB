@@ -30,3 +30,27 @@
         </LinearLayout>
     </LinearLayout>
 </ScrollView>
+
+
+GlobalScope.launch(Dispatchers.IO) {
+            try {
+                val response = apiService.getUsersByRole().execute()
+                if (response.isSuccessful) {
+                    val userRoleResponse = response.body()
+                    withContext(Dispatchers.Main) {
+                        updatePieChart(userRoleResponse)
+                    }
+                } else {
+                    // Manejar errores de la respuesta no exitosa
+                }
+            } catch (e: Exception) {
+                // Manejar errores de la red u otros errores
+            }
+        }
+
+        val userRoleName = preferences["UserRolePreferences", ""]
+        Log.d("UserRole", "Rol del usuario: $userRoleName")
+        if (userRoleName == "admin"){
+            val llMNenu = findViewById<LinearLayout>(R.id.llMenu)
+            llMNenu.visibility = View.GONE
+        }

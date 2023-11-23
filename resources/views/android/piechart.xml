@@ -1,0 +1,55 @@
+private fun updatePieChart(userRoleResponse: List<UserRoleResponse>?) {
+        userRoleResponse?.let { roles ->
+            val pieChart = findViewById<PieChart>(R.id.pieChart)
+
+            val total = roles.sumBy { it.count }
+
+            val pieEntries = roles.map { role ->
+                val percentage = (role.count.toFloat() / total) * 100
+                PieEntry(percentage, role.role, role.count)
+            }
+
+            val randomColors = List(pieEntries.size) { generateRandomColor() }
+
+            val pieDataSet = PieDataSet(pieEntries, "").apply {
+                colors = randomColors
+                sliceSpace = 1f // Ajustar según sea necesario para la separación entre las porciones
+                valueTextSize = 12f // Ajustar según sea necesario para el tamaño del texto
+            }
+
+            val pieData = PieData(pieDataSet).apply {
+                setValueFormatter(object : ValueFormatter() {
+                    override fun getFormattedValue(value: Float): String {
+                        return "${value.toInt()}%" // Agregar el signo de porcentaje
+                    }
+                })
+            }
+
+            pieChart.apply {
+                data = pieData
+                setDrawCenterText(true)
+                setCenterText("Roles")
+                setExtraOffsets(0f, 5f, 0f, 0f) // Ajustar según sea necesario para los desplazamientos adicionales
+
+                // Ajustar el tamaño del PieChart dinámicamente
+                layoutParams.width = resources.displayMetrics.widthPixels
+                layoutParams.height = resources.displayMetrics.widthPixels // Puedes ajustar según tus necesidades
+
+                invalidate()
+
+                setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
+                    override fun onValueSelected(e: Entry?, h: Highlight?) {
+                        Toast.makeText(
+                            applicationContext,
+                            "Usuarios en este rol: ${e?.data as Int}", // Mostrar el valor original al hacer clic
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                    override fun onNothingSelected() {
+                        // No hacer nada cuando no se selecciona nada
+                    }
+                })
+            }
+        }
+    }
