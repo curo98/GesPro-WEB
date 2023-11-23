@@ -103,8 +103,8 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/state/{id}/edit', [App\Http\Controllers\Api\StateRequestController::class, 'edit']);
     Route::post('/state/{id}/update', [App\Http\Controllers\Api\StateRequestController::class, 'update']);
 
-    Route::get('/types-or-conditions-payments', [App\Http\Controllers\Api\TypePaymentController::class, 'index']);
-    Route::post('/type-or-condition-payment/store', [App\Http\Controllers\Api\TypePaymentController::class, 'store']);
-    Route::get('/type-or-condition-payment/{id}/edit', [App\Http\Controllers\Api\TypePaymentController::class, 'edit']);
-    Route::post('/type-or-condition-payment/{id}/update', [App\Http\Controllers\Api\TypePaymentController::class, 'update']);
+    Route::get('/types-or-conditions-payments', [App\Http\Controllers\Api\TypePaymentRequestController::class, 'index']);
+    Route::post('/type-or-condition-payment/store', [App\Http\Controllers\Api\TypePaymentRequestController::class, 'store']);
+    Route::get('/type-or-condition-payment/{id}/edit', [App\Http\Controllers\Api\TypePaymentRequestController::class, 'edit']);
+    Route::post('/type-or-condition-payment/{id}/update', [App\Http\Controllers\Api\TypePaymentRequestController::class, 'update']);
 });
