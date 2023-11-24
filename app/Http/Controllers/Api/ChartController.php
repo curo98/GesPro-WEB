@@ -29,14 +29,11 @@ class ChartController extends Controller
         $data[] = $requestDatum->count;
     }
 
-    $colors = [];
-
     // Puedes generar colores aleatorios o definir un conjunto específico de colores según tus preferencias.
 
     return response()->json([
         'labels' => $labels,
-        'data' => $data,
-        'colors' => $colors,
+        'data' => $data
     ]);
     }
     public function counts()
