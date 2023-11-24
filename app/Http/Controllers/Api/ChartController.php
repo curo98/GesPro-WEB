@@ -13,44 +13,31 @@ class ChartController extends Controller
 {
     public function requestByWeekend()
     {
-        // Definir el orden de los días de la semana
-        $dayOrder = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
-
-        // Obtener el primer día y el último día de la semana actual
-        $startDate = Carbon::now()->startOfWeek();
-        $endDate = Carbon::now()->endOfWeek();
-
-        // Consulta para obtener los datos de los proveedores
         $requestsData = SupplierRequest::select(
-                DB::raw('DAYNAME(created_at) as day'),
-                DB::raw('COUNT(*) as count')
-            )
-            ->whereBetween('created_at', [$startDate, $endDate])
-            ->groupBy('day')
-            ->orderByRaw("FIELD(day, '" . implode("', '", $dayOrder) . "')")
-            ->get();
+            DB::raw('MONTH(created_at) as month'),
+            DB::raw('COUNT(*) as count')
+        )
+        ->groupBy('month')
+        ->orderBy('month')
+        ->get();
 
-        // Crear etiquetas para los días de la semana
-        $labels = [];
-        foreach ($requestsData as $requestDatum) {
-            $labels[] = Carbon::createFromDate($requestDatum->day)->dayName;
-        }
+    $labels = [];
+    $data = [];
 
-        // Obtener los datos de recuento y convertirlos en un array
-        $data = $requestsData->pluck('count')->toArray();
+    foreach ($requestsData as $requestDatum) {
+        $labels[] = Carbon::create()->month($requestDatum->month)->format('F'); // Obtén el nombre del mes
+        $data[] = $requestDatum->count;
+    }
 
-        // Generar colores aleatorios en formato RGB para la gráfica
-        $colors = [];
-        foreach ($labels as $label) {
-            $color = 'rgba(' . rand(0, 255) . ',' . rand(0, 255) . ',' . rand(0, 255) . ', 0.2)';
-            $colors[] = $color;
-        }
+    $colors = [];
 
-        return response()->json([
-            'labels' => $labels,
-            'data' => $data,
-            'colors' => $colors,
-        ]);
+    // Puedes generar colores aleatorios o definir un conjunto específico de colores según tus preferencias.
+
+    return response()->json([
+        'labels' => $labels,
+        'data' => $data,
+        'colors' => $colors,
+    ]);
     }
     public function counts()
     {
