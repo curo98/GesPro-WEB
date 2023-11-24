@@ -20,6 +20,9 @@ use App\Http\Controllers\Auth\AuthController;
 //Route::post('/register', [App\Http\Controllers\Auth\AuthController::class, 'register']);
 Route::get('/getUsersByRole', [App\Http\Controllers\Api\ChartController::class, 'getUsersByRole']);
 Route::get('/counts', [App\Http\Controllers\Api\ChartController::class, 'counts']);
+Route::get('/requests-by-weekend', [App\Http\Controllers\Api\ChartController::class, 'requestByWeekend']);
+
+
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
