@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use \App\Models\User;
 use App\Models\SupplierRequest;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class ChartController extends Controller
 {
