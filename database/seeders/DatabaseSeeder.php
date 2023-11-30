@@ -53,20 +53,20 @@ class DatabaseSeeder extends Seeder
         ]);
         \App\Models\TypePayment::create([
             'name' => 'Factura a 60 dias',
-            'email' => 'Factura con un plazo de pago extendido de 60 días. El pago debe realizarse dentro de los 60 días a partir de la fecha de emisión.'
+            'description' => 'Factura con un plazo de pago extendido de 60 días. El pago debe realizarse dentro de los 60 días a partir de la fecha de emisión.'
         ]);
         \App\Models\TypePayment::create([
             'name' => 'Factura a 90 dias',
-            'email' => 'Factura con un plazo de pago extendido de 90 días. El pago debe realizarse dentro de los 90 días a partir de la fecha de emisión.'
+            'description' => 'Factura con un plazo de pago extendido de 90 días. El pago debe realizarse dentro de los 90 días a partir de la fecha de emisión.'
         ]);
         // \App\Models\MethodPayment::factory(2)->create();
         \App\Models\MethodPayment::create([
             'name' => 'Transferencia Bancaria',
-            'email' => 'Método de pago que implica la transferencia electrónica de fondos desde la cuenta del pagador a la cuenta del beneficiario. La transferencia bancaria se realiza a través de servicios bancarios en línea o en la sucursal bancaria.'
+            'description' => 'Método de pago que implica la transferencia electrónica de fondos desde la cuenta del pagador a la cuenta del beneficiario. La transferencia bancaria se realiza a través de servicios bancarios en línea o en la sucursal bancaria.'
         ]);
         \App\Models\MethodPayment::create([
             'name' => 'Letras',
-            'email' => 'Método de pago que involucra la emisión y aceptación de letras de cambio entre las partes comerciales. Una letra de cambio es un instrumento financiero que establece el compromiso de un pagador de realizar un pago específico en una fecha futura determinada a un beneficiario.'
+            'description' => 'Método de pago que involucra la emisión y aceptación de letras de cambio entre las partes comerciales. Una letra de cambio es un instrumento financiero que establece el compromiso de un pagador de realizar un pago específico en una fecha futura determinada a un beneficiario.'
         ]);
         \App\Models\Document::factory(10)->create();
         \App\Models\Question::factory(6)->create();
