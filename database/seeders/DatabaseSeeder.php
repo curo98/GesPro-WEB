@@ -88,7 +88,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Letras',
             'description' => 'Método de pago que involucra la emisión y aceptación de letras de cambio entre las partes comerciales. Una letra de cambio es un instrumento financiero que establece el compromiso de un pagador de realizar un pago específico en una fecha futura determinada a un beneficiario.'
         ]);
-        \App\Models\Document::factory(10)->create();
+        // \App\Models\Document::factory(10)->create();
         // Array de preguntas
         $questions = [
             'Cuenta con vinculación familiar y/o amical con algún trabajador de Iberoplast?',
