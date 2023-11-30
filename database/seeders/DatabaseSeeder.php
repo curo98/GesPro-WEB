@@ -69,7 +69,6 @@ class DatabaseSeeder extends Seeder
             'description' => 'Método de pago que involucra la emisión y aceptación de letras de cambio entre las partes comerciales. Una letra de cambio es un instrumento financiero que establece el compromiso de un pagador de realizar un pago específico en una fecha futura determinada a un beneficiario.'
         ]);
         \App\Models\Document::factory(10)->create();
-        \App\Models\Question::factory(6)->create();
         // Array de preguntas
         $questions = [
             'Cuenta con vinculación familiar y/o amical con algún trabajador de Iberoplast?',
@@ -84,10 +83,8 @@ class DatabaseSeeder extends Seeder
             'Está libre de procedimiento concursal de restauración patrimonial, quiebra o liquidación?',
             'Cuenta con política de prevención de fraude fiscal y/o lavado de activos?',
             'Carece de resoluciones de pérdida de aplazamiento en los últimos 3 años o fraccionamiento notificas en los últimos cuatro (4) años?',
-            'Está en la lista del Consejo de Seguridad de las Naciones Unidas de conformidad con sus resoluciones en materia de terrorismo, financiamiento del terrorismo, y financiamiento de la proliferación de armas de destrucción masiva?',
             'Cuenta con una política de calidad?',
             'Cuenta con una política de inocuidad?',
-            'La empresa cuenta con un procedimiento de acción correctiva y se investigan las causas de las no conformidades, planteando acciones correctivas coherentes frente a posibles desviaciones de Calidad?',
             'La empresa cuenta con un programa de auditoría interna de calidad o inocuidad?',
             'La empresa cuenta con un procedimiento de inmovilización y recojo de producto/bien observado por el cliente?',
             'La empresa cuenta con un procedimiento para la atención de quejas e investigación de las causas de las mismas?',
