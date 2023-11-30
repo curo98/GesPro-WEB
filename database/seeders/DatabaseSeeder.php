@@ -15,11 +15,31 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
 
-        \App\Models\Role::factory(4)->create();
+        // \App\Models\Role::factory(4)->create();
         \App\Models\Role::create([
-                'name' => 'admin',
-                'description' => 'Usuario con todos los permisos',
-            ]);
+            'name' => 'compras',
+            'description' => 'Usuario del departamento de compras, encargado(a) de recibir y validar las solicitudes generadas por los proveedores.',
+        ]);
+
+        \App\Models\Role::create([
+            'name' => 'contabilidad',
+            'description' => 'Usuario del departamento de contabilidad, encargado(a) de aprobar o rechazar las solicitudes generadas por los proveedores.',
+        ]);
+
+        \App\Models\Role::create([
+            'name' => 'proveedor',
+            'description' => 'Usuario proveedor, representa a un proveedor registrado en la aplicación con acceso a las solicitudes que este genere, así como visualizar el seguimiento de sus solicitudes.',
+        ]);
+
+        \App\Models\Role::create([
+            'name' => 'invitado',
+            'description' => 'Usuario con permisos muy limitados. Este tipo de rol ha sido considerado para nuevas funcionalidades a futuro.',
+        ]);
+
+        \App\Models\Role::create([
+            'name' => 'admin',
+            'description' => 'Usuario con todos los permisos.',
+        ]);
         // \App\Models\User::factory(2)->create();
         \App\Models\User::create([
                 'name' => 'Joseph Castillo',
@@ -72,22 +92,17 @@ class DatabaseSeeder extends Seeder
         // Array de preguntas
         $questions = [
             'Cuenta con vinculación familiar y/o amical con algún trabajador de Iberoplast?',
-            'Alguno de sus directivos, administradores y/o personal operativo ha sido o es trabajador de Iberoplast y/o de alguna de sus empresas relacionadas?',
             'Cuenta con RUC activo y condición de habido?',
             'Cuenta con representantes legales actualizados en el RUC?',
             'Cuenta con un programa de Gestión de Seguridad en el marco de las certificaciones OEA, BASC y/o ISO 28000?',
             'Cumple con las declaraciones anuales de Impuesto a la Renta de tercera categoría?',
             'Está al día con los pagos y aportes tributarios a la SUNAT?',
-            'Está libre de deudas por obligaciones tributarias que den origen a medidas cautelares de cobranza coactiva en los últimos cuatro (4) años?',
             'Carece de pérdidas durante los tres (3) años consecutivos en los últimos cuatro (4) años calendario?',
             'Está libre de procedimiento concursal de restauración patrimonial, quiebra o liquidación?',
             'Cuenta con política de prevención de fraude fiscal y/o lavado de activos?',
-            'Carece de resoluciones de pérdida de aplazamiento en los últimos 3 años o fraccionamiento notificas en los últimos cuatro (4) años?',
             'Cuenta con una política de calidad?',
             'Cuenta con una política de inocuidad?',
             'La empresa cuenta con un programa de auditoría interna de calidad o inocuidad?',
-            'La empresa cuenta con un procedimiento de inmovilización y recojo de producto/bien observado por el cliente?',
-            'La empresa cuenta con un procedimiento para la atención de quejas e investigación de las causas de las mismas?',
             'Cuentan con Código de Ética y conducta?',
             'Cuenta con políticas del cuidado del medio ambiente?',
             'Cuenta dentro de su organigrama con alguna persona expuesta políticamente (PEP)?'
