@@ -104,13 +104,11 @@ class DatabaseSeeder extends Seeder
         // \App\Models\Observation::factory(5)->create();
 
         \App\Models\Policy::create([
-            'title' => 'Política de Proveedores',
-            'content' => 'Esta política establece los principios y prácticas que rigen nuestras relaciones con proveedores. En Iberoplast, valoramos la integridad, la calidad y la colaboración con nuestros socios comerciales. Al adherirnos a esta política, buscamos construir relaciones sólidas y mutuamente beneficiosas con nuestros proveedores. Documento: Política de Proveedores',
+            'title' => 'Política de Proveedores'
         ]);
 
         \App\Models\Policy::create([
-            'title' => 'Política de Protección de Datos',
-            'content' => 'La seguridad y privacidad de los datos son fundamentales en Iberoplast. Esta política describe nuestras prácticas para proteger y gestionar la información confidencial de nuestros clientes, empleados y socios. Estamos comprometidos con el cumplimiento de las normativas de protección de datos para garantizar la confidencialidad y la integridad de la información. Documento: Política de Protección de Datos',
+            'title' => 'Política de Protección de Datos'
         ]);
 
        // Crear 10 registros de SupplierRequest
