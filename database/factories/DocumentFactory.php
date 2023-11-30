@@ -17,11 +17,11 @@ class DocumentFactory extends Factory
      */
     public function definition(): array
     {
-        $existingSupplier = Supplier::factory()->create();
+        // $existingSupplier = Supplier::factory()->create();
 
-        return [
-            'file' => $this->faker->word, // Genera un nombre de archivo ficticio
-            'id_supplier' => $existingSupplier->id, // Obtiene el ID del proveedor existente
-        ];
+        // return [
+        //     'file' => $this->faker->word, // Genera un nombre de archivo ficticio
+        //     'id_supplier' => $existingSupplier->id, // Obtiene el ID del proveedor existente
+        // ];
     }
 }
