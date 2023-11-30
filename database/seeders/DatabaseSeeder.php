@@ -20,24 +20,24 @@ class DatabaseSeeder extends Seeder
                 'name' => 'admin',
                 'description' => 'Usuario con todos los permisos',
             ]);
-        \App\Models\User::factory(2)->create();
+        // \App\Models\User::factory(2)->create();
         \App\Models\User::create([
-                'name' => 'Alexis',
+                'name' => 'Joseph Castillo',
                 'email' => 'admin@admin.com',
-                'password' => bcrypt('123'),
+                'password' => bcrypt('1234'),
                 'id_role' => 5,
             ]);
         $comprasRole = \App\Models\Role::where('name', 'compras')->first();
         $contabilidadRole = \App\Models\Role::where('name', 'contabilidad')->first();
         \App\Models\User::create([
-            'name' => 'Compras',
+            'name' => 'Yannina Chavez',
             'email' => 'compras@example.com',
             'password' => bcrypt('1234'),
             'id_role' => $comprasRole->id,
         ]);
 
         \App\Models\User::create([
-            'name' => 'Contador',
+            'name' => 'Arturo Salas',
             'email' => 'contabilidad@example.com',
             'password' => bcrypt('1234'),
             'id_role' => $contabilidadRole->id,
@@ -46,22 +46,72 @@ class DatabaseSeeder extends Seeder
 
         //\App\Models\Supplier::factory(5)->create();
         \App\Models\StateRequest::factory(9)->create();
-        \App\Models\TypePayment::factory(2)->create();
-        \App\Models\MethodPayment::factory(2)->create();
+        // \App\Models\TypePayment::factory(2)->create();
+        \App\Models\TypePayment::create([
+            'name' => 'Factura a 30 dias',
+            'description' => 'Factura con un plazo de pago de 30 días. El pago debe realizarse dentro de los 30 días a partir de la fecha de emisión.'
+        ]);
+        \App\Models\TypePayment::create([
+            'name' => 'Factura a 60 dias',
+            'email' => 'Factura con un plazo de pago extendido de 60 días. El pago debe realizarse dentro de los 60 días a partir de la fecha de emisión.'
+        ]);
+        \App\Models\TypePayment::create([
+            'name' => 'Factura a 90 dias',
+            'email' => 'Factura con un plazo de pago extendido de 90 días. El pago debe realizarse dentro de los 90 días a partir de la fecha de emisión.'
+        ]);
+        // \App\Models\MethodPayment::factory(2)->create();
+        \App\Models\MethodPayment::create([
+            'name' => 'Transferencia Bancaria',
+            'email' => 'Método de pago que implica la transferencia electrónica de fondos desde la cuenta del pagador a la cuenta del beneficiario. La transferencia bancaria se realiza a través de servicios bancarios en línea o en la sucursal bancaria.'
+        ]);
+        \App\Models\MethodPayment::create([
+            'name' => 'Letras',
+            'email' => 'Método de pago que involucra la emisión y aceptación de letras de cambio entre las partes comerciales. Una letra de cambio es un instrumento financiero que establece el compromiso de un pagador de realizar un pago específico en una fecha futura determinada a un beneficiario.'
+        ]);
         \App\Models\Document::factory(10)->create();
         \App\Models\Question::factory(6)->create();
-        \App\Models\Observation::factory(5)->create();
+        // Array de preguntas
+        $questions = [
+            'Cuenta con vinculación familiar y/o amical con algún trabajador de Iberoplast?',
+            'Alguno de sus directivos, administradores y/o personal operativo ha sido o es trabajador de Iberoplast y/o de alguna de sus empresas relacionadas?',
+            'Cuenta con RUC activo y condición de habido?',
+            'Cuenta con representantes legales actualizados en el RUC?',
+            'Cuenta con un programa de Gestión de Seguridad en el marco de las certificaciones OEA, BASC y/o ISO 28000?',
+            'Cumple con las declaraciones anuales de Impuesto a la Renta de tercera categoría?',
+            'Está al día con los pagos y aportes tributarios a la SUNAT?',
+            'Está libre de deudas por obligaciones tributarias que den origen a medidas cautelares de cobranza coactiva en los últimos cuatro (4) años?',
+            'Carece de pérdidas durante los tres (3) años consecutivos en los últimos cuatro (4) años calendario?',
+            'Está libre de procedimiento concursal de restauración patrimonial, quiebra o liquidación?',
+            'Cuenta con política de prevención de fraude fiscal y/o lavado de activos?',
+            'Carece de resoluciones de pérdida de aplazamiento en los últimos 3 años o fraccionamiento notificas en los últimos cuatro (4) años?',
+            'Está en la lista del Consejo de Seguridad de las Naciones Unidas de conformidad con sus resoluciones en materia de terrorismo, financiamiento del terrorismo, y financiamiento de la proliferación de armas de destrucción masiva?',
+            'Cuenta con una política de calidad?',
+            'Cuenta con una política de inocuidad?',
+            'La empresa cuenta con un procedimiento de acción correctiva y se investigan las causas de las no conformidades, planteando acciones correctivas coherentes frente a posibles desviaciones de Calidad?',
+            'La empresa cuenta con un programa de auditoría interna de calidad o inocuidad?',
+            'La empresa cuenta con un procedimiento de inmovilización y recojo de producto/bien observado por el cliente?',
+            'La empresa cuenta con un procedimiento para la atención de quejas e investigación de las causas de las mismas?',
+            'Cuentan con Código de Ética y conducta?',
+            'Cuenta con políticas del cuidado del medio ambiente?',
+            'Cuenta dentro de su organigrama con alguna persona expuesta políticamente (PEP)?'
+        ];
+
+        // Crear preguntas en la base de datos
+        foreach ($questions as $question) {
+            \App\Models\Question::create(['question' => $question]);
+        }
+
+        // \App\Models\Observation::factory(5)->create();
 
         \App\Models\Policy::create([
-                'title' => 'Politica de proveedores',
-                'content' => 'Document - policy suppliers',
-            ]);
+            'title' => 'Política de Proveedores',
+            'content' => 'Esta política establece los principios y prácticas que rigen nuestras relaciones con proveedores. En Iberoplast, valoramos la integridad, la calidad y la colaboración con nuestros socios comerciales. Al adherirnos a esta política, buscamos construir relaciones sólidas y mutuamente beneficiosas con nuestros proveedores. Documento: Política de Proveedores',
+        ]);
 
         \App\Models\Policy::create([
-                'title' => 'Politica de proteccion de datos',
-                'content' => 'Document - policy data protection',
-            ]);
-
+            'title' => 'Política de Protección de Datos',
+            'content' => 'La seguridad y privacidad de los datos son fundamentales en Iberoplast. Esta política describe nuestras prácticas para proteger y gestionar la información confidencial de nuestros clientes, empleados y socios. Estamos comprometidos con el cumplimiento de las normativas de protección de datos para garantizar la confidencialidad y la integridad de la información. Documento: Política de Protección de Datos',
+        ]);
 
        // Crear 10 registros de SupplierRequest
         $supplierRequests = \App\Models\SupplierRequest::factory(50)->create();
@@ -107,12 +157,12 @@ class DatabaseSeeder extends Seeder
             }
         });
 
-        \App\Models\User::factory()
-            ->count(2)
-            ->create([
-                'id_role' => 2,
-                'password' => bcrypt('1234'),
-        ]);
+        // \App\Models\User::factory()
+        //     ->count(2)
+        //     ->create([
+        //         'id_role' => 2,
+        //         'password' => bcrypt('1234'),
+        // ]);
 
 
         DB::statement("INSERT INTO `countries` (`id`, `name`) VALUES
