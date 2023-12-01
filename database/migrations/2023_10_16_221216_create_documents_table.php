@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('documents', function (Blueprint $table) {
             $table->id();
 
-            $table->string('url');
+            $table->string('uri');
             $table->string('name');
 
             $table->unsignedBigInteger('id_supplier')->nullable();

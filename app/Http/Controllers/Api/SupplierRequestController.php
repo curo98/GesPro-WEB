@@ -379,7 +379,7 @@ class SupplierRequestController extends Controller
                 // Crea una nueva instancia del modelo Document
                 $document = new Document;
                 $document->name = $fileName;
-                $document->url = Storage::url($path); // Obtiene la URL del archivo desde el almacenamiento
+                $document->uri = Storage::url($path); // Obtiene la URL del archivo desde el almacenamiento
                 // Asigna el id_supplier según tus necesidades, por ejemplo:
                 // $document->id_supplier = Auth::user()->id; // Asigna el ID del proveedor actualmente autenticado
 

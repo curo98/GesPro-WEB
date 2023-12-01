@@ -12,7 +12,7 @@ class Document extends Model
     protected $fillable = [
         'id_supplier',
         'name',
-        'url',
+        'uri',
     ];
 
     protected $hidden = [
