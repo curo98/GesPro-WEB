@@ -14,6 +14,8 @@ use App\Models\Supplier;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
+use GuzzleHttp\Client;
 
 class SupplierRequestController extends Controller
 {
@@ -363,27 +365,23 @@ class SupplierRequestController extends Controller
                 $nombreOriginal = $archivo['name'];
                 $ruta = $archivo['ruta'];
 
-                // Download the file from the content URI
-                $contenido = file_get_contents($ruta);
+                // Use Guzzle to make a request and retrieve the file content
+                $client = new Client();
+                $response = $client->get($ruta);
+                $contenido = $response->getBody();
 
-                // Check if the download was successful
-                if ($contenido !== false) {
-                    // Save the file to Laravel storage
-                    $archivoInstancia = Storage::put("archivos/$nombreOriginal", $contenido);
+                // Save the file to Laravel storage
+                $archivoInstancia = Storage::put("archivos/$nombreOriginal", $contenido);
 
-                    // Almacenar en la tabla Archivo
-                    $archivoModel = Archivo::create([
-                        'name' => pathinfo($archivoInstancia, PATHINFO_FILENAME),
-                        'title' => $nombreOriginal,
-                        'ruta' => $archivoInstancia,
-                    ]);
+                // Almacenar en la tabla Archivo
+                $archivoModel = Archivo::create([
+                    'name' => pathinfo($archivoInstancia, PATHINFO_FILENAME),
+                    'title' => $nombreOriginal,
+                    'ruta' => $archivoInstancia,
+                ]);
 
-                    // Puedes hacer un dd para verificar el contenido
-                    dd($archivoModel);
-                } else {
-                    // Handle the case where file download fails
-                    Log::error("Failed to download file from URI: $ruta");
-                }
+                // Puedes hacer un dd para verificar el contenido
+                dd($archivoModel);
             }
         }
         if ($saved) {
