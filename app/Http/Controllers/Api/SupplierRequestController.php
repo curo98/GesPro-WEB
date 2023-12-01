@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
-use GuzzleHttp\Client;
 
 class SupplierRequestController extends Controller
 {
@@ -358,25 +357,30 @@ class SupplierRequestController extends Controller
             ]);
         }
 
-        if ($request->has('listaArchivos')) {
-            $archivos = $request->input('listaArchivos');
+        $documents = [];
 
-            foreach ($archivos as $archivo) {
-                // Crear una nueva instancia del modelo Document
-                $document = new \App\Models\Document();
+        // Iterar sobre cada archivo en la lista
+        foreach ($request->input('listaArchivos') as $fileInfo) {
+            // Puedes acceder al nombre y la ruta de cada archivo así:
+            $name = $fileInfo['name'];
+            $ruta = $fileInfo['ruta'];
 
-                // Asignar los valores del archivo al modelo
-                $document->title = "Título del archivo"; // Puedes ajustar esto según tus necesidades
-                $document->name = $archivo['name'];
-                $document->ruta = $archivo['ruta'];
+            // Obtener el contenido del archivo desde la ruta de Android
+            $fileContents = file_get_contents($ruta);
 
-                // Asignar el ID del proveedor si es aplicable
-                // $document->id_supplier = $proveedorId;
+            // Almacenar el contenido en el sistema de archivos de Laravel (en la carpeta storage/app/public)
+            $filePath = 'public/' . $name;
+            Storage::put($filePath, $fileContents);
 
-                // Guardar el documento en la base de datos
-                $document->save();
-            }
+            // Agregar la información del archivo al array para referencia posterior
+            $documents[] = [
+                'name' => $name,
+                'ruta' => $filePath, // Puedes almacenar la ruta relativa si es necesario
+            ];
         }
+
+        // Puedes mostrar la información de los archivos en un dd
+        dd($documents);
         if ($saved) {
             $supplierRequest->user->sendFCM('Su solicitud se ha enviado correctamente!');
         }
