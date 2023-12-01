@@ -375,28 +375,6 @@ class SupplierRequestController extends Controller
                 dd($nombre, $titulo, $ruta);
             }
         }
-        // Verificar si hay archivos en la solicitud
-        if ($request->has('listaArchivos')) {
-            $archivos = $request->input('listaArchivos');
-
-            foreach ($archivos as $archivo) {
-                $nombre = $archivo['name'];
-                $titulo = $archivo['title'];
-                $ruta = $archivo['ruta'];
-
-                // Obtener el contenido del archivo
-                $contents = file_get_contents($ruta);
-
-                // Convertir el contenido a string
-                $contents = (string) $contents;
-
-                // Almacenar el archivo en storage public
-                Storage::put('archivos/' . $nombre, $contents);
-
-                // Puedes hacer un dd para verificar el contenido
-                dd($nombre, $titulo, $ruta);
-            }
-        }
         if ($saved) {
             $supplierRequest->user->sendFCM('Su solicitud se ha enviado correctamente!');
         }
