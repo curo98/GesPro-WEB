@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\File;
 class SupplierRequestController extends Controller
 {
     public function uploadFiles(Request $request){
-        dd($request->all()->toArray());
+        dd($request->file('files'));
     }
     function getStateId($stateName)
     {
