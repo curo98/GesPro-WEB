@@ -364,7 +364,8 @@ class SupplierRequestController extends Controller
         return response()->json(['message' => 'Registro exitoso como proveedor'], 201);
     }
 
-    public function uploadFiles(Request $request){
+    public function uploadFiles(Request $request)
+    {
         if ($request->hasFile('files')) {
             $files = $request->file('files');
 
@@ -372,12 +373,20 @@ class SupplierRequestController extends Controller
                 $fileName = $file->getClientOriginalName();
 
                 // Almacena el archivo en storage/app/public
-                $file->storeAs('public', $fileName);
+                $path = $file->storeAs('public', $fileName);
 
-                // Puedes hacer algo más con cada archivo aquí, como almacenar su información en la base de datos.
+                // Crea una nueva instancia del modelo Document
+                $document = new Document;
+                $document->name = $fileName;
+                $document->url = Storage::url($path); // Obtiene la URL del archivo desde el almacenamiento
+                // Asigna el id_supplier según tus necesidades, por ejemplo:
+                // $document->id_supplier = Auth::user()->id; // Asigna el ID del proveedor actualmente autenticado
+
+                // Guarda el documento en la base de datos
+                $document->save();
             }
 
-            return response()->json(['message' => 'Archivos almacenados exitosamente']);
+            return response()->json(['message' => 'Archivos almacenados y registrados exitosamente']);
         } else {
             return response()->json(['error' => 'No se ha proporcionado ningún archivo'], 400);
         }
