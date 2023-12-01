@@ -386,7 +386,7 @@ class SupplierRequestController extends Controller
         return response()->json(['message' => 'Registro exitoso como proveedor'], 201);
     }
 
-    public function uploadFiles(Request $request, $id_supplier_request, $user)
+    public function uploadFiles(Request $request)
     {
         if ($request->hasFile('files')) {
             $files = $request->file('files');
