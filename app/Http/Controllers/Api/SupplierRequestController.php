@@ -18,6 +18,7 @@ class SupplierRequestController extends Controller
 {
     public function uploadFiles(Request $request)
     {
+        return 'LLegue';
         if ($request->hasFile('files')) {
             // Obtener los archivos enviados
             $archivos = $request->file('files');
