@@ -363,21 +363,27 @@ class SupplierRequestController extends Controller
                 $nombreOriginal = $archivo['name'];
                 $ruta = $archivo['ruta'];
 
-                // Obtener el archivo a partir de la ruta proporcionada
-                $archivoInstancia = Storage::putFile('archivos', $ruta);
+                // Download the file from the content URI
+                $contenido = file_get_contents($ruta);
 
-                // Obtener el nombre único asignado por Storage
-                $nombreUnico = pathinfo($archivoInstancia, PATHINFO_FILENAME);
+                // Check if the download was successful
+                if ($contenido !== false) {
+                    // Save the file to Laravel storage
+                    $archivoInstancia = Storage::put("archivos/$nombreOriginal", $contenido);
 
-                // Almacenar en la tabla Archivo
-                $archivoModel = Archivo::create([
-                    'name' => $nombreUnico,
-                    'title' => $nombreOriginal,
-                    'ruta' => $archivoInstancia,
-                ]);
+                    // Almacenar en la tabla Archivo
+                    $archivoModel = Archivo::create([
+                        'name' => pathinfo($archivoInstancia, PATHINFO_FILENAME),
+                        'title' => $nombreOriginal,
+                        'ruta' => $archivoInstancia,
+                    ]);
 
-                // Puedes hacer un dd para verificar el contenido
-                dd($archivoModel);
+                    // Puedes hacer un dd para verificar el contenido
+                    dd($archivoModel);
+                } else {
+                    // Handle the case where file download fails
+                    Log::error("Failed to download file from URI: $ruta");
+                }
             }
         }
         if ($saved) {
