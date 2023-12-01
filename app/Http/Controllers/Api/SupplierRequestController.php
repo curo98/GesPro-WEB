@@ -365,11 +365,8 @@ class SupplierRequestController extends Controller
                 $titulo = $archivo['title'];
                 $ruta = $archivo['ruta'];
 
-                // Utilizar Storage::get para obtener el contenido del archivo
-                $contenido = Storage::get($ruta);
-
-                // Almacenar el archivo en el sistema de archivos de Laravel
-                Storage::put("archivos/$nombre", $contenido);
+                // Almacenar el archivo en storage public
+                Storage::store($ruta, $nombre);
 
                 // Puedes hacer un dd para verificar el contenido
                 dd($nombre, $titulo, $ruta);
