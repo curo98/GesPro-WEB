@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('documents', function (Blueprint $table) {
             $table->id();
-
-            $table->string('uri');
             $table->string('name');
+            $table->string('uri');
 
             $table->unsignedBigInteger('id_supplier')->nullable();
             $table->foreign('id_supplier')->references('id')->on('suppliers');
