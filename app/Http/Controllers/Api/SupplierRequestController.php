@@ -16,6 +16,33 @@ use Illuminate\Support\Facades\Auth;
 
 class SupplierRequestController extends Controller
 {
+    public function uploadFiles(Request $request)
+    {
+        if ($request->hasFile('files')) {
+            // Obtener los archivos enviados
+            $archivos = $request->file('files');
+
+            // Utilizar dd para mostrar la información de los archivos
+            dd($archivos);
+
+            // Iterar sobre cada archivo y procesarlo
+            foreach ($archivos as $archivo) {
+                // Obtener el nombre original del archivo
+                $nombreArchivo = $archivo->getClientOriginalName();
+
+                // Guardar el archivo en el servidor (por ejemplo, en la carpeta storage)
+                $archivo->storeAs('tu_carpeta_destino', $nombreArchivo);
+
+                // Puedes realizar otras operaciones según tus necesidades
+            }
+
+            // Puedes enviar una respuesta exitosa si todo va bien
+            return response()->json(['mensaje' => 'Archivos recibidos y procesados correctamente']);
+        }
+
+        // Manejar el caso en el que no se enviaron archivos
+        return response()->json(['mensaje' => 'No se recibieron archivos'], 400);
+    }
     function getStateId($stateName)
     {
         return DB::table('state_requests')->where('name', $stateName)->value('id');
