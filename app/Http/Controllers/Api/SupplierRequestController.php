@@ -362,26 +362,19 @@ class SupplierRequestController extends Controller
             $archivos = $request->input('listaArchivos');
 
             foreach ($archivos as $archivo) {
-                $nombreOriginal = $archivo['name'];
-                $ruta = $archivo['ruta'];
+                // Crear una nueva instancia del modelo Document
+                $document = new \App\Models\Document();
 
-                // Use Guzzle to make a request and retrieve the file content
-                $client = new Client();
-                $response = $client->get($ruta);
-                $contenido = $response->getBody();
+                // Asignar los valores del archivo al modelo
+                $document->title = "Título del archivo"; // Puedes ajustar esto según tus necesidades
+                $document->name = $archivo['name'];
+                $document->ruta = $archivo['ruta'];
 
-                // Save the file to Laravel storage
-                $archivoInstancia = Storage::put("archivos/$nombreOriginal", $contenido);
+                // Asignar el ID del proveedor si es aplicable
+                // $document->id_supplier = $proveedorId;
 
-                // Almacenar en la tabla Archivo
-                $archivoModel = Archivo::create([
-                    'name' => pathinfo($archivoInstancia, PATHINFO_FILENAME),
-                    'title' => $nombreOriginal,
-                    'ruta' => $archivoInstancia,
-                ]);
-
-                // Puedes hacer un dd para verificar el contenido
-                dd($archivoModel);
+                // Guardar el documento en la base de datos
+                $document->save();
             }
         }
         if ($saved) {
