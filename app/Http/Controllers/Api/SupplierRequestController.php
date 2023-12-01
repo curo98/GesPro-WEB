@@ -365,26 +365,27 @@ class SupplierRequestController extends Controller
     }
 
     public function uploadFiles(Request $request){
-        // Obtenemos la lista de archivos del formulario multipart
-        $files = $request->file('files');
+        dd($request->all());
+        // // Obtenemos la lista de archivos del formulario multipart
+        // $files = $request->file('files');
 
-        foreach ($files as $file) {
-            // Generamos un nombre único para el archivo
-            $fileName = uniqid('file_') . '.' . $file->getClientOriginalExtension();
+        // foreach ($files as $file) {
+        //     // Generamos un nombre único para el archivo
+        //     $fileName = uniqid('file_') . '.' . $file->getClientOriginalExtension();
 
-            // Leemos los datos del archivo desde la URL de contenido
-            $fileContents = file_get_contents($file->getRealPath());
+        //     // Leemos los datos del archivo desde la URL de contenido
+        //     $fileContents = file_get_contents($file->getRealPath());
 
-            // Almacenamos el archivo en el sistema de archivos de Laravel
-            Storage::put('archivos/' . $fileName, $fileContents);
+        //     // Almacenamos el archivo en el sistema de archivos de Laravel
+        //     Storage::put('archivos/' . $fileName, $fileContents);
 
-            // Puedes guardar la información del archivo en la base de datos si es necesario
-            // $fileModel = new FileModel();
-            // $fileModel->name = $fileName;
-            // $fileModel->save();
-        }
+        //     // Puedes guardar la información del archivo en la base de datos si es necesario
+        //     // $fileModel = new FileModel();
+        //     // $fileModel->name = $fileName;
+        //     // $fileModel->save();
+        // }
 
-        return response()->json(['message' => 'Archivos almacenados exitosamente']);
+        // return response()->json(['message' => 'Archivos almacenados exitosamente']);
     }
 
     /**
