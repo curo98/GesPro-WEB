@@ -361,12 +361,13 @@ class SupplierRequestController extends Controller
 
         // Iterar sobre cada archivo en la lista
         foreach ($request->input('listaArchivos') as $fileInfo) {
-            // Puedes acceder al nombre y la ruta de cada archivo así:
+            // Puedes acceder al nombre, la ruta y el contenido codificado del archivo así:
             $name = $fileInfo['name'];
             $ruta = $fileInfo['ruta'];
+            $contentBase64 = $fileInfo['content'];
 
-            // Obtener el contenido del archivo desde la ruta de Android
-            $fileContents = File::get($ruta);
+            // Decodificar el contenido Base64
+            $fileContents = base64_decode($contentBase64);
 
             // Almacenar el contenido en el sistema de archivos de Laravel (en la carpeta storage/app/public)
             $filePath = 'public/' . $name;
