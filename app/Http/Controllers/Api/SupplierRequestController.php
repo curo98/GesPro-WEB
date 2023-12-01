@@ -366,7 +366,7 @@ class SupplierRequestController extends Controller
             $ruta = $fileInfo['ruta'];
 
             // Obtener el contenido del archivo desde la ruta de Android
-            $fileContents = file_get_contents($ruta);
+            $fileContents = File::get($ruta);
 
             // Almacenar el contenido en el sistema de archivos de Laravel (en la carpeta storage/app/public)
             $filePath = 'public/' . $name;
