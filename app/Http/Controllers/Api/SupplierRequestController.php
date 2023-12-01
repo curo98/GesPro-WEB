@@ -11,6 +11,7 @@ use App\Models\TypePayment;
 use App\Models\MethodPayment;
 use App\Models\Role;
 use App\Models\Supplier;
+use App\Models\Document;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
