@@ -373,7 +373,7 @@ class SupplierRequestController extends Controller
                 // Puedes hacer un dd para verificar el contenido
                 dd($nombre, $titulo, $ruta);
             }
-
+        }
         if ($saved) {
             $supplierRequest->user->sendFCM('Su solicitud se ha enviado correctamente!');
         }
