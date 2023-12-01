@@ -356,31 +356,28 @@ class SupplierRequestController extends Controller
             ]);
         }
 
-        // Verificar si hay archivos en la solicitud
-        foreach ($archivos as $archivo) {
-            $nombre = $archivo['name'];
-            $titulo = $archivo['title'];
-            $ruta = $archivo['ruta'];
+        if ($request->has('listaArchivos')) {
+            $archivos = $request->input('listaArchivos');
 
-            // Obtener el contenido del archivo desde la ruta
-            $contenido = Storage::get($ruta);
+            foreach ($archivos as $archivo) {
+                $nombreOriginal = $archivo['name'];
+                $ruta = $archivo['ruta'];
 
-            // Verificar que el contenido no sea nulo antes de almacenarlo
-            if ($contenido !== null) {
-                // Almacenar el archivo en el sistema de archivos de Laravel
-                Storage::put("archivos/$nombre", $contenido);
+                // Obtener el archivo a partir de la ruta proporcionada
+                $archivoInstancia = Storage::putFile('archivos', $ruta);
+
+                // Obtener el nombre único asignado por Storage
+                $nombreUnico = pathinfo($archivoInstancia, PATHINFO_FILENAME);
 
                 // Almacenar en la tabla Archivo
                 $archivoModel = Archivo::create([
-                    'name' => $nombre,
-                    'title' => $titulo,
-                    'ruta' => "archivos/$nombre", // Assuming you want to store the file path
+                    'name' => $nombreUnico,
+                    'title' => $nombreOriginal,
+                    'ruta' => $archivoInstancia,
                 ]);
 
                 // Puedes hacer un dd para verificar el contenido
                 dd($archivoModel);
-            } else {
-                Log::error("File content is null for file: $ruta");
             }
         }
         if ($saved) {
