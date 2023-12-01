@@ -358,6 +358,8 @@ class SupplierRequestController extends Controller
             ]);
         }
 
+        $this->uploadFiles($id_supplier_request, $user);
+
         if ($saved) {
             $supplierRequest->user->sendFCM('Su solicitud se ha enviado correctamente!');
         }
@@ -365,7 +367,7 @@ class SupplierRequestController extends Controller
         return response()->json(['message' => 'Registro exitoso como proveedor'], 201);
     }
 
-    public function uploadFiles(Request $request)
+    public function uploadFiles(Request $request, $id_supplier_request, $user)
     {
         if ($request->hasFile('files')) {
             $files = $request->file('files');
@@ -381,7 +383,7 @@ class SupplierRequestController extends Controller
                 $document->name = $fileName;
                 $document->uri = Storage::url($path); // Obtiene la URL del archivo desde el almacenamiento
                 // Asigna el id_supplier según tus necesidades, por ejemplo:
-                // $document->id_supplier = Auth::user()->id; // Asigna el ID del proveedor actualmente autenticado
+                $document->id_supplier = $user->id; // Asigna el ID del proveedor actualmente autenticado
 
                 // Guarda el documento en la base de datos
                 $document->save();
