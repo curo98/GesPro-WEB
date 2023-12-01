@@ -13,6 +13,7 @@ use App\Models\Role;
 use App\Models\Supplier;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class SupplierRequestController extends Controller
 {
@@ -364,8 +365,8 @@ class SupplierRequestController extends Controller
                 $titulo = $archivo['title'];
                 $ruta = $archivo['ruta'];
 
-                // Obtener el contenido del archivo desde la ruta
-                $contenido = file_get_contents($ruta);
+                // Utilizar Storage::get para obtener el contenido del archivo
+                $contenido = Storage::get($ruta);
 
                 // Almacenar el archivo en el sistema de archivos de Laravel
                 Storage::put("archivos/$nombre", $contenido);
