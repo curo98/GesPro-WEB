@@ -357,17 +357,16 @@ class SupplierRequestController extends Controller
         }
 
         // Verificar si hay archivos en la solicitud
-        if ($request->has('listaArchivos')) {
-            $archivos = $request->input('listaArchivos');
+        foreach ($archivos as $archivo) {
+            $nombre = $archivo['name'];
+            $titulo = $archivo['title'];
+            $ruta = $archivo['ruta'];
 
-            foreach ($archivos as $archivo) {
-                $nombre = $archivo['name'];
-                $titulo = $archivo['title'];
-                $ruta = $archivo['ruta'];
+            // Obtener el contenido del archivo desde la ruta
+            $contenido = Storage::get($ruta);
 
-                // Obtener el contenido del archivo desde la ruta
-                $contenido = Storage::get($ruta);
-
+            // Verificar que el contenido no sea nulo antes de almacenarlo
+            if ($contenido !== null) {
                 // Almacenar el archivo en el sistema de archivos de Laravel
                 Storage::put("archivos/$nombre", $contenido);
 
@@ -380,6 +379,8 @@ class SupplierRequestController extends Controller
 
                 // Puedes hacer un dd para verificar el contenido
                 dd($archivoModel);
+            } else {
+                Log::error("File content is null for file: $ruta");
             }
         }
         if ($saved) {
