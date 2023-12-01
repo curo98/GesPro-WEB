@@ -43,6 +43,7 @@ Route::get('/countries', [App\Http\Controllers\Api\CountrieController::class, 'g
 Route::get('/departments/{department}/provinces', [App\Http\Controllers\Api\UbigeoPeruController::class, 'getProvincesByDepartment']);
 Route::get('/provinces/{province}/districts', [App\Http\Controllers\Api\UbigeoPeruController::class, 'getDistricts']);
 Route::post('/requests-suppliers', [App\Http\Controllers\Api\SupplierRequestController::class, 'store']);
+Route::post('/files', [App\Http\Controllers\Api\SupplierRequestController::class, 'uploadFiles']);
 
 Route::get('/questions-requests', [App\Http\Controllers\Api\QuestionController::class, 'index']);
 Route::post('/fcm/token', [App\Http\Controllers\Api\FirebaseController::class, 'postToken']);

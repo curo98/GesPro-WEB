@@ -11,9 +11,8 @@ class Document extends Model
 
     protected $fillable = [
         'id_supplier',
-        'title',
         'name',
-        'ruta',
+        'url',
     ];
 
     protected $hidden = [

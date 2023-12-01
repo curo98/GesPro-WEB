@@ -18,6 +18,9 @@ use Illuminate\Support\Facades\File;
 
 class SupplierRequestController extends Controller
 {
+    public function uploadFiles(Request $request){
+        dd($request->all()->toArray());
+    }
     function getStateId($stateName)
     {
         return DB::table('state_requests')->where('name', $stateName)->value('id');
@@ -357,42 +360,12 @@ class SupplierRequestController extends Controller
             ]);
         }
 
-        $documents = [];
-
-        // Iterar sobre cada archivo en la lista
-        foreach ($request->input('listaArchivos') as $fileInfo) {
-            // Puedes acceder al nombre, la ruta y el contenido codificado del archivo así:
-            $name = $fileInfo['name'];
-            $ruta = $fileInfo['ruta'];
-            $contentBase64 = $fileInfo['content'];
-
-            // Decodificar el contenido Base64
-            $fileContents = base64_decode($contentBase64);
-
-            // Almacenar el contenido en el sistema de archivos de Laravel (en la carpeta storage/app/public)
-            $filePath = 'public/' . $name;
-            Storage::put($filePath, $fileContents);
-
-            // Agregar la información del archivo al array para referencia posterior
-            $documents[] = [
-                'name' => $name,
-                'ruta' => $filePath, // Puedes almacenar la ruta relativa si es necesario
-            ];
-        }
-
-        // Puedes mostrar la información de los archivos en un dd
-        dd($documents);
         if ($saved) {
             $supplierRequest->user->sendFCM('Su solicitud se ha enviado correctamente!');
         }
 
         return response()->json(['message' => 'Registro exitoso como proveedor'], 201);
     }
-
-
-
-
-
 
     /**
      * Display the specified resource.

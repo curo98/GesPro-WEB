@@ -14,9 +14,8 @@ return new class extends Migration
         Schema::create('documents', function (Blueprint $table) {
             $table->id();
 
-            $table->string('title');
+            $table->string('url');
             $table->string('name');
-            $table->string('ruta');
 
             $table->unsignedBigInteger('id_supplier')->nullable();
             $table->foreign('id_supplier')->references('id')->on('suppliers');
