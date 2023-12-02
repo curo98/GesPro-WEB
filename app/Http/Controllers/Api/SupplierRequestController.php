@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
+
 
 class SupplierRequestController extends Controller
 {
@@ -381,12 +383,16 @@ class SupplierRequestController extends Controller
             foreach ($files as $file) {
                 $fileName = $file->getClientOriginalName();
 
+                // Genera una UUID única para el archivo
+                $uuid = Str::uuid();
+
                 // Almacena el archivo en storage/app/public
-                $path = $file->storeAs('public', $fileName);
+                $path = $file->storeAs('public', $uuid . '_' . $fileName);
 
                 // Crea una nueva instancia del modelo Document
                 $document = new Document;
                 $document->name = $fileName;
+                $document->uuid = $uuid; // Asigna la UUID al campo correspondiente
                 $document->uri = Storage::url($path);
                 $document->id_supplier = $supplier->id;
 
