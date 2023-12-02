@@ -376,7 +376,7 @@ class SupplierRequestController extends Controller
 
     public function uploadFiles(Request $request, $idRequest, $idUser)
     {
-        dd($idUser);
+        dd($request);
         if ($request->hasFile('files')) {
             $files = $request->file('files');
 
