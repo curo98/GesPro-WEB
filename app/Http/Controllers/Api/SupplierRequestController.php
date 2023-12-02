@@ -375,6 +375,9 @@ class SupplierRequestController extends Controller
         if ($request->hasFile('files')) {
             $files = $request->file('files');
 
+            // Obtén la última solicitud del usuario
+            $lastRequest = $user->supplierRequests()->latest()->first();
+
             foreach ($files as $file) {
                 $fileName = $file->getClientOriginalName();
 
@@ -386,13 +389,16 @@ class SupplierRequestController extends Controller
                 $document->name = $fileName;
                 $document->uri = Storage::url($path);
 
-                // Asigna el id_supplier utilizando la relación uno a uno
-                if ($supplier) {
-                    $document->id_supplier = $supplier->id;
-                }
-
                 // Guarda el documento en la base de datos
                 $document->save();
+
+                // Registra el documento en la tabla intermedia
+                if ($lastRequest) {
+                    $supplierRequestDocument = new SupplierRequestDocument;
+                    $supplierRequestDocument->id_supplier_request = $lastRequest->id;
+                    $supplierRequestDocument->id_document = $document->id;
+                    $supplierRequestDocument->save();
+                }
             }
 
             return response()->json(['message' => 'Archivos almacenados y registrados exitosamente']);
