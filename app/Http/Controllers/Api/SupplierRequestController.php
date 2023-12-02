@@ -376,8 +376,7 @@ class SupplierRequestController extends Controller
 
     public function uploadFiles(Request $request, $idRequest, $idUser)
     {
-        $user = User::find($idUser);
-        $user->supplier()->id;
+        dd($idUser);
         if ($request->hasFile('files')) {
             $files = $request->file('files');
 
