@@ -388,6 +388,7 @@ class SupplierRequestController extends Controller
                 $document = new Document;
                 $document->name = $fileName;
                 $document->uri = Storage::url($path);
+                $document->id_supplier = $supplier->id;
 
                 // Guarda el documento en la base de datos
                 $document->save();
