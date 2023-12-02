@@ -381,19 +381,15 @@ class SupplierRequestController extends Controller
             $lastRequest = $user->supplierRequests()->latest()->first();
 
             foreach ($files as $file) {
-                $fileName = $file->getClientOriginalName();
-
-                // Genera una UUID única para el archivo
                 $uuid = Str::uuid();
 
                 // Almacena el archivo en storage/app/public
-                $path = $file->storeAs('public', $uuid . '_' . $fileName);
+                $path = $file->storeAs('public', $uuid);
 
                 // Crea una nueva instancia del modelo Document
                 $document = new Document;
-                $document->name = $fileName;
-                $document->uuid = $uuid; // Asigna la UUID al campo correspondiente
-                $document->uri = Storage::url($path);
+                $document->name = $file->getClientOriginalName(); // Puedes conservar el nombre original si lo necesitas
+                $document->uri = $uuid; // Asigna la UUID como parte de la URI
                 $document->id_supplier = $supplier->id;
 
                 // Guarda el documento en la base de datos
