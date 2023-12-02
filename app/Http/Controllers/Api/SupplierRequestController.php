@@ -367,6 +367,11 @@ class SupplierRequestController extends Controller
 
     public function uploadFiles(Request $request)
     {
+        $user = Auth::guard('api')->user();
+
+        // Obtén el proveedor asociado al usuario
+        $supplier = $user->supplier;
+
         if ($request->hasFile('files')) {
             $files = $request->file('files');
 
@@ -379,9 +384,12 @@ class SupplierRequestController extends Controller
                 // Crea una nueva instancia del modelo Document
                 $document = new Document;
                 $document->name = $fileName;
-                $document->uri = Storage::url($path); // Obtiene la URL del archivo desde el almacenamiento
-                // Asigna el id_supplier según tus necesidades, por ejemplo:
-                // $document->id_supplier = Auth::user()->id; // Asigna el ID del proveedor actualmente autenticado
+                $document->uri = Storage::url($path);
+
+                // Asigna el id_supplier utilizando la relación uno a uno
+                if ($supplier) {
+                    $document->id_supplier = $supplier->id;
+                }
 
                 // Guarda el documento en la base de datos
                 $document->save();
