@@ -27,6 +27,6 @@ class Document extends Model
 
     public function supplierRequests()
     {
-        return $this->belongsToMany(SupplierRequest::class, 'supplier_requests_documents', 'id_documents', 'id_supplier_request');
+        return $this->belongsToMany(SupplierRequest::class, 'supplier_requests_documents', 'id_document', 'id_supplier_request');
     }
 }

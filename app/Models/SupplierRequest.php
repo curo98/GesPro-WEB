@@ -53,7 +53,7 @@ class SupplierRequest extends Model
 
     public function documents()
     {
-        return $this->belongsToMany(Document::class, 'supplier_requests_documents', 'id_supplier_request', 'id_documents');
+        return $this->belongsToMany(Document::class, 'supplier_requests_documents', 'id_supplier_request', 'id_document');
     }
 
     public function questions()
