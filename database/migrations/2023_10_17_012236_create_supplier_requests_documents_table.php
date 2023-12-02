@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreign('id_supplier_request')->references('id')->on('supplier_requests');
 
             $table->unsignedBigInteger('id_document');
-            $table->foreign('id_documents')->references('id')->on('documents');
+            $table->foreign('id_document')->references('id')->on('documents');
 
             $table->timestamps();
         });
