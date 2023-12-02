@@ -393,11 +393,14 @@ class SupplierRequestController extends Controller
                 $document->save();
 
                 // Registra el documento en la tabla intermedia
+                // Registra el documento en la tabla intermedia usando DB
                 if ($lastRequest) {
-                    $supplierRequestDocument = new SupplierRequestDocument;
-                    $supplierRequestDocument->id_supplier_request = $lastRequest->id;
-                    $supplierRequestDocument->id_document = $document->id;
-                    $supplierRequestDocument->save();
+                    DB::table('supplier_requests_documents')->insert([
+                        'id_supplier_request' => $lastRequest->id,
+                        'id_document' => $document->id,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
                 }
             }
 
