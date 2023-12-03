@@ -11,6 +11,7 @@ class Supplier extends Model
 
     protected $fillable = [
         'nacionality',
+        'flag_country',
         'nic_ruc',
         'locality',
         'street_and_number',
