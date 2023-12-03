@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use \App\Models\Supplier;
+use \App\Models\Country;
 use \App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
@@ -44,10 +45,15 @@ class SupplierController extends Controller
             // Agrega otros campos de usuario si es necesario
         ]);
 
+        $nacionality = $request->input('nacionality');
+        // Busca el registro en la tabla countries
+        $country = Country::where('name', $nacionality)->first();
+
         // Crea un nuevo proveedor y asócialo con el usuario
         $proveedor = Supplier::create([
             'nic_ruc' => $request->input('nic_ruc'),
-            'nacionality' => $request->input('nacionality'),
+            'nacionality' => $country->name,
+            'flag_country' => $country->flag,
             'id_user' => $user->id,// Asocia el proveedor con el usuario recién creado
             'state' => 'inactivo'
         ]);
@@ -100,20 +106,27 @@ class SupplierController extends Controller
     {
         // Obtén los datos del request
         $name = $request->input('name');
+        $email = $request->input('email');
         $nic_ruc = $request->input('nic_ruc');
+
+        $nacionality = $request->input('nacionality');
+        // Busca el registro en la tabla countries
+        $country = Country::where('name', $nacionality)->first();
 
         // Ejecuta una consulta SQL para actualizar los campos en la base de datos
         DB::table('suppliers')
             ->where('id', $id)
             ->update([
-                'nic_ruc' => $nic_ruc
+                'nic_ruc' => $nic_ruc,
+                'nacionality' => $country->name,
+                'flag_country' => $country->flag,
             ]);
 
         // A continuación, actualiza el nombre del usuario asociado al proveedor
         DB::table('users')
             ->join('suppliers', 'users.id', '=', 'suppliers.id_user')
             ->where('suppliers.id', $id)
-            ->update(['users.name' => $name]);
+            ->update(['users.name' => $name, 'users.email' => $email]);
 
         return response()->json(['message' => 'Proveedor actualizado']);
     }
