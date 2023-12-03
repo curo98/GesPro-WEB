@@ -386,8 +386,20 @@ class SupplierRequestController extends Controller
                 // Genera una URI amigable para el nombre del archivo
                 $cleanedFileName = Str::slug(pathinfo($originalFileName, PATHINFO_FILENAME));
 
+                // Verifica si el archivo ya existe en storage
+                $extension = $file->getClientOriginalExtension();
+                $path = 'public/' . $cleanedFileName . '.' . $extension;
+
+                $counter = 1;
+                while (Storage::exists($path)) {
+                    // Si el archivo ya existe, cambia el nombre agregando un contador
+                    $cleanedFileName = $cleanedFileName . '_' . $counter;
+                    $path = 'public/' . $cleanedFileName . '.' . $extension;
+                    $counter++;
+                }
+
                 // Almacena el archivo en storage/app/public
-                $path = $file->storeAs('public', $cleanedFileName . '.' . $file->getClientOriginalExtension());
+                $path = $file->storeAs('public', $cleanedFileName . '.' . $extension);
 
                 // Crea una nueva instancia del modelo Document
                 $document = new Document;
