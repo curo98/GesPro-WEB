@@ -386,8 +386,11 @@ class SupplierRequestController extends Controller
                 // Genera una URI amigable para el nombre del archivo
                 $cleanedFileName = Str::slug(pathinfo($originalFileName, PATHINFO_FILENAME));
 
-                // Almacena el archivo en storage/app/public
-                $path = $file->storeAs('public', $cleanedFileName . '.' . $file->getClientOriginalExtension());
+                // Genera un UUID único
+                $uuid = Str::uuid()->toString();
+
+                // Concatena el UUID al nombre del archivo
+                $finalFileName = $cleanedFileName . '_' . $uuid . '.' . $file->getClientOriginalExtension();
 
                 // Crea una nueva instancia del modelo Document
                 $document = new Document;
