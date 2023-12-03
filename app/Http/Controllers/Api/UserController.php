@@ -59,7 +59,7 @@ class UserController extends Controller
         $storagePath = "public/profiles/{$cleanedUserName}/{$cleanedFileName}.{$file->getClientOriginalExtension()}";
 
         // Almacenar la foto en el directorio correcto
-        $file->storeAs("profiles/{$cleanedUserName}", "{$cleanedFileName}.{$file->getClientOriginalExtension()}", 'public');
+        $file->storeAs("public/profiles/{$cleanedUserName}", "{$cleanedFileName}.{$file->getClientOriginalExtension()}");
 
         // Actualizar el campo 'photo' en la tabla de usuarios
         $user->photo = $storagePath;
