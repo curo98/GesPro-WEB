@@ -277,6 +277,7 @@ class SupplierRequestController extends Controller
         $user = Auth::guard('api')->user();
         $selectedPolicies = $request->input('selectedPolicies');
         $user->id_role = Role::where('name', 'proveedor')->first()->id;
+        $user->photo = '/avatar/incognito.png';
         $user->save();
 
         $typePaymentName = $request->input('typePayment');

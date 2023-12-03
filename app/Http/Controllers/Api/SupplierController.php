@@ -40,6 +40,7 @@ class SupplierController extends Controller
         $user = User::create([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
+            'photo' => '/avatar/incognito.png',
             'password' => Hash::make('1234556'),
             'id_role' => 2
             // Agrega otros campos de usuario si es necesario

@@ -25,6 +25,7 @@ class UserController extends Controller
         $user = User::create([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
+            'photo' =>'/avatar/incognito.png',
             'password' => bcrypt('1234556'), // Utilizar bcrypt para hashear la contraseña
             'id_role' => $request->input('id_role')
             // Agrega otros campos de usuario si es necesario
