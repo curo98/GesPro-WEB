@@ -60,7 +60,7 @@ class UserController extends Controller
         $path = $request->file->storeAs(dirname($storagePath), basename($storagePath));
 
         // Actualiza el campo 'photo' del usuario con la nueva ruta
-        $user->update(['photo' => $path]);
+        $user->update(['photo' => Storage::url($path)]);
 
         // Puedes devolver una respuesta adecuada
         return response()->json(['message' => 'Foto de perfil actualizada']);
