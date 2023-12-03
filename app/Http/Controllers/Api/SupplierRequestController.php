@@ -447,7 +447,7 @@ class SupplierRequestController extends Controller
     public function show($id)
     {
         $supplierRequest = SupplierRequest::with(
-            'user',
+            'user.supplier',
             'typePayment',
             'methodPayment',
             'documents',
