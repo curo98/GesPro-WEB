@@ -573,6 +573,12 @@ class SupplierRequestController extends Controller
                     $file = $files[$index];
                     $originalFileName = $file->getClientOriginalName();
 
+                    // Limpia el nombre del usuario de espacios en blancos y símbolos
+                    $cleanedUserName = Str::slug($user->name);
+
+                    // Genera una URI amigable para el nombre del archivo
+                    $cleanedFileName = Str::slug(pathinfo($originalFileName, PATHINFO_FILENAME));
+
                     // Actualiza el archivo en storage/app/public
                     $path = $file->storeAs("public/documents/{$cleanedUserName}", "{$cleanedFileName}.{$file->getClientOriginalExtension()}");
 
