@@ -381,6 +381,7 @@ class SupplierRequestController extends Controller
             $lastRequest = $user->supplierRequests()->latest()->first();
 
             foreach ($files as $file) {
+                $title = $request->input('titles')[0];
                 $originalFileName = $file->getClientOriginalName();
 
                 // Limpia el nombre del usuario de espacios en blancos y símbolos
@@ -406,7 +407,7 @@ class SupplierRequestController extends Controller
 
                 // Crea una nueva instancia del modelo Document
                 $document = new Document;
-                $document->title = $file->title;
+                $document->title = $title;
                 $document->name = $originalFileName;
                 $document->uri = Storage::url($path);
                 $document->id_supplier = $supplier->id;
