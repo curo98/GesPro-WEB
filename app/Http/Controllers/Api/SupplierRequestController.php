@@ -565,6 +565,7 @@ class SupplierRequestController extends Controller
 
             // Obtén la última solicitud del usuario
             $sr = SupplierRequest::find($id);
+            $user = $sr->user;
             $supplier = $sr->user->supplier;
 
             foreach ($titles as $index => $title) {
