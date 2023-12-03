@@ -12,6 +12,7 @@ use App\Models\MethodPayment;
 use App\Models\Role;
 use App\Models\Supplier;
 use App\Models\Document;
+use App\Models\Country;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -288,13 +289,18 @@ class SupplierRequestController extends Controller
             return response()->json(['message' => 'Tipo de pago o método de pago no válido'], 400);
         }
 
+        $nacionality = $request->input('nacionality');
+
+        // Busca el registro en la tabla countries
+        $country = Country::where('name', $nacionality)->first();
         // Verificar si el usuario ya tiene un proveedor asociado
         $existingSupplier = Supplier::where('id_user', $user->id)->first();
 
         if ($existingSupplier) {
             // Si el proveedor existe, actualizar los campos
             $existingSupplier->update([
-                'nacionality' => $request->input('nacionality'),
+                'nacionality' => $country->name,
+                'flag_country' => $country->flag,
                 'nic_ruc' => $request->input('nic_ruc'),
                 'locality' => $request->input('locality'),
                 'street_and_number' => $request->input('street_and_number'),
@@ -302,7 +308,8 @@ class SupplierRequestController extends Controller
         } else {
             // Si el proveedor no existe, crear uno nuevo
             $supplier = new Supplier([
-                'nacionality' => $request->input('nacionality'),
+                'nacionality' => $country->name,
+                'flag_country' => $country->flag,
                 'nic_ruc' => $request->input('nic_ruc'),
                 'locality' => $request->input('locality'),
                 'street_and_number' => $request->input('street_and_number'),
@@ -530,8 +537,14 @@ class SupplierRequestController extends Controller
         $supplierRequest->methodPayment()->associate($methodPayment);
 
         $supplier = Supplier::where('id_user', $user->id)->first();
+
+        $nacionality = $data['nacionality'];
+        // Busca el registro en la tabla countries
+        $country = Country::where('name', $nacionality)->first();
+
         $supplier->update([
-            'nacionality' => $data['nacionality'],
+            'nacionality' => $country->name,
+            'flag_country' => $country->flag,
             'nic_ruc' => $data['nic_ruc'],
             'locality' => $data['locality'],
             'street_and_number' => $data['street_and_number'],

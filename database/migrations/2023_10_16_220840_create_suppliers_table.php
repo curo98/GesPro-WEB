@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('suppliers', function (Blueprint $table) {
             $table->id();
             $table->string('nacionality');
+            $table->string('flag_country')->nullable();
             $table->string('nic_ruc');
             $table->string('locality')->nullable();
             $table->string('street_and_number')->nullable();
