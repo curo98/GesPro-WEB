@@ -56,6 +56,7 @@ Route::middleware('auth:api')->group(function () {
     //edit profile
     Route::get('/user', [App\Http\Controllers\Api\UserController::class, 'edit']);
     Route::post('/user', [App\Http\Controllers\Api\UserController::class, 'update']);
+    Route::post('/uploadPhotoProfile', [App\Http\Controllers\Api\UserController::class, 'updatePhoto']);
     // end edit profile
 
     Route::post('/logout', [AuthController::class, 'logout']);

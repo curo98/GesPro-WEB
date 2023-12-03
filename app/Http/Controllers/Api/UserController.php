@@ -41,6 +41,11 @@ class UserController extends Controller
     }
     // end Profile
 
+    public function updatePhoto(Request $request)
+    {
+        return "llegue hasta aqui";
+    }
+
     public function show($id)
     {
         $user = User::find($id);
