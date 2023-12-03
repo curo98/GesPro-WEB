@@ -376,12 +376,13 @@ class SupplierRequestController extends Controller
 
         if ($request->hasFile('files')) {
             $files = $request->file('files');
+            $titles = $request->input('titles');
 
             // Obtén la última solicitud del usuario
             $lastRequest = $user->supplierRequests()->latest()->first();
 
-            foreach ($files as $file) {
-                $title = $request->input('titles')[0];
+            foreach ($files as $index => $file) {
+                $title = $titles[$index];
                 $originalFileName = $file->getClientOriginalName();
 
                 // Limpia el nombre del usuario de espacios en blancos y símbolos
