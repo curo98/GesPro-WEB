@@ -383,23 +383,26 @@ class SupplierRequestController extends Controller
             foreach ($files as $file) {
                 $originalFileName = $file->getClientOriginalName();
 
+                // Limpia el nombre del usuario de espacios en blancos y símbolos
+                $cleanedUserName = Str::slug($user->name);
+
                 // Genera una URI amigable para el nombre del archivo
                 $cleanedFileName = Str::slug(pathinfo($originalFileName, PATHINFO_FILENAME));
 
-                // Verifica si el archivo ya existe en storage
-                $extension = $file->getClientOriginalExtension();
-                $path = 'public/' . $cleanedFileName . '.' . $extension;
+                // Construye la ruta de almacenamiento
+                $storagePath = "public/documents/{$cleanedUserName}/{$cleanedFileName}.{$file->getClientOriginalExtension()}";
 
+                // Verifica si el archivo ya existe en storage
                 $counter = 1;
-                while (Storage::exists($path)) {
+                while (Storage::exists($storagePath)) {
                     // Si el archivo ya existe, cambia el nombre agregando un contador
                     $cleanedFileName = $cleanedFileName . '_' . $counter;
-                    $path = 'public/' . $cleanedFileName . '.' . $extension;
+                    $storagePath = "public/documents/{$cleanedUserName}/{$cleanedFileName}.{$file->getClientOriginalExtension()}";
                     $counter++;
                 }
 
                 // Almacena el archivo en storage/app/public
-                $path = $file->storeAs('public', $cleanedFileName . '.' . $extension);
+                $path = $file->storeAs("public/documents/{$cleanedUserName}", "{$cleanedFileName}.{$file->getClientOriginalExtension()}");
 
                 // Crea una nueva instancia del modelo Document
                 $document = new Document;
@@ -426,6 +429,7 @@ class SupplierRequestController extends Controller
             return response()->json(['error' => 'No se ha proporcionado ningún archivo'], 400);
         }
     }
+
 
     /**
      * Display the specified resource.
