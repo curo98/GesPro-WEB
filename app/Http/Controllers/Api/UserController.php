@@ -47,25 +47,23 @@ class UserController extends Controller
     {
         $user = Auth::guard('api')->user();
 
-        $file = $request->file('file');
-
         // Limpia el nombre del usuario de espacios en blancos y símbolos
         $cleanedUserName = Str::slug($user->name);
 
         // Genera una URI amigable para el nombre del archivo
-        $cleanedFileName = Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
+        $cleanedFileName = Str::slug(pathinfo($request->file->getClientOriginalName(), PATHINFO_FILENAME));
 
         // Construye la ruta de almacenamiento
-        $storagePath = "public/profiles/{$cleanedUserName}/{$cleanedFileName}.{$file->getClientOriginalExtension()}";
+        $storagePath = "public/profiles/{$cleanedUserName}/{$cleanedFileName}.{$request->file->getClientOriginalExtension()}";
 
-        // Almacenar la foto en el directorio correcto
-        $file->storeAs("public/profiles/{$cleanedUserName}", "{$cleanedFileName}.{$file->getClientOriginalExtension()}");
+        // Almacena la foto en el sistema de archivos
+        $path = $request->file->storeAs(dirname($storagePath), basename($storagePath));
 
-        // Actualizar el campo 'photo' en la tabla de usuarios
-        $user->photo = $storagePath;
-        $user->save();
+        // Actualiza el campo 'photo' del usuario con la nueva ruta
+        $user->update(['photo' => $path]);
 
-        return response()->json(['message' => 'Foto de perfil actualizada'], 200);
+        // Puedes devolver una respuesta adecuada
+        return response()->json(['message' => 'Foto de perfil actualizada']);
     }
 
     public function show($id)
