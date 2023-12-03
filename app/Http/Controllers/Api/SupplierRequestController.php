@@ -560,65 +560,53 @@ class SupplierRequestController extends Controller
     public function uploadFilesUpdated(Request $request, $id)
     {
         if ($request->hasFile('files')) {
-            try {
-                $files = $request->file('files');
-                $titles = $request->input('titles');
+            $files = $request->file('files');
+            $titles = $request->input('titles');
 
-                // Obtén la última solicitud del usuario
-                $sr = SupplierRequest::find($id);
-                $supplier = $sr->user->supplier;
+            // Obtén la última solicitud del usuario
+            $sr = SupplierRequest::find($id);
+            $supplier = $sr->user->supplier;
 
-                // Inicia una transacción de base de datos
-                DB::beginTransaction();
+            foreach ($titles as $index => $title) {
+                // Verifica si el índice existe en el array $files
+                if (array_key_exists($index, $files)) {
+                    $file = $files[$index];
+                    $originalFileName = $file->getClientOriginalName();
 
-                foreach ($titles as $index => $title) {
-                    // Verifica si el índice existe en el array $files
-                    if (array_key_exists($index, $files)) {
-                        $file = $files[$index];
-                        $originalFileName = $file->getClientOriginalName();
+                    // Actualiza el archivo en storage/app/public
+                    $path = $file->storeAs("public/documents/{$cleanedUserName}", "{$cleanedFileName}.{$file->getClientOriginalExtension()}");
 
-                        // Actualiza el archivo en storage/app/public
-                        $path = $file->storeAs("public/documents/{$cleanedUserName}", "{$cleanedFileName}.{$file->getClientOriginalExtension()}");
+                    // Busca el documento existente por título e ID de proveedor
+                    $existingDocument = Document::where('id_supplier', $supplier->id)
+                        ->where('title', $title)
+                        ->first();
 
-                        // Busca el documento existente por título e ID de proveedor
-                        $existingDocument = Document::where('id_supplier', $supplier->id)
-                            ->where('title', $title)
-                            ->first();
+                    // Si el documento existe, actualiza la información del documento
+                    if ($existingDocument) {
+                        $existingDocument->name = $originalFileName;
+                        $existingDocument->uri = Storage::url($path);
+                        $existingDocument->save();
 
-                        // Si el documento existe, actualiza la información del documento
-                        if ($existingDocument) {
-                            $existingDocument->name = $originalFileName;
-                            $existingDocument->uri = Storage::url($path);
-                            $existingDocument->save();
-
-                            // Registra el documento en la tabla intermedia usando DB
-                            if ($sr) {
-                                DB::table('supplier_requests_documents')->updateOrInsert(
-                                    [
-                                        'id_supplier_request' => $sr->id,
-                                        'id_document' => $existingDocument->id,
-                                    ],
-                                    ['created_at' => now(), 'updated_at' => now()]
-                                );
-                            }
+                        // Registra el documento en la tabla intermedia usando DB
+                        if ($sr) {
+                            DB::table('supplier_requests_documents')->updateOrInsert(
+                                [
+                                    'id_supplier_request' => $sr->id,
+                                    'id_document' => $existingDocument->id,
+                                ],
+                                ['created_at' => now(), 'updated_at' => now()]
+                            );
                         }
                     }
                 }
-
-                // Confirma la transacción si todas las operaciones se realizan correctamente
-                DB::commit();
-
-                return response()->json(['message' => 'Archivos almacenados y actualizados exitosamente']);
-            } catch (\Exception $e) {
-                // Deshace la transacción en caso de error
-                DB::rollBack();
-
-                return response()->json(['error' => 'Error al almacenar o actualizar archivos'], 500);
             }
-        } else {
-            return response()->json(['error' => 'No se ha proporcionado ningún archivo'], 400);
+
+            return response()->json(['message' => 'Archivos almacenados y actualizados exitosamente']);
         }
+
+        return response()->json(['error' => 'No se ha proporcionado ningún archivo'], 400);
     }
+
 
 
 
