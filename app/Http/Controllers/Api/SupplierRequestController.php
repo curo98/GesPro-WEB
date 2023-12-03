@@ -580,9 +580,6 @@ class SupplierRequestController extends Controller
                     // Genera una URI amigable para el nombre del archivo
                     $cleanedFileName = Str::slug(pathinfo($originalFileName, PATHINFO_FILENAME));
 
-                    // Actualiza el archivo en storage/app/public
-                    $path = $file->storeAs("public/documents/{$cleanedUserName}", "{$cleanedFileName}.{$file->getClientOriginalExtension()}");
-
                     // Busca el documento existente por título e ID de proveedor
                     $existingDocument = Document::where('id_supplier', $supplier->id)
                         ->where('title', $title)
@@ -590,19 +587,23 @@ class SupplierRequestController extends Controller
 
                     // Si el documento existe, actualiza la información del documento
                     if ($existingDocument) {
+                        // Actualiza el archivo en storage/app/public
+                        $path = $file->storeAs("public/documents/{$cleanedUserName}", "{$cleanedFileName}.{$file->getClientOriginalExtension()}");
+
                         $existingDocument->name = $originalFileName;
                         $existingDocument->uri = Storage::url($path);
                         $existingDocument->save();
 
                         // Registra el documento en la tabla intermedia usando DB
                         if ($sr) {
-                            DB::table('supplier_requests_documents')->updateOrInsert(
-                                [
-                                    'id_supplier_request' => $sr->id,
-                                    'id_document' => $existingDocument->id,
-                                ],
-                                ['created_at' => now(), 'updated_at' => now()]
-                            );
+                            DB::table('supplier_requests_documents')
+                                ->updateOrInsert(
+                                    [
+                                        'id_supplier_request' => $sr->id,
+                                        'id_document' => $existingDocument->id,
+                                    ],
+                                    ['created_at' => now(), 'updated_at' => now()]
+                                );
                         }
                     }
                 }
@@ -613,6 +614,7 @@ class SupplierRequestController extends Controller
 
         return response()->json(['error' => 'No se ha proporcionado ningún archivo'], 400);
     }
+
 
 
 
