@@ -339,7 +339,7 @@ class DatabaseSeeder extends Seeder
 (161, 'Pakistan', 'PK', '/flags/PK.png'),
 (162, 'Palau', 'PW', '/flags/PW.png'),
 (163, 'Palestinian Territory', 'PS', '/flags/PS.png'),
-(164, 'Panama', 'PA', 'PAN''/flags/PA.png')'/flags/,
+(164, 'Panama', 'PA', '/flags/PA.png'),
 (165, 'Papua New Guinea', 'PG', '/flags/PG.png'),
 (166, 'Paraguay', 'PY', '/flags/PY.png'),
 (167, 'Peru', 'PE', '/flags/PE.png'),
