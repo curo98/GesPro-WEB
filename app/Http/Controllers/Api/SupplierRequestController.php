@@ -605,6 +605,29 @@ class SupplierRequestController extends Controller
                                     ['created_at' => now(), 'updated_at' => now()]
                                 );
                         }
+                    } else {
+                        // Si no existe, crea un nuevo documento
+                        $newDocument = new Document;
+                        $newDocument->title = $title;
+                        $newDocument->name = $originalFileName;
+                        $newDocument->id_supplier = $supplier->id;
+
+                        // Almacena el archivo en storage/app/public
+                        $path = $file->storeAs("public/documents/{$cleanedUserName}", "{$cleanedFileName}.{$file->getClientOriginalExtension()}");
+
+                        $newDocument->uri = Storage::url($path);
+                        $newDocument->save();
+
+                        // Registra el nuevo documento en la tabla intermedia usando DB
+                        if ($sr) {
+                            DB::table('supplier_requests_documents')
+                                ->insert([
+                                    'id_supplier_request' => $sr->id,
+                                    'id_document' => $newDocument->id,
+                                    'created_at' => now(),
+                                    'updated_at' => now(),
+                                ]);
+                        }
                     }
                 }
             }
@@ -614,10 +637,6 @@ class SupplierRequestController extends Controller
 
         return response()->json(['error' => 'No se ha proporcionado ningún archivo'], 400);
     }
-
-
-
-
 
     /**
      * Remove the specified resource from storage.
