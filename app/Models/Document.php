@@ -10,6 +10,7 @@ class Document extends Model
     use HasFactory;
 
     protected $fillable = [
+        'tittle',
         'name',
         'uri',
         'id_supplier',

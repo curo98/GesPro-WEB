@@ -406,6 +406,7 @@ class SupplierRequestController extends Controller
 
                 // Crea una nueva instancia del modelo Document
                 $document = new Document;
+                $document->tittle = $file->tittle;
                 $document->name = $originalFileName;
                 $document->uri = Storage::url($path);
                 $document->id_supplier = $supplier->id;
