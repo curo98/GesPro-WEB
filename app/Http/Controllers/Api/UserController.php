@@ -43,7 +43,27 @@ class UserController extends Controller
 
     public function updatePhoto(Request $request)
     {
-        return "llegue hasta aqui";
+        $user = Auth::guard('api')->user();
+
+        $file = $request->file('file');
+
+        // Limpia el nombre del usuario de espacios en blancos y símbolos
+        $cleanedUserName = Str::slug($user->name);
+
+        // Genera una URI amigable para el nombre del archivo
+        $cleanedFileName = Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
+
+        // Construye la ruta de almacenamiento
+        $storagePath = "public/profiles/{$cleanedUserName}/{$cleanedFileName}.{$file->getClientOriginalExtension()}";
+
+        // Almacenar la foto en el directorio correcto
+        $file->storeAs("profiles/{$cleanedUserName}", "{$cleanedFileName}.{$file->getClientOriginalExtension()}", 'public');
+
+        // Actualizar el campo 'photo' en la tabla de usuarios
+        $user->photo = $storagePath;
+        $user->save();
+
+        return response()->json(['message' => 'Foto de perfil actualizada'], 200);
     }
 
     public function show($id)
