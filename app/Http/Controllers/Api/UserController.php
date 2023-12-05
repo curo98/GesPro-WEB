@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use \App\Models\User;
 use \App\Models\Role;
-use \App\Models\Supplier;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -38,15 +37,10 @@ class UserController extends Controller
     }
 
     //Profile
-    public function edit() {
-    $user = Auth::guard('api')->user();
+    public function edit(){
 
-    // Verifica si el usuario tiene un proveedor asociado
-    $supplier = Supplier::where('id_user', $user->id)->first();
-
-    // Devuelve el usuario con el proveedor si existe
-    return response()->json(['user' => $user, 'supplier' => $supplier]);
-}
+        return Auth::guard('api')->user();
+    }
     // end Profile
 
     public function updatePhoto(Request $request)
