@@ -37,10 +37,15 @@ class UserController extends Controller
     }
 
     //Profile
-    public function edit(){
+    public function edit() {
+    $user = Auth::guard('api')->user();
 
-        return Auth::guard('api')->user();
-    }
+    // Verifica si el usuario tiene un proveedor asociado
+    $supplier = Supplier::where('user_id', $user->id)->first();
+
+    // Devuelve el usuario con el proveedor si existe
+    return response()->json(['user' => $user, 'supplier' => $supplier]);
+}
     // end Profile
 
     public function updatePhoto(Request $request)
