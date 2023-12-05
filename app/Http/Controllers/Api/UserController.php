@@ -38,8 +38,20 @@ class UserController extends Controller
 
     //Profile
     public function edit(){
+        // Retrieve the currently authenticated user
+        $user = Auth::guard('api')->user();
 
-        return Auth::guard('api')->user();
+        // Check if the user has a supplier relationship
+        if ($user->supplier) {
+            // Load the supplier relationship
+            $user->load('supplier');
+
+            // Return the user with the associated supplier
+            return response()->json(['user' => $user]);
+        }
+
+        // If the user doesn't have a supplier, return just the user
+        return response()->json(['user' => $user]);
     }
     // end Profile
 
