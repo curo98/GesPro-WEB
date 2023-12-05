@@ -42,7 +42,7 @@ class UserController extends Controller
     $user = Auth::guard('api')->user();
 
     // Verifica si el usuario tiene un proveedor asociado
-    $supplier = Supplier::where('user_id', $user->id)->first();
+    $supplier = Supplier::where('id_user', $user->id)->first();
 
     // Devuelve el usuario con el proveedor si existe
     return response()->json(['user' => $user, 'supplier' => $supplier]);
