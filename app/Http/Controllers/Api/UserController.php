@@ -37,15 +37,10 @@ class UserController extends Controller
     }
 
     //Profile
-    public function edit() {
-    $userAuth = Auth::guard('api')->user();
+    public function edit(){
 
-    // Obtén el usuario con la relación 'supplier' cargada
-    $getUser = User::with('supplier')->find($userAuth->id);
-
-    return response()->json(['user' => $getUser]);
-}
-
+        return Auth::guard('api')->user();
+    }
     // end Profile
 
     public function updatePhoto(Request $request)
