@@ -24,7 +24,8 @@ class SupplierRequestController extends Controller
 {
     public function verifyRequest()
     {
-        $user = Auth::guard('api')->user();
+        $user = auth('api')->user();
+        $hasRequests = SupplierRequest::where('id_user', $user->id)->exists();
 
         $supplierRequests = SupplierRequest::where('id_user', $user->id)
             ->latest('id')
