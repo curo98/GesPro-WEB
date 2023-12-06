@@ -11,8 +11,13 @@ class FirebaseController extends Controller
 {
     public function sendAll(Request $request)
     {
-        $recipients = User::whereNotNull('device_token')->pluck('device_token')->toArray();
+        // Obtén el usuario actual autenticado
+        $user = Auth::guard('api')->user();
 
+        // Obtén los tokens de dispositivo de todos los usuarios excepto el usuario actual
+        $recipients = User::whereNotNull('device_token')->where('id', '!=', $user->id)->pluck('device_token')->toArray();
+
+        // Envía la notificación a los destinatarios
         fcm()
             ->to($recipients)
             ->notification([
@@ -21,7 +26,8 @@ class FirebaseController extends Controller
             ])
             ->send();
 
-        $notification = 'Notificación enviada a todos los usuarios (Android).';
+        // Respuesta JSON indicando que la notificación fue enviada
+        $notification = 'Notificación enviada a todos los usuarios (Android), excepto a ti.';
         return response()->json(['notification' => $notification]);
     }
     /**
