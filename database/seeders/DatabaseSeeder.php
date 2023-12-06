@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Artisan;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -13,6 +15,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Eliminar contenido de las carpetas app y public en storage
+        File::deleteDirectory(storage_path('app'));
+        // Eliminar el enlace simbólico en la carpeta public
+        File::delete(public_path('storage'));
+
+        // Volver a generar el enlace simbólico
+        Artisan::call('storage:link');
         // \App\Models\User::factory(10)->create();
 
         // \App\Models\Role::factory(4)->create();
