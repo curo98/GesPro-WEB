@@ -80,6 +80,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/request/{id}/approve', [App\Http\Controllers\Api\StateRequestController::class, 'approveRequest']);
     Route::post('/request/{id}/disapprove', [App\Http\Controllers\Api\StateRequestController::class, 'disapproveRequest']);
     Route::post('/request/{id}/cancel', [App\Http\Controllers\Api\StateRequestController::class, 'cancelRequest']);
+    Route::post('/request/{id}/trash', [App\Http\Controllers\Api\StateRequestController::class, 'trashRequest']);
 
     Route::get('/documents-request', [App\Http\Controllers\Api\DocumentController::class, 'index']);
 

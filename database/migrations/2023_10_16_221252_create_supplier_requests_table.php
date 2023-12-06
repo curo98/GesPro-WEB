@@ -23,12 +23,9 @@ return new class extends Migration
             $table->unsignedBigInteger('id_method_payment');
             $table->foreign('id_method_payment')->references('id')->on('method_payments');
 
+            $table->softDeletes();
             $table->timestamps();
         });
-
-
-
-
     }
 
     /**

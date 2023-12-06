@@ -9,6 +9,8 @@ class SupplierRequest extends Model
 {
     use HasFactory;
 
+    use SoftDeletes;
+
     protected $fillable = [
         'id_user',
         'id_type_payment',

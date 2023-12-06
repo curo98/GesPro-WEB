@@ -273,4 +273,18 @@ class StateRequestController extends Controller
 
         return response()->json(['success' => false, 'error' => 'No se encontró la última transición']);
     }
+
+    public function trashRequest($id)
+    {
+        $sr = SupplierRequest::find($id);
+
+        if (!$sr) {
+            return response()->json(['message' => 'Solicitud de proveedor no encontrada'], 404);
+        }
+
+        $sr->delete();
+
+        return response()->json(['message' => 'Solicitud de proveedor borrada lógicamente']);
+    }
+
 }
