@@ -116,5 +116,6 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/user/{id}/edit', [App\Http\Controllers\Api\UserController::class, 'editUser']);
     Route::post('/user/{id}/update', [App\Http\Controllers\Api\UserController::class, 'updateUser']);
 
+    Route::get('/verify-request', [App\Http\Controllers\Api\SupplierRequestController::class, 'verifyRequest']);
 
 });

@@ -22,6 +22,42 @@ use Illuminate\Support\Str;
 
 class SupplierRequestController extends Controller
 {
+    public function verifyRequest()
+    {
+        $user = Auth::guard('api')->user();
+
+        $supplierRequests = SupplierRequest::where('id_user', $user->id)
+            ->latest('id')
+            ->first();
+
+        $latestTransition = DB::table('transitions_state_requests')
+            ->where('id_supplier_request', $supplierRequests->id)
+            ->orderBy('id', 'desc')
+            ->first();
+
+        if ($latestTransition) {
+            $toStateId = $latestTransition->to_state_id;
+
+            $estadoAprobada = DB::table('state_requests')->where('name', 'Aprobada')->first();
+            $stateApproved = $estadoAprobada->id;
+
+            $estadoDesaprobada = DB::table('state_requests')->where('name', 'Desaprobada')->first();
+            $stateRejected = $estadoDesaprobada->id;
+
+            $estadoCancelada = DB::table('state_requests')->where('name', 'Cancelada')->first();
+            $stateCanceled = $estadoCancelada->id;
+
+            if ($toStateId == $stateApproved) {
+                return response()->json(['message' => '¡Usted ya no puede generar más solicitudes!']);
+            } elseif (!in_array($toStateId, [$stateRejected, $stateCanceled, $stateApproved])) {
+                return response()->json(['message' => '¡Usted tiene una solicitud en proceso!']);
+            }
+        } else {
+            return response()->json(['message' => '¡Usted puede generar una nueva solicitud!']);
+        }
+    }
+
+
     function getStateId($stateName)
     {
         return DB::table('state_requests')->where('name', $stateName)->value('id');
