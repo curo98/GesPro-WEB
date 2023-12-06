@@ -53,7 +53,7 @@ class SupplierRequestController extends Controller
 
             if ($toStateId == $stateApproved) {
                 return response()->json(['canContinue' => false, 'message' => '¡Usted ya no puede generar más solicitudes!']);
-            } elseif (!in_array($toStateId, [$stateRejected, $stateCanceled, $stateApproved])) {
+            } elseif (!in_array($toStateId, [$stateRejected, $stateApproved])) {
                 return response()->json(['canContinue' => false, 'message' => '¡Usted tiene una solicitud en proceso!']);
             }
         } else {
