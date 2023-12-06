@@ -48,15 +48,14 @@ class SupplierRequestController extends Controller
             $stateCanceled = $estadoCancelada->id;
 
             if ($toStateId == $stateApproved) {
-                return response()->json(['message' => '¡Usted ya no puede generar más solicitudes!']);
+                return response()->json(['canContinue' => false, 'message' => '¡Usted ya no puede generar más solicitudes!']);
             } elseif (!in_array($toStateId, [$stateRejected, $stateCanceled, $stateApproved])) {
-                return response()->json(['message' => '¡Usted tiene una solicitud en proceso!']);
+                return response()->json(['canContinue' => false, 'message' => '¡Usted tiene una solicitud en proceso!']);
             }
         } else {
-            return response()->json(['message' => '¡Usted puede generar una nueva solicitud!']);
+            return response()->json(['canContinue' => true, 'message' => '¡Usted puede generar una nueva solicitud!']);
         }
     }
-
 
     function getStateId($stateName)
     {
