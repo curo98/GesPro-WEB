@@ -302,18 +302,6 @@ class SupplierRequestController extends Controller
         }
     }
 
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $user = Auth::guard('api')->user();
@@ -418,70 +406,62 @@ class SupplierRequestController extends Controller
     }
 
     public function uploadFiles(Request $request)
-    {
-        $user = Auth::guard('api')->user();
+{
+    $user = Auth::guard('api')->user();
 
-        // Obtén el proveedor asociado al usuario
-        $supplier = $user->supplier;
+    // Obtén el proveedor asociado al usuario
+    $supplier = $user->supplier;
 
-        if ($request->hasFile('files')) {
-            $files = $request->file('files');
-            $titles = $request->input('titles');
+    if ($request->hasFile('files')) {
+        $files = $request->file('files');
+        $titles = $request->input('titles');
 
-            // Obtén la última solicitud del usuario
-            $lastRequest = $user->supplierRequests()->latest()->first();
+        // Obtén la última solicitud del usuario
+        $lastRequest = $user->supplierRequests()->latest()->first();
 
-            foreach ($files as $index => $file) {
-                $title = $titles[$index];
-                $originalFileName = $file->getClientOriginalName();
+        foreach ($files as $index => $file) {
+            $title = $titles[$index];
+            $originalFileName = $file->getClientOriginalName();
 
-                // Limpia el nombre del usuario de espacios en blancos y símbolos
-                $cleanedUserName = Str::slug($user->name);
+            // Limpia el nombre del usuario de espacios en blancos y símbolos
+            $cleanedUserName = Str::slug($user->name);
 
-                // Genera una URI amigable para el nombre del archivo
-                $cleanedFileName = Str::slug(pathinfo($originalFileName, PATHINFO_FILENAME));
+            // Genera un código UUID único como nombre del archivo
+            $uuid = Str::uuid()->toString();
 
-                // Construye la ruta de almacenamiento
-                $storagePath = "public/documents/{$cleanedUserName}/{$cleanedFileName}.{$file->getClientOriginalExtension()}";
+            // Construye la ruta de almacenamiento con el UUID y la extensión original
+            $storagePath = "public/documents/{$cleanedUserName}/{$uuid}.{$file->getClientOriginalExtension()}";
 
-                // Verifica si el archivo ya existe en storage
-                $counter = 1;
-                while (Storage::exists($storagePath)) {
-                    // Si el archivo ya existe, cambia el nombre agregando un contador
-                    $cleanedFileName = $cleanedFileName . '_' . $counter;
-                    $storagePath = "public/documents/{$cleanedUserName}/{$cleanedFileName}.{$file->getClientOriginalExtension()}";
-                    $counter++;
-                }
+            // Almacena el archivo en storage/app/public
+            $path = $file->storeAs("public/documents/{$cleanedUserName}", "{$uuid}.{$file->getClientOriginalExtension()}");
 
-                // Almacena el archivo en storage/app/public
-                $path = $file->storeAs("public/documents/{$cleanedUserName}", "{$cleanedFileName}.{$file->getClientOriginalExtension()}");
+            // Crea una nueva instancia del modelo Document
+            $document = new Document;
+            $document->title = $title;
+            $document->name = $originalFileName;
+            $document->uri = Storage::url($path);
+            $document->id_supplier = $supplier->id;
 
-                // Crea una nueva instancia del modelo Document
-                $document = new Document;
-                $document->title = $title;
-                $document->name = $originalFileName;
-                $document->uri = Storage::url($path);
-                $document->id_supplier = $supplier->id;
+            // Guarda el documento en la base de datos
+            $document->save();
 
-                // Guarda el documento en la base de datos
-                $document->save();
-
-                // Registra el documento en la tabla intermedia usando DB
-                if ($lastRequest) {
-                    DB::table('supplier_requests_documents')->insert([
-                        'id_supplier_request' => $lastRequest->id,
-                        'id_document' => $document->id,
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ]);
-                }
+            // Registra el documento en la tabla intermedia usando DB
+            if ($lastRequest) {
+                DB::table('supplier_requests_documents')->insert([
+                    'id_supplier_request' => $lastRequest->id,
+                    'id_document' => $document->id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
             }
-
-            return response()->json(['message' => 'Archivos almacenados y registrados exitosamente']);
-        } else {
-            return response()->json(['error' => 'No se ha proporcionado ningún archivo'], 400);
         }
+
+        return response()->json(['message' => 'Archivos almacenados y registrados exitosamente']);
+    } else {
+        return response()->json(['error' => 'No se ha proporcionado ningún archivo'], 400);
     }
+}
+
 
 
     /**
