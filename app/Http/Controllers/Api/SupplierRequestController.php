@@ -23,33 +23,43 @@ use Illuminate\Support\Str;
 class SupplierRequestController extends Controller
 {
     public function verifyRequest()
-{
-    // Verificar si el usuario tiene al menos una solicitud registrada
-    $user = auth('api')->user();
-    $hasRequests = SupplierRequest::where('id_user', $user->id)->exists();
+    {
+        $user = auth('api')->user();
+        $hasRequests = SupplierRequest::where('id_user', $user->id)->exists();
+        // Si el usuario no tiene solicitudes registradas, continuar sin hacer ninguna verificación adicional
+            if (!$hasRequests) {
+                return response()->json(['canContinue' => true, 'message' => '¡Usted puede generar una nueva solicitud!']);
+            }
+        $supplierRequests = SupplierRequest::where('id_user', $user->id)
+            ->latest('id')
+            ->first();
 
-    // Si el usuario no tiene solicitudes registradas, continuar sin hacer ninguna verificación adicional
-    if (!$hasRequests) {
-        return response()->json(['canContinue' => true, 'message' => '¡Usted puede generar una nueva solicitud!']);
+        $latestTransition = DB::table('transitions_state_requests')
+            ->where('id_supplier_request', $supplierRequests->id)
+            ->orderBy('id', 'desc')
+            ->first();
+
+        if ($latestTransition) {
+            $toStateId = $latestTransition->to_state_id;
+
+            $estadoAprobada = DB::table('state_requests')->where('name', 'Aprobada')->first();
+            $stateApproved = $estadoAprobada->id;
+
+            $estadoDesaprobada = DB::table('state_requests')->where('name', 'Desaprobada')->first();
+            $stateRejected = $estadoDesaprobada->id;
+
+            $estadoCancelada = DB::table('state_requests')->where('name', 'Cancelada')->first();
+            $stateCanceled = $estadoCancelada->id;
+
+            if ($toStateId == $stateApproved) {
+                return response()->json(['canContinue' => false, 'message' => '¡Usted ya no puede generar más solicitudes!']);
+            } elseif (!in_array($toStateId, [$stateRejected, $stateCanceled, $stateApproved])) {
+                return response()->json(['canContinue' => false, 'message' => '¡Usted tiene una solicitud en proceso!']);
+            }
+        } else {
+            return response()->json(['canContinue' => true, 'message' => '¡Usted puede generar una nueva solicitud!']);
+        }
     }
-
-    // Continuar con la verificación de la solicitud para usuarios con al menos una solicitud registrada
-    $supplierRequests = SupplierRequest::where('id_user', $user->id)
-        ->latest('id')
-        ->first();
-
-    // Resto del código de verificación aquí...
-
-    // Devolver la respuesta JSON según el resultado de la verificación
-    if ($toStateId == $stateApproved) {
-        return response()->json(['canContinue' => false, 'message' => '¡Usted ya no puede generar más solicitudes!']);
-    } elseif (!in_array($toStateId, [$stateRejected, $stateCanceled, $stateApproved])) {
-        return response()->json(['canContinue' => false, 'message' => '¡Usted tiene una solicitud en proceso!']);
-    } else {
-        return response()->json(['canContinue' => true, 'message' => '¡Usted puede generar una nueva solicitud!']);
-    }
-}
-
 
     function getStateId($stateName)
     {
