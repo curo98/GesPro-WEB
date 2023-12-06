@@ -23,43 +23,50 @@ use Illuminate\Support\Str;
 class SupplierRequestController extends Controller
 {
     public function verifyRequest()
-    {
-        $user = auth('api')->user();
-        $hasRequests = SupplierRequest::where('id_user', $user->id)->exists();
-        // Si el usuario no tiene solicitudes registradas, continuar sin hacer ninguna verificación adicional
-            if (!$hasRequests) {
-                return response()->json(['canContinue' => true, 'message' => '¡Usted puede generar una nueva solicitud!']);
-            }
-        $supplierRequests = SupplierRequest::where('id_user', $user->id)
-            ->latest('id')
-            ->first();
+{
+    $user = auth('api')->user();
+    $hasRequests = SupplierRequest::where('id_user', $user->id)->exists();
 
-        $latestTransition = DB::table('transitions_state_requests')
-            ->where('id_supplier_request', $supplierRequests->id)
-            ->orderBy('id', 'desc')
-            ->first();
+    // Si el usuario no tiene solicitudes registradas, continuar sin hacer ninguna verificación adicional
+    if (!$hasRequests) {
+        return response()->json(['canContinue' => true, 'message' => '¡Usted puede generar una nueva solicitud!']);
+    }
 
-        if ($latestTransition) {
-            $toStateId = $latestTransition->to_state_id;
+    $supplierRequests = SupplierRequest::where('id_user', $user->id)
+        ->latest('id')
+        ->first();
 
-            $estadoAprobada = DB::table('state_requests')->where('name', 'Aprobada')->first();
-            $stateApproved = $estadoAprobada->id;
+    $latestTransition = DB::table('transitions_state_requests')
+        ->where('id_supplier_request', $supplierRequests->id)
+        ->orderBy('id', 'desc')
+        ->first();
 
-            $estadoDesaprobada = DB::table('state_requests')->where('name', 'Desaprobada')->first();
-            $stateRejected = $estadoDesaprobada->id;
+    if ($latestTransition) {
+        $toStateId = $latestTransition->to_state_id;
 
-            $estadoCancelada = DB::table('state_requests')->where('name', 'Cancelada')->first();
-            $stateCanceled = $estadoCancelada->id;
+        $estadoAprobada = DB::table('state_requests')->where('name', 'Aprobada')->first();
+        $stateApproved = $estadoAprobada->id;
 
-            if ($toStateId == $stateApproved) {
-                return response()->json(['canContinue' => false, 'message' => '¡Usted ya no puede generar más solicitudes!']);
-            } elseif (!in_array($toStateId, [$stateRejected, $stateApproved])) {
-                return response()->json(['canContinue' => false, 'message' => '¡Usted tiene una solicitud en proceso!']);
-            }
-        } else {
+        $estadoDesaprobada = DB::table('state_requests')->where('name', 'Desaprobada')->first();
+        $stateRejected = $estadoDesaprobada->id;
+
+        $estadoCancelada = DB::table('state_requests')->where('name', 'Cancelada')->first();
+        $stateCanceled = $estadoCancelada->id;
+
+        // Modificado: Permitir continuar incluso si el estado es "Cancelada"
+        if ($toStateId == $stateApproved) {
+            return response()->json(['canContinue' => false, 'message' => '¡Usted ya no puede generar más solicitudes!']);
+        } elseif ($toStateId == $stateCanceled) {
             return response()->json(['canContinue' => true, 'message' => '¡Usted puede generar una nueva solicitud!']);
+        } elseif (!in_array($toStateId, [$stateRejected, $stateApproved])) {
+            return response()->json(['canContinue' => false, 'message' => '¡Usted tiene una solicitud en proceso!']);
         }
     }
+
+    // Modificado: Permitir continuar incluso si no hay transición o si la transición es a un estado "Cancelada"
+    return response()->json(['canContinue' => true, 'message' => '¡Usted puede generar una nueva solicitud!']);
+}
+
 
     function getStateId($stateName)
     {
