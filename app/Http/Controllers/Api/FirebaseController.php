@@ -9,6 +9,21 @@ use Illuminate\Support\Facades\Auth;
 
 class FirebaseController extends Controller
 {
+    public function sendAll(Request $request)
+    {
+        $recipients = User::whereNotNull('device_token')->pluck('device_token')->toArray();
+
+        fcm()
+            ->to($recipients)
+            ->notification([
+                'title' => $request->input('title'),
+                'body' => $request->input('body')
+            ])
+            ->send();
+
+        $notification = 'Notificación enviada a todos los usuarios (Android).';
+        return response()->json(['notification' => $notification]);
+    }
     /**
      * Display a listing of the resource.
      */

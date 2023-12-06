@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Auth\AuthController;
-
+use App\Http\Controllers\Admin\FirebaseController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -53,6 +53,7 @@ Route::post('/fcm/deviceToken', [App\Http\Controllers\Api\FirebaseController::cl
 // Rutas protegidas con autenticación
 Route::middleware('auth:api')->group(function () {
 
+    Route::post('/fcm/send', [App\Http\Controllers\Api\FirebaseController::class, 'sendAll']);
     //edit profile
     Route::get('/user', [App\Http\Controllers\Api\UserController::class, 'edit']);
     Route::post('/user', [App\Http\Controllers\Api\UserController::class, 'update']);
