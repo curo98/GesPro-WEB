@@ -149,12 +149,12 @@ class ActivitiesTableSeeder extends Seeder
             ['bus_id' => 23, 'price' => 90.00, 'destination_id' => 7], // Abba Bus
 
             // Cusco
-            ['bus_id' => 24, 'price' => 100.00, 'destination_id' => 8], // Paredes Estrella VIP
-            ['bus_id' => 25, 'price' => 110.00, 'destination_id' => 8], // Turismo Molina
-            ['bus_id' => 26, 'price' => 90.00, 'destination_id' => 8], // Transportes Imperial Cusco
+            ['bus_id' => 11, 'price' => 100.00, 'destination_id' => 8], // Paredes Estrella VIP
+            ['bus_id' => 22, 'price' => 110.00, 'destination_id' => 8], // Turismo Molina
+            ['bus_id' => 23, 'price' => 90.00, 'destination_id' => 8], // Transportes Imperial Cusco
 
             // Puno
-            ['bus_id' => 27, 'price' => 140.00, 'destination_id' => 9], // Guardianes Del Cosmos
+            ['bus_id' => 19, 'price' => 140.00, 'destination_id' => 9], // Guardianes Del Cosmos
         ];
 
         foreach ($tarifas as $tarifa) {
