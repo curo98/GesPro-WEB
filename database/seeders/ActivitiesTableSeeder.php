@@ -75,94 +75,94 @@ class ActivitiesTableSeeder extends Seeder
         TouristSpot::insert($extremeSports);
 
         // Deportes Extremos
-        $buses = [
-            ['name' => 'Sullana Express'], // piura 90  - loreto 90 - tumbes 150
-            ['name' => 'ITTSABUS'],  // piura 85 - loreto 120
-            ['name' => 'Terramovil Peru'], // piura 90 - loreto 90
-            ['name' => 'Transportes Dora'], //piura 80 - loreto 80
-            ['name' => 'Turismo Tacna Internacional'],//piura 110
-            ['name' => 'Seysan'], // la libertad 70
-            ['name' => 'Transportes Julio Cesar'], // ancash 58.5
-            ['name' => 'Flor Movil'], // ancash 47.5
-            ['name' => 'Perubus'], // ica 50
-            ['name' => 'Jaksa'], // ica 32.4
-            ['name' => 'Paredes Estrella VIP'], // ica 80
-            ['name' => 'Danielito Tours'], // ica 60
-            ['name' => 'Expreso Santa Clara'], // ica 40
-            ['name' => 'Danielito Tours'], // ica 60
-            ['name' => 'Turismo Tacna Internacional'], // Tumbes 130 - Arequipa 120
-            ['name' => 'Turismo y Transportes Costa Mar'], // Tumbes 150
-            ['name' => 'Transportes Argo'], // Tumbes 150
-            ['name' => 'Andoriña Tours'], // Arequipa 80
-            ['name' => 'Guardianes Del Cosmos'], // Arequipa 100
-            ['name' => 'Wari Palomino'], // Arequipa 80
-            ['name' => 'Transportes Reyna'], // Arequipa 90
-            ['name' => 'Waybus'], // Arequipa 110
-            ['name' => 'Abba Bus'], // Arequipa 90
-            ['name' => 'Paredes Estrella VIP'], // Cusco 100
-            ['name' => 'Turismo Molina'], // Cusco 110
-            ['name' => 'Transportes Imperial Cusco'], // Cusco 90
-            ['name' => 'Guardianes Del Cosmos'], // Puno 140
-        ];
+        // $buses = [
+        //     ['name' => 'Sullana Express'], // piura 90  - loreto 90 - tumbes 150
+        //     ['name' => 'ITTSABUS'],  // piura 85 - loreto 120
+        //     ['name' => 'Terramovil Peru'], // piura 90 - loreto 90
+        //     ['name' => 'Transportes Dora'], //piura 80 - loreto 80
+        //     ['name' => 'Turismo Tacna Internacional'],//piura 110
+        //     ['name' => 'Seysan'], // la libertad 70
+        //     ['name' => 'Transportes Julio Cesar'], // ancash 58.5
+        //     ['name' => 'Flor Movil'], // ancash 47.5
+        //     ['name' => 'Perubus'], // ica 50
+        //     ['name' => 'Jaksa'], // ica 32.4
+        //     ['name' => 'Paredes Estrella VIP'], // ica 80
+        //     ['name' => 'Danielito Tours'], // ica 60
+        //     ['name' => 'Expreso Santa Clara'], // ica 40
+        //     ['name' => 'Danielito Tours'], // ica 60
+        //     ['name' => 'Turismo Tacna Internacional'], // Tumbes 130 - Arequipa 120
+        //     ['name' => 'Turismo y Transportes Costa Mar'], // Tumbes 150
+        //     ['name' => 'Transportes Argo'], // Tumbes 150
+        //     ['name' => 'Andoriña Tours'], // Arequipa 80
+        //     ['name' => 'Guardianes Del Cosmos'], // Arequipa 100
+        //     ['name' => 'Wari Palomino'], // Arequipa 80
+        //     ['name' => 'Transportes Reyna'], // Arequipa 90
+        //     ['name' => 'Waybus'], // Arequipa 110
+        //     ['name' => 'Abba Bus'], // Arequipa 90
+        //     ['name' => 'Paredes Estrella VIP'], // Cusco 100
+        //     ['name' => 'Turismo Molina'], // Cusco 110
+        //     ['name' => 'Transportes Imperial Cusco'], // Cusco 90
+        //     ['name' => 'Guardianes Del Cosmos'], // Puno 140
+        // ];
 
-        // Insertar deportes extremos en la base de datos
-        Bus::insert($buses);
+        // // Insertar deportes extremos en la base de datos
+        // Bus::insert($buses);
 
         // Asignar tarifas a destinos y buses
-        $tarifas = [
-            // Piura
-            ['bus_id' => 1, 'price' => 90.00, 'destination_id' => 1], // Sullana Express
-            ['bus_id' => 2, 'price' => 85.00, 'destination_id' => 1], // ITTSABUS
-            ['bus_id' => 3, 'price' => 90.00, 'destination_id' => 1], // Terramovil Peru
-            ['bus_id' => 4, 'price' => 80.00, 'destination_id' => 1], // Transportes Dora
-            ['bus_id' => 5, 'price' => 110.00, 'destination_id' => 1], // Turismo Tacna Internacional
+        // $tarifas = [
+        //     // Piura
+        //     ['bus_id' => 1, 'price' => 90.00, 'destination_id' => 1], // Sullana Express
+        //     ['bus_id' => 2, 'price' => 85.00, 'destination_id' => 1], // ITTSABUS
+        //     ['bus_id' => 3, 'price' => 90.00, 'destination_id' => 1], // Terramovil Peru
+        //     ['bus_id' => 4, 'price' => 80.00, 'destination_id' => 1], // Transportes Dora
+        //     ['bus_id' => 5, 'price' => 110.00, 'destination_id' => 1], // Turismo Tacna Internacional
 
-            // Loreto
-            ['bus_id' => 1, 'price' => 90.00, 'destination_id' => 2], // Sullana Express
-            ['bus_id' => 2, 'price' => 120.00, 'destination_id' => 2], // ITTSABUS
-            ['bus_id' => 3, 'price' => 90.00, 'destination_id' => 2], // Terramovil Peru
-            ['bus_id' => 4, 'price' => 80.00, 'destination_id' => 2], // Transportes Dora
+        //     // Loreto
+        //     ['bus_id' => 1, 'price' => 90.00, 'destination_id' => 2], // Sullana Express
+        //     ['bus_id' => 2, 'price' => 120.00, 'destination_id' => 2], // ITTSABUS
+        //     ['bus_id' => 3, 'price' => 90.00, 'destination_id' => 2], // Terramovil Peru
+        //     ['bus_id' => 4, 'price' => 80.00, 'destination_id' => 2], // Transportes Dora
 
-            // La Libertad
-            ['bus_id' => 6, 'price' => 70.00, 'destination_id' => 3], // Seysan
+        //     // La Libertad
+        //     ['bus_id' => 6, 'price' => 70.00, 'destination_id' => 3], // Seysan
 
-            // Áncash
-            ['bus_id' => 7, 'price' => 58.50, 'destination_id' => 4], // Transportes Julio Cesar
-            ['bus_id' => 8, 'price' => 47.50, 'destination_id' => 4], // Flor Movil
-            ['bus_id' => 15, 'price' => 100.00, 'destination_id' => 4], // Paredes Estrella VIP
+        //     // Áncash
+        //     ['bus_id' => 7, 'price' => 58.50, 'destination_id' => 4], // Transportes Julio Cesar
+        //     ['bus_id' => 8, 'price' => 47.50, 'destination_id' => 4], // Flor Movil
+        //     ['bus_id' => 15, 'price' => 100.00, 'destination_id' => 4], // Paredes Estrella VIP
 
-            // Ica
-            ['bus_id' => 9, 'price' => 50.00, 'destination_id' => 5], // Perubus
-            ['bus_id' => 10, 'price' => 32.40, 'destination_id' => 5], // Jaksa
-            ['bus_id' => 11, 'price' => 80.00, 'destination_id' => 5], // Paredes Estrella VIP
-            ['bus_id' => 12, 'price' => 60.00, 'destination_id' => 5], // Danielito Tours
-            ['bus_id' => 13, 'price' => 40.00, 'destination_id' => 5], // Expreso Santa Clara
-            ['bus_id' => 14, 'price' => 60.00, 'destination_id' => 5], // Danielito Tours
+        //     // Ica
+        //     ['bus_id' => 9, 'price' => 50.00, 'destination_id' => 5], // Perubus
+        //     ['bus_id' => 10, 'price' => 32.40, 'destination_id' => 5], // Jaksa
+        //     ['bus_id' => 11, 'price' => 80.00, 'destination_id' => 5], // Paredes Estrella VIP
+        //     ['bus_id' => 12, 'price' => 60.00, 'destination_id' => 5], // Danielito Tours
+        //     ['bus_id' => 13, 'price' => 40.00, 'destination_id' => 5], // Expreso Santa Clara
+        //     ['bus_id' => 14, 'price' => 60.00, 'destination_id' => 5], // Danielito Tours
 
-            // Tumbes
-            ['bus_id' => 15, 'price' => 130.00, 'destination_id' => 6], // Turismo Tacna Internacional
-            ['bus_id' => 16, 'price' => 150.00, 'destination_id' => 6], // Turismo y Transportes Costa Mar
-            ['bus_id' => 17, 'price' => 150.00, 'destination_id' => 6], // Transportes Argo
+        //     // Tumbes
+        //     ['bus_id' => 15, 'price' => 130.00, 'destination_id' => 6], // Turismo Tacna Internacional
+        //     ['bus_id' => 16, 'price' => 150.00, 'destination_id' => 6], // Turismo y Transportes Costa Mar
+        //     ['bus_id' => 17, 'price' => 150.00, 'destination_id' => 6], // Transportes Argo
 
-            // Arequipa
-            ['bus_id' => 18, 'price' => 80.00, 'destination_id' => 7], // Andoriña Tours
-            ['bus_id' => 19, 'price' => 100.00, 'destination_id' => 7], // Guardianes Del Cosmos
-            ['bus_id' => 20, 'price' => 80.00, 'destination_id' => 7], // Wari Palomino
-            ['bus_id' => 21, 'price' => 90.00, 'destination_id' => 7], // Transportes Reyna
-            ['bus_id' => 22, 'price' => 110.00, 'destination_id' => 7], // Waybus
-            ['bus_id' => 23, 'price' => 90.00, 'destination_id' => 7], // Abba Bus
+        //     // Arequipa
+        //     ['bus_id' => 18, 'price' => 80.00, 'destination_id' => 7], // Andoriña Tours
+        //     ['bus_id' => 19, 'price' => 100.00, 'destination_id' => 7], // Guardianes Del Cosmos
+        //     ['bus_id' => 20, 'price' => 80.00, 'destination_id' => 7], // Wari Palomino
+        //     ['bus_id' => 21, 'price' => 90.00, 'destination_id' => 7], // Transportes Reyna
+        //     ['bus_id' => 22, 'price' => 110.00, 'destination_id' => 7], // Waybus
+        //     ['bus_id' => 23, 'price' => 90.00, 'destination_id' => 7], // Abba Bus
 
-            // Cusco
-            ['bus_id' => 24, 'price' => 100.00, 'destination_id' => 8], // Paredes Estrella VIP
-            ['bus_id' => 25, 'price' => 110.00, 'destination_id' => 8], // Turismo Molina
-            ['bus_id' => 26, 'price' => 90.00, 'destination_id' => 8], // Transportes Imperial Cusco
+        //     // Cusco
+        //     ['bus_id' => 24, 'price' => 100.00, 'destination_id' => 8], // Paredes Estrella VIP
+        //     ['bus_id' => 25, 'price' => 110.00, 'destination_id' => 8], // Turismo Molina
+        //     ['bus_id' => 26, 'price' => 90.00, 'destination_id' => 8], // Transportes Imperial Cusco
 
-            // Puno
-            ['bus_id' => 27, 'price' => 140.00, 'destination_id' => 9], // Guardianes Del Cosmos
-        ];
+        //     // Puno
+        //     ['bus_id' => 27, 'price' => 140.00, 'destination_id' => 9], // Guardianes Del Cosmos
+        // ];
 
-        foreach ($tarifas as $tarifa) {
-            Fare::create($tarifa);
-        }
+        // foreach ($tarifas as $tarifa) {
+        //     Fare::create($tarifa);
+        // }
     }
 }
