@@ -21,7 +21,7 @@ class ActivityController extends Controller
 
     public function getTourist(){
 
-        $a = TouristSport::all();
+        $a = TouristSpot::all();
 
         return $a;
     }
