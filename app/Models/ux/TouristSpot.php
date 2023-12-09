@@ -9,11 +9,6 @@ class TouristSpot extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'name',
-        'description',
-        'uri',
-        'destination_id',
-        'activity_id',
-    ];
+    protected $table = 'tourist_spots';
+    protected $fillable = ['name', 'description', 'uri', 'destination', 'exact_location'];
 }

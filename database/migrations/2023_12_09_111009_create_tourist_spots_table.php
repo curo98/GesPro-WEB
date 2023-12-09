@@ -16,11 +16,8 @@ return new class extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->string('uri')->nullable();
-            $table->unsignedBigInteger('destination_id');
-            $table->foreign('destination_id')->references('id')->on('destinations');
-
-            $table->unsignedBigInteger('activity_id');
-            $table->foreign('activity_id')->references('id')->on('activities');
+            $table->string('destination')->nullable();
+            $table->string('exact_location')->nullable();
             $table->timestamps();
         });
     }
