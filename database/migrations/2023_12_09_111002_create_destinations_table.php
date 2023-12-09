@@ -11,14 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tourist_spots', function (Blueprint $table) {
+        Schema::create('destinations', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->text('description')->nullable();
-            $table->string('uri')->nullable();
-            $table->unsignedBigInteger('destination_id');
-            $table->foreign('destination_id')->references('id')->on('destinations');
-            $table->string('exact_location')->nullable();
             $table->timestamps();
         });
     }
@@ -28,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tourist_spots');
+        Schema::dropIfExists('destinations');
     }
 };

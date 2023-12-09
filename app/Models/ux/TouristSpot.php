@@ -7,8 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class TouristSpot extends Model
 {
-    use HasFactory;
+    protected $fillable = ['name', 'description', 'uri', 'exact_location', 'destination_id'];
 
-    protected $table = 'tourist_spots';
-    protected $fillable = ['name', 'description', 'uri', 'destination', 'exact_location'];
+    // Definir la relación inversa de Many-to-One con la tabla destinations
+    public function destination()
+    {
+        return $this->belongsTo(Destination::class);
+    }
 }
