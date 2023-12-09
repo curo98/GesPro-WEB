@@ -31,7 +31,7 @@ class ActivityController extends Controller
         $busCompanyIds = $fares->pluck('bus_id')->unique();
 
         // Obtener la información de las compañías de autobuses
-        $busCompanies = BusCompany::whereIn('id', $busCompanyIds)->get();
+        $busCompanies = Bus::whereIn('id', $busCompanyIds)->get();
 
         // Retornar la información de las compañías de autobuses
         return response()->json($busCompanies);
