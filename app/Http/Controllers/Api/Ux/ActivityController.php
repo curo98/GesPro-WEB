@@ -14,10 +14,11 @@ class ActivityController extends Controller
      */
     public function index(){
 
-        $a = Activity::all();
+        $a = Destination::all();
 
         return $a;
     }
+
 
     public function getTourist(){
 
