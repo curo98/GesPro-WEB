@@ -13,8 +13,7 @@ class ActivitiesTableSeeder extends Seeder
      */
     public function run(): void
     {
-        // Limpiar registros existentes antes de insertar nuevos datos
-        Activity::truncate();
+
 
         // Array con datos de actividades
         $activities = [
