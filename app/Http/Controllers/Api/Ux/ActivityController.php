@@ -13,7 +13,7 @@ class ActivityController extends Controller
      */
     public function index(){
 
-        $a = Acitivity::all();
+        $a = Activity::all();
 
         return $a;
     }
