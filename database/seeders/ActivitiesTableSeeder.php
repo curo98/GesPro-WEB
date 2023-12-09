@@ -26,6 +26,8 @@ class ActivitiesTableSeeder extends Seeder
             ['name' => 'Naturaleza', 'description' => 'Explora entornos naturales y parques nacionales.'],
             ['name' => 'Playa', 'description' => 'Relájate y disfruta del sol en hermosas playas.'],
         ];
+        // Insertar actividades en la base de datos
+        Activity::insert($activities);
 
         // Actividades
         $dest = [
@@ -40,8 +42,7 @@ class ActivitiesTableSeeder extends Seeder
             ['name' => 'Puno'],
         ];
 
-        // Insertar actividades en la base de datos
-        Activity::insert($activities);
+
         Destination::insert($dest);
 
         // Deportes Extremos
