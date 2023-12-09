@@ -76,33 +76,29 @@ class ActivitiesTableSeeder extends Seeder
 
         // Deportes Extremos
         $buses = [
-            ['name' => 'Sullana Express'], // piura 90  - loreto 90 - tumbes 150
-            ['name' => 'ITTSABUS'],  // piura 85 - loreto 120
-            ['name' => 'Terramovil Peru'], // piura 90 - loreto 90
-            ['name' => 'Transportes Dora'], //piura 80 - loreto 80
-            ['name' => 'Turismo Tacna Internacional'],//piura 110
-            ['name' => 'Seysan'], // la libertad 70
-            ['name' => 'Transportes Julio Cesar'], // ancash 58.5
-            ['name' => 'Flor Movil'], // ancash 47.5
-            ['name' => 'Perubus'], // ica 50
-            ['name' => 'Jaksa'], // ica 32.4
-            ['name' => 'Paredes Estrella VIP'], // ica 80
-            ['name' => 'Danielito Tours'], // ica 60
-            ['name' => 'Expreso Santa Clara'], // ica 40
-            ['name' => 'Danielito Tours'], // ica 60
-            ['name' => 'Turismo Tacna Internacional'], // Tumbes 130 - Arequipa 120
-            ['name' => 'Turismo y Transportes Costa Mar'], // Tumbes 150
-            ['name' => 'Transportes Argo'], // Tumbes 150
-            ['name' => 'Andoriña Tours'], // Arequipa 80
-            ['name' => 'Guardianes Del Cosmos'], // Arequipa 100
-            ['name' => 'Wari Palomino'], // Arequipa 80
-            ['name' => 'Transportes Reyna'], // Arequipa 90
-            ['name' => 'Waybus'], // Arequipa 110
-            ['name' => 'Abba Bus'], // Arequipa 90
-            ['name' => 'Paredes Estrella VIP'], // Cusco 100
-            ['name' => 'Turismo Molina'], // Cusco 110
-            ['name' => 'Transportes Imperial Cusco'], // Cusco 90
-            ['name' => 'Guardianes Del Cosmos'], // Puno 140
+            ['name' => 'Sullana Express', 'uri' => '/buses/sullana_express.png'], // piura 90  - loreto 90 - tumbes 150
+            ['name' => 'ITTSABUS', 'uri' => '/buses/ittsa_bus.png'],  // piura 85 - loreto 120
+            ['name' => 'Terramovil Peru', 'uri' => '/buses/terramovil.png'], // piura 90 - loreto 90
+            ['name' => 'Transportes Dora', 'uri' => '/buses/dora.png'], //piura 80 - loreto 80
+            ['name' => 'Turismo Tacna Internacional', 'uri' => '/buses/tur_tacna.png'],//piura 110
+            ['name' => 'Seysan', 'uri' => '/buses/seysan.png'], // la libertad 70
+            ['name' => 'Transportes Julio Cesar', 'uri' => '/buses/juliocesar.png'], // ancash 58.5
+            ['name' => 'Flor Movil', 'uri' => '/buses/flor_movil.png'], // ancash 47.5
+            ['name' => 'Perubus', 'uri' => '/buses/perubus.png'], // ica 50
+            ['name' => 'Jaksa', 'uri' => '/buses/jaksa.png'], // ica 32.4
+            ['name' => 'Paredes Estrella VIP', 'uri' => '/buses/paredes_estrella.png'], // ica 80
+            ['name' => 'Danielito Tours', 'uri' => '/buses/danielito_bus.png'], // ica 60
+            ['name' => 'Expreso Santa Clara', 'uri' => '/buses/santaclara_bus'], // ica 40
+            ['name' => 'Turismo y Transportes Costa Mar', 'uri' => '/buses/costa_mar.png'], // Tumbes 150
+            ['name' => 'Transportes Argo', 'uri' => '/buses/argo/png'], // Tumbes 150
+            ['name' => 'Andoriña Tours', 'uri' => '/buses/andorina.png'], // Arequipa 80
+            ['name' => 'Guardianes Del Cosmos', 'uri' => '/buses/cosmos.png'], // Arequipa 100
+            ['name' => 'Wari Palomino', 'uri' => '/buses/palomino.png'], // Arequipa 80
+            ['name' => 'Transportes Reyna', 'uri' => '/buses/trans_reyna.png'], // Arequipa 90
+            ['name' => 'Waybus', 'uri' => '/buses/waybus.png'], // Arequipa 110
+            ['name' => 'Abba Bus', 'uri' => '/buses/abba_bus.png'], // Arequipa 90
+            ['name' => 'Turismo Molina', 'uri' => '/buses/tur_molina.png'], // Cusco 110
+            ['name' => 'Transportes Imperial Cusco', 'uri' => '/buses/imp_cusco.png'], // Cusco 90
         ];
 
         // Insertar deportes extremos en la base de datos
