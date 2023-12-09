@@ -16,8 +16,10 @@ use App\Http\Controllers\Admin\FirebaseController;
 |
 */
 
-//Route::post('register', [AuthController::class, 'register']);
-//Route::post('/register', [App\Http\Controllers\Auth\AuthController::class, 'register']);
+//PROJECT UX
+Route::get('/activities', [App\Http\Controllers\Api\Ux\ActivityController::class, 'index']);
+
+//END PROJECT UX
 Route::get('/getUsersByRole', [App\Http\Controllers\Api\ChartController::class, 'getUsersByRole']);
 Route::get('/counts', [App\Http\Controllers\Api\ChartController::class, 'counts']);
 Route::get('/requests-by-weekend', [App\Http\Controllers\Api\ChartController::class, 'requestByWeekend']);
