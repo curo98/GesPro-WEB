@@ -22,6 +22,21 @@ class ActivityController extends Controller
         return $a;
     }
 
+    public function getBuses($id){
+
+        // Obtener todas las tarifas que coincidan con el ID de destino
+        $fares = Fare::where('destination_id', $id)->get();
+
+        // Obtener los IDs únicos de las compañías de autobuses
+        $busCompanyIds = $fares->pluck('bus_id')->unique();
+
+        // Obtener la información de las compañías de autobuses
+        $busCompanies = BusCompany::whereIn('id', $busCompanyIds)->get();
+
+        // Retornar la información de las compañías de autobuses
+        return response()->json($busCompanies);
+    }
+
 
     public function getTourist(){
 

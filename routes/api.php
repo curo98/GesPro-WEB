@@ -17,6 +17,8 @@ use App\Http\Controllers\Admin\FirebaseController;
 */
 
 //PROJECT UX
+Route::get('/buses/{id}', [App\Http\Controllers\Api\Ux\ActivityController::class, 'getBuses']);
+
 Route::get('/destinations', [App\Http\Controllers\Api\Ux\ActivityController::class, 'index']);
 Route::get('/tourist-spots', [App\Http\Controllers\Api\Ux\ActivityController::class, 'getTourist']);
 
