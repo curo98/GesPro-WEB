@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Api\Ux;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use \App\Models\ux\Activity;
+use \App\Models\ux\Destination;
+use \App\Models\ux\Bus;
+use \App\Models\ux\Fare;
 use \App\Models\ux\TouristSpot;
 
 class ActivityController extends Controller
