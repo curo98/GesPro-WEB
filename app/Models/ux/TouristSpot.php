@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class TouristSpot extends Model
 {
-    protected $fillable = ['name', 'description', 'uri', 'exact_location', 'destination_id'];
+    protected $fillable = ['name', 'description', 'uri','destination_id', 'exact_location'];
 
     // Definir la relación inversa de Many-to-One con la tabla destinations
     public function destination()
