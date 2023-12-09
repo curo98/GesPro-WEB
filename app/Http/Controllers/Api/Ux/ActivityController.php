@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Ux;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use \App\Models\ux\Activity;
+use \App\Models\ux\ToruistSpot;
 
 class ActivityController extends Controller
 {
@@ -14,6 +15,13 @@ class ActivityController extends Controller
     public function index(){
 
         $a = Activity::all();
+
+        return $a;
+    }
+
+    public function getTourist(){
+
+        $a = TouristSport::all();
 
         return $a;
     }

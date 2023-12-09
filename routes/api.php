@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\FirebaseController;
 
 //PROJECT UX
 Route::get('/activities', [App\Http\Controllers\Api\Ux\ActivityController::class, 'index']);
+Route::get('/tourist-spots', [App\Http\Controllers\Api\Ux\ActivityController::class, 'getTourist']);
 
 //END PROJECT UX
 Route::get('/getUsersByRole', [App\Http\Controllers\Api\ChartController::class, 'getUsersByRole']);
