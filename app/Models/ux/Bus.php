@@ -1,20 +1,13 @@
 <?php
 
-namespace App\Models\ux;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Destination extends Model
+class Bus extends Model
 {
     use HasFactory;
-
-    protected $fillable = ['name'];
-
-    public function touristSpots()
-    {
-        return $this->hasMany(TouristSpot::class);
-    }
 
     public function fares()
     {
