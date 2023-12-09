@@ -6,6 +6,8 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\ux\Activity;
 use App\Models\ux\TouristSpot;
+use App\Models\ux\Bus;
+use App\Models\ux\Fare;
 use App\Models\ux\Destination;
 
 class ActivitiesTableSeeder extends Seeder
