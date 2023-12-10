@@ -44,6 +44,7 @@ class ActivityController extends Controller
         $companyInfo = [
             'id' => $busCompany->id,
             'name' => $busCompany->name,
+            'uri' => $busCompany->uri,
             'fares' => [],
         ];
 
