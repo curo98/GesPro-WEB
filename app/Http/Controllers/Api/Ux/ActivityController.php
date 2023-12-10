@@ -22,20 +22,48 @@ class ActivityController extends Controller
         return $a;
     }
 
-    public function getBuses($id){
+    public function getBuses($id) {
+    // Obtener todas las tarifas que coincidan con el ID de destino
+    $fares = Fare::where('destination_id', $id)->get();
 
-        // Obtener todas las tarifas que coincidan con el ID de destino
-        $fares = Fare::where('destination_id', $id)->get();
+    // Obtener los IDs únicos de las compañías de autobuses
+    $busCompanyIds = $fares->pluck('bus_id')->unique();
 
-        // Obtener los IDs únicos de las compañías de autobuses
-        $busCompanyIds = $fares->pluck('bus_id')->unique();
+    // Obtener la información de las compañías de autobuses
+    $busCompanies = Bus::whereIn('id', $busCompanyIds)->get();
 
-        // Obtener la información de las compañías de autobuses
-        $busCompanies = Bus::whereIn('id', $busCompanyIds)->get();
+    // Crear un array para almacenar la información completa de las compañías de autobuses
+    $busCompaniesInfo = [];
 
-        // Retornar la información de las compañías de autobuses
-        return response()->json($busCompanies);
+    // Iterar sobre cada compañía de autobuses
+    foreach ($busCompanies as $busCompany) {
+        // Obtener las tarifas específicas para esta compañía y destino
+        $companyFares = $fares->where('bus_id', $busCompany->id);
+
+        // Crear un array para almacenar la información de la compañía y sus tarifas
+        $companyInfo = [
+            'id' => $busCompany->id,
+            'name' => $busCompany->name,
+            'fares' => [],
+        ];
+
+        // Iterar sobre las tarifas y agregar la información al array
+        foreach ($companyFares as $fare) {
+            $companyInfo['fares'][] = [
+                'destination_id' => $fare->destination_id,
+                'price' => $fare->price,
+                // Otros campos relevantes de la tarifa
+            ];
+        }
+
+        // Agregar la información de la compañía al array principal
+        $busCompaniesInfo[] = $companyInfo;
     }
+
+    // Retornar la información completa de las compañías de autobuses
+    return response()->json($busCompaniesInfo);
+}
+
 
 
     public function getTourist(){
