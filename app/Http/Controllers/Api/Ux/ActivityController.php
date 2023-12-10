@@ -67,11 +67,12 @@ class ActivityController extends Controller
 
 
 
-    public function getTourist(){
+    public function getTourist()
+    {
+        // Obtener todos los puntos turísticos con la información de su destino
+        $touristSpots = TouristSpot::with('destination')->get();
 
-        $a = TouristSpot::all();
-
-        return $a;
+        return $touristSpots;
     }
 
     /**
