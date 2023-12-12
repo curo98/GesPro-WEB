@@ -90,7 +90,7 @@ class ActivitiesTableSeeder extends Seeder
             ['name' => 'Danielito Tours', 'uri' => '/buses/danielito_bus.png'], // ica 60
             ['name' => 'Expreso Santa Clara', 'uri' => '/buses/santaclara_bus'], // ica 40
             ['name' => 'Turismo y Transportes Costa Mar', 'uri' => '/buses/costa_mar.png'], // Tumbes 150
-            ['name' => 'Transportes Argo', 'uri' => '/buses/argo/png'], // Tumbes 150
+            ['name' => 'Transportes Argo', 'uri' => '/buses/argo.png'], // Tumbes 150
             ['name' => 'Andoriña Tours', 'uri' => '/buses/andorina.png'], // Arequipa 80
             ['name' => 'Guardianes Del Cosmos', 'uri' => '/buses/cosmos.png'], // Arequipa 100
             ['name' => 'Wari Palomino', 'uri' => '/buses/palomino.png'], // Arequipa 80
