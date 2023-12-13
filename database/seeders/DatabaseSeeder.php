@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         //PROJECT UX
-        $this->call(ActivitiesTableSeeder::class);
+        //$this->call(ActivitiesTableSeeder::class);
 
         //END PROJECT UX
 
