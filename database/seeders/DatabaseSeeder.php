@@ -4,6 +4,8 @@ namespace Database\Seeders;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Artisan;
+use App\Models\Person;
+
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -15,6 +17,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        Person::factory(10)->create();
+
         //PROJECT UX
         //$this->call(ActivitiesTableSeeder::class);
 

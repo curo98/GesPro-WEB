@@ -16,6 +16,10 @@ use App\Http\Controllers\Admin\FirebaseController;
 |
 */
 
+//PRACTICE UX
+Route::get('/people', [App\Http\Controllers\Api\Practice\PersonController::class, 'index']);
+//END PRACTICE UX
+
 //PROJECT UX
 Route::get('/buses/{id}', [App\Http\Controllers\Api\Ux\ActivityController::class, 'getBuses']);
 
