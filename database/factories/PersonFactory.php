@@ -2,30 +2,27 @@
 
 namespace Database\Factories;
 
-use App\Models\Practice\Person;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Practice\Person;
 
+
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Model>
+ */
 class PersonFactory extends Factory
 {
     /**
-     * Define el modelo de fábrica asociado.
+     * Define the model's default state.
      *
-     * @var string
+     * @return array<string, mixed>
      */
-    protected $model = Person::class;
-
-    /**
-     * Define el estado de la fábrica para un modelo de persona.
-     *
-     * @return array
-     */
-    public function definition()
+    public function definition(): array
     {
         return [
             'first_name' => $this->faker->firstName,
             'last_name' => $this->faker->lastName,
             'age' => $this->faker->numberBetween(18, 60),
-            'gender' => $this->faker->randomElement(['M', 'F']),
+            'gender' => $this->faker->randomElement(['Male', 'Female']),
             'address' => $this->faker->address,
         ];
     }
