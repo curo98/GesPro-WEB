@@ -16,12 +16,13 @@ use App\Http\Controllers\Admin\FirebaseController;
 |
 */
 
-//PRACTICE UX
+//PRACTICE APP's MOVILES
 Route::get('/people', [App\Http\Controllers\Api\Practice\PersonController::class, 'index']);
 Route::post('/person/store', [App\Http\Controllers\Api\Practice\PersonController::class, 'store']);
 Route::get('/person/{id}/edit', [App\Http\Controllers\Api\Practice\PersonController::class, 'editPerson']);
 Route::post('/person/{id}/update', [App\Http\Controllers\Api\Practice\PersonController::class, 'updatePerson']);
-//END PRACTICE UX
+Route::post('/person/{id}/destroy', [App\Http\Controllers\Api\Practice\PersonController::class, 'destroyPerson']);
+//END PRACTICE APP's MOVILES
 
 //PROJECT UX
 Route::get('/buses/{id}', [App\Http\Controllers\Api\Ux\ActivityController::class, 'getBuses']);
