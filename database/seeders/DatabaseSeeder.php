@@ -16,7 +16,25 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        Person::factory(10)->create();
+        // Define la cantidad total de registros que deseas cargar
+        $totalRegistros = 30;
+
+        // Inicializa la matriz de datos
+        $data = [];
+
+        // Utiliza un bucle para generar y agregar los registros
+        for ($i = 0; $i < $totalRegistros; $i++) {
+            $data[] = [
+                'first_name' => 'Nombre' . ($i + 1),
+                'last_name' => 'Apellido' . ($i + 1),
+                'age' => rand(18, 60), // Edad aleatoria entre 18 y 60
+                'gender' => ($i % 2 == 0) ? 'M' : 'F', // Alterna entre 'Male' y 'Female'
+                'address' => 'Dirección' . ($i + 1),
+            ];
+        }
+
+        // Inserta los registros en la tabla 'people'
+        DB::table('people')->insert($data);
 
         //PROJECT UX
         //$this->call(ActivitiesTableSeeder::class);
