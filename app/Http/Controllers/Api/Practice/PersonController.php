@@ -31,7 +31,13 @@ class PersonController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->only(['first_name', 'last_name']);
+
+        $person = new Person();
+        $person->fill($data);
+        $person->save();
+
+        return response()->json(['message' => 'Person created successfully'], 201);
     }
 
     /**
@@ -53,16 +59,46 @@ class PersonController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function editPerson($id)
     {
-        //
+        $user = Person::find($id);
+
+        if ($user) {
+            return response()->json($user);
+        } else {
+            return response()->json(['message' => 'Persona no encontrado'], 404);
+        }
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Update the specified resource in storage.
      */
-    public function destroy(string $id)
+    public function updatePerson(Request $request, $id)
     {
-        //
+        // Obtén los datos del request
+        $name = $request->input('name');
+        $email = $request->input('email');
+
+        // Ejecuta una consulta SQL para actualizar los campos en la base de datos
+        DB::table('users')
+            ->where('id', $id)
+            ->update([
+                'name' => $name,
+                'email' => $email,
+                'id_role' => $role->id
+            ]);
+
+        return response()->json(['message' => 'Usuario actualizado']);
+    }
+
+    public function destroyPerson($id) {
+        $user = Person::find($id);
+
+        if ($user) {
+            $user->delete();
+            return response()->json(['message' => 'Usuario eliminado correctamente'], 200);
+        } else {
+            return response()->json(['message' => 'Usuario no encontrado'], 404);
+        }
     }
 }
