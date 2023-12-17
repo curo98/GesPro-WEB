@@ -24,7 +24,7 @@ Route::post('/person/{id}/update', [App\Http\Controllers\Api\Practice\PersonCont
 Route::post('/person/{id}/destroy', [App\Http\Controllers\Api\Practice\PersonController::class, 'destroyPerson']);
 //END PRACTICE APP's MOVILES
 
-//PROJECT UX
+//PROJECT UX - APIS
 Route::get('/buses/{id}', [App\Http\Controllers\Api\Ux\ActivityController::class, 'getBuses']);
 
 Route::get('/destinations', [App\Http\Controllers\Api\Ux\ActivityController::class, 'index']);
